@@ -1803,7 +1803,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // TODO: Replace with your Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyCd4pw51gYKtMYjFyGhTVQqfIp7A8sM8TM",
+            apiKey: "AIzaSyCd4pwS1gYKtMYjFychTVQqfIp7A8sMBTM",
             authDomain: "quizcraft-e3e3c.firebaseapp.com",
             databaseURL: "https://quizcraft-e3e3c-default-rtdb.firebaseio.com",
             projectId: "quizcraft-e3e3c",
@@ -1848,20 +1848,17 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     
                     const loginScreen = document.getElementById('loginScreen');
                     const signupScreen = document.getElementById('signupScreen');
-                    const headerBar = document.querySelector('.header-bar');
                     
                     if (loginScreen) loginScreen.classList.remove('active');
                     if (signupScreen) signupScreen.classList.remove('active');
-                    if (headerBar) headerBar.style.display = 'block';
                     
+                    // showScreen will handle hiding/showing nav appropriately
                     window.showScreen('homeScreen');
                 } else {
                     window.currentUser = null;
                     console.log('No user logged in');
                     
-                    const headerBar = document.querySelector('.header-bar');
-                    if (headerBar) headerBar.style.display = 'none';
-                    
+                    // showScreen will handle hiding nav
                     window.showScreen('loginScreen');
                 }
             });
