@@ -407,6 +407,18 @@
             margin-top: 2rem;
         }
 
+        /* Center buttons on login/signup screens */
+        #loginScreen .btn-group,
+        #signupScreen .btn-group {
+            justify-content: center;
+        }
+
+        #loginScreen .btn-group .btn,
+        #signupScreen .btn-group .btn {
+            width: 100%;
+            max-width: 350px;
+        }
+
         .home-actions {
             display: none; /* Hidden by default */
         }
@@ -422,7 +434,10 @@
         }
 
         .home-actions .btn {
-            min-width: 200px;
+            width: 220px;
+            max-width: 220px;
+            font-size: 1.1rem;
+            padding: 1rem 1.5rem;
             box-shadow: 
                 0 8px 0 rgba(0,0,0,0.2),
                 0 12px 30px rgba(0,0,0,0.25);
@@ -1208,8 +1223,13 @@
     <div class="container">
         <!-- Login Screen -->
         <div id="loginScreen" class="screen active">
+            <!-- Logo above the card -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 400px; width: 90%;">
+            </div>
+            
             <div class="card" style="max-width: 500px; margin: 0 auto;">
-                <h2>🔐 Welcome to LetsGetQuizzy!</h2>
+                <h2 style="color: var(--orange-gold);">WELCOME!</h2>
                 <p style="text-align: center; color: #666; margin-bottom: 2rem;">Sign in to create and host quizzes</p>
                 
                 <div class="input-group">
@@ -1783,7 +1803,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // TODO: Replace with your Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyCd4pw51gYKtMYjFyGhTVQqfIp7A8sM8TM",
+            apiKey: "AIzaSyCd4pwS1gYKtMYjFychTVQqfIp7A8sMBTM",
             authDomain: "quizcraft-e3e3c.firebaseapp.com",
             databaseURL: "https://quizcraft-e3e3c-default-rtdb.firebaseio.com",
             projectId: "quizcraft-e3e3c",
@@ -1818,6 +1838,34 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.onAuthStateChanged = onAuthStateChanged;
         window.signOut = signOut;
         window.googleProvider = googleProvider;
+
+        // Set up auth state listener
+        document.addEventListener('DOMContentLoaded', () => {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    window.currentUser = user;
+                    console.log('User logged in:', user.email);
+                    
+                    const loginScreen = document.getElementById('loginScreen');
+                    const signupScreen = document.getElementById('signupScreen');
+                    const headerBar = document.querySelector('.header-bar');
+                    
+                    if (loginScreen) loginScreen.classList.remove('active');
+                    if (signupScreen) signupScreen.classList.remove('active');
+                    if (headerBar) headerBar.style.display = 'block';
+                    
+                    window.showScreen('homeScreen');
+                } else {
+                    window.currentUser = null;
+                    console.log('No user logged in');
+                    
+                    const headerBar = document.querySelector('.header-bar');
+                    if (headerBar) headerBar.style.display = 'none';
+                    
+                    window.showScreen('loginScreen');
+                }
+            });
+        });
     </script>
 
     <script>
@@ -2359,34 +2407,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         window.goToHostScreen = goToHostScreen;
 
-        // Wait for DOM to be ready before setting up auth
-        document.addEventListener('DOMContentLoaded', () => {
-            window.onAuthStateChanged(window.auth, (user) => {
-                if (user) {
-                    currentUser = user;
-                    console.log('User logged in:', user.email);
-                    // User is signed in, show home screen and nav
-                    const loginScreen = document.getElementById('loginScreen');
-                    const signupScreen = document.getElementById('signupScreen');
-                    const headerBar = document.querySelector('.header-bar');
-                    
-                    if (loginScreen) loginScreen.classList.remove('active');
-                    if (signupScreen) signupScreen.classList.remove('active');
-                    if (headerBar) headerBar.style.display = 'block';
-                    
-                    showScreen('homeScreen');
-                } else {
-                    currentUser = null;
-                    console.log('No user logged in');
-                    // No user signed in, hide nav and show login
-                    const headerBar = document.querySelector('.header-bar');
-                    if (headerBar) headerBar.style.display = 'none';
-                    
-                    showScreen('loginScreen');
-                }
-            });
-        });
-
         // Login with Email
         async function loginWithEmail() {
             const email = document.getElementById('loginEmail').value;
@@ -2478,6 +2498,11 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             try {
                 await window.signOut(window.auth);
                 playSound('tickSound');
+                
+                // Hide AI Generator modal if it's open
+                const aiModal = document.getElementById('aiGeneratorModal');
+                if (aiModal) aiModal.style.display = 'none';
+                
                 showScreen('loginScreen');
             } catch (error) {
                 console.error('Logout error:', error);
@@ -2539,7 +2564,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             document.getElementById(screenId).classList.add('active');
             
             // Show/hide nav bar based on screen
-            if (screenId === 'homeScreen') {
+            if (screenId === 'homeScreen' || screenId === 'loginScreen' || screenId === 'signupScreen') {
                 document.body.classList.remove('has-nav');
             } else {
                 document.body.classList.add('has-nav');
