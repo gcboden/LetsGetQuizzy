@@ -868,21 +868,7 @@
 
         /* Sound toggle button */
         .sound-toggle {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(26, 26, 46, 0.95);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            z-index: 999;
+            display: none; /* Sounds disabled */
         }
 
         .sound-toggle:hover {
@@ -1870,17 +1856,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         let soundEnabled = true;
 
         function playSound(soundId) {
-            if (soundEnabled) {
-                const sound = document.getElementById(soundId);
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log('Sound play failed:', e));
-            }
+            // Sounds disabled
+            return;
         }
 
         function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
-            playSound('tickSound'); // Confirmation sound
+            // Sound toggle disabled
+            return;
         }
 
         // COINS SYSTEM
@@ -2379,7 +2361,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // Check if user is authenticated
         function requireAuth() {
-            if (!currentUser) {
+            if (!window.currentUser) {
                 alert('⚠️ Please log in to access this feature!');
                 showScreen('loginScreen');
                 return false;
