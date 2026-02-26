@@ -1585,6 +1585,30 @@ Alex Johnson
                     </button>
                 </div>
 
+                <!-- Round Settings -->
+                <div style="background: rgba(255,255,255,0.5); padding: 1.5rem; border-radius: 12px; margin: 2rem 0; border: 2px dashed rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--orange-gold); margin-bottom: 1rem; text-align: center;">⚡ Game Show Mode</h3>
+                    
+                    <label style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; cursor: pointer; margin-bottom: 1rem;">
+                        <input type="checkbox" id="enableRounds" onchange="toggleRoundSettings()" style="width: 20px; height: 20px; cursor: pointer;">
+                        <span style="font-weight: 600; font-size: 1.1rem;">Enable Round-Based Gameplay</span>
+                    </label>
+                    
+                    <div id="roundSettings" style="display: none; margin-top: 1rem;">
+                        <div class="input-group">
+                            <label style="text-align: center;">Questions per Round</label>
+                            <select id="questionsPerRound" style="cursor: pointer; text-align: center; font-weight: 600;">
+                                <option value="3">3 Questions (More Breaks)</option>
+                                <option value="5" selected>5 Questions (Balanced)</option>
+                                <option value="10">10 Questions (Fewer Breaks)</option>
+                            </select>
+                        </div>
+                        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                            🎬 Creates dramatic pauses with leaderboards between rounds
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Team Setup -->
                 <div class="team-setup" id="teamSetup" style="display: none;">
                     <h3 style="color: var(--blue-electric); margin-bottom: 1rem;">Create Teams</h3>
@@ -2674,6 +2698,7 @@ Alex Johnson
         let currentQuestionIndex = 0;
         let currentRound = 1;
         let questionsPerRound = 5;
+        let roundsEnabled = false;
         let totalRounds = 1;
         let roundScores = {}; // Track scores at end of each round
         let gamePin = '';
@@ -3561,6 +3586,21 @@ For true/false questions, use answers: ["True", "False"]`;
         }
         window.processRoster = processRoster;
 
+        // ROUND SETTINGS FUNCTIONS
+        function toggleRoundSettings() {
+            const checkbox = document.getElementById('enableRounds');
+            const settings = document.getElementById('roundSettings');
+            
+            if (checkbox.checked) {
+                settings.style.display = 'block';
+                roundsEnabled = true;
+            } else {
+                settings.style.display = 'none';
+                roundsEnabled = false;
+            }
+        }
+        window.toggleRoundSettings = toggleRoundSettings;
+
         function loadQuizzes() {
             const select = document.getElementById('quizSelect');
             select.innerHTML = '<option value="">Select a quiz...</option>';
@@ -3584,8 +3624,14 @@ For true/false questions, use answers: ["True", "False"]`;
 
             currentQuiz = quizzes.find(q => q.id == quizId);
             
-            // Calculate total rounds
-            totalRounds = Math.ceil(currentQuiz.questions.length / questionsPerRound);
+            // Get round settings from UI
+            roundsEnabled = document.getElementById('enableRounds').checked;
+            if (roundsEnabled) {
+                questionsPerRound = parseInt(document.getElementById('questionsPerRound').value);
+                totalRounds = Math.ceil(currentQuiz.questions.length / questionsPerRound);
+            } else {
+                totalRounds = 1;
+            }
             currentRound = 1;
             roundScores = {};
             
@@ -3930,11 +3976,17 @@ For true/false questions, use answers: ["True", "False"]`;
             const question = currentQuiz.questions[currentQuestionIndex];
             timeLeft = question.timeLimit;
 
-            // Update round and question display
-            const questionInRound = (currentQuestionIndex % questionsPerRound) + 1;
-            const displayRound = Math.floor(currentQuestionIndex / questionsPerRound) + 1;
-            document.getElementById('currentRoundDisplay').textContent = displayRound;
-            document.getElementById('currentQuestionDisplay').textContent = questionInRound;
+            // Update round and question display (only if rounds are enabled)
+            const roundIndicator = document.querySelector('#hostQuestionScreen .card > div');
+            if (roundsEnabled) {
+                const questionInRound = (currentQuestionIndex % questionsPerRound) + 1;
+                const displayRound = Math.floor(currentQuestionIndex / questionsPerRound) + 1;
+                document.getElementById('currentRoundDisplay').textContent = displayRound;
+                document.getElementById('currentQuestionDisplay').textContent = questionInRound;
+                if (roundIndicator) roundIndicator.style.display = 'block';
+            } else {
+                if (roundIndicator) roundIndicator.style.display = 'none';
+            }
 
             document.getElementById('hostQuestionText').textContent = question.question;
             const hostGrid = document.getElementById('hostAnswerGrid');
@@ -4364,8 +4416,8 @@ For true/false questions, use answers: ["True", "False"]`;
                 return;
             }
 
-            // Check if we've reached the end of a round
-            const isEndOfRound = (currentQuestionIndex % questionsPerRound === 0) && currentQuestionIndex > 0;
+            // Check if we've reached the end of a round (only if rounds are enabled)
+            const isEndOfRound = roundsEnabled && (currentQuestionIndex % questionsPerRound === 0) && currentQuestionIndex > 0;
             
             if (isEndOfRound && currentQuestionIndex < currentQuiz.questions.length) {
                 await showRoundTransition();
