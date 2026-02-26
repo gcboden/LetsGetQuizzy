@@ -1594,6 +1594,10 @@ Alex Johnson
                             <option value="2">2 Teams</option>
                             <option value="3">3 Teams</option>
                             <option value="4">4 Teams</option>
+                            <option value="5">5 Teams</option>
+                            <option value="6">6 Teams</option>
+                            <option value="7">7 Teams</option>
+                            <option value="8">8 Teams</option>
                         </select>
                     </div>
                     
@@ -1669,6 +1673,21 @@ Alex Johnson
         <!-- Question Screen (Host) -->
         <div id="hostQuestionScreen" class="screen">
             <div class="card">
+                <!-- Round Indicator -->
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <p style="
+                        display: inline-block;
+                        background: linear-gradient(90deg, var(--orange-gold), var(--blue-electric));
+                        color: white;
+                        padding: 0.5rem 1.5rem;
+                        border-radius: 20px;
+                        font-weight: 700;
+                        font-size: 0.9rem;
+                    ">
+                        ROUND <span id="currentRoundDisplay">1</span> | Question <span id="currentQuestionDisplay">1</span>
+                    </p>
+                </div>
+                
                 <div class="timer" id="hostTimer">20</div>
                 <div class="question-container">
                     <div class="question-text" id="hostQuestionText"></div>
@@ -1781,6 +1800,52 @@ Alex Johnson
                 <div class="status-message answered">
                     <p>Nice work! Waiting for other players...</p>
                     <p style="margin-top: 1rem; font-size: 2rem;">🎯</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Round Transition Screen -->
+        <div id="roundTransitionScreen" class="screen">
+            <div class="card" style="max-width: 900px; margin: 0 auto; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+                <h1 style="font-size: 3rem; color: var(--blue-electric); margin-bottom: 1rem;">
+                    Round <span id="completedRoundNum">1</span> Complete!
+                </h1>
+                
+                <!-- Round Leaderboard -->
+                <div style="margin: 2rem 0;">
+                    <h2 style="color: var(--orange-gold); margin-bottom: 1.5rem;">Current Standings</h2>
+                    <div id="roundLeaderboard" style="display: flex; flex-direction: column; gap: 1rem;">
+                    </div>
+                </div>
+                
+                <!-- Movement Indicators -->
+                <div id="roundMovements" style="margin: 2rem 0; padding: 1.5rem; background: rgba(0,0,0,0.05); border-radius: 12px;">
+                    <h3 style="color: #666; margin-bottom: 1rem;">📊 Position Changes</h3>
+                    <div id="movementsList"></div>
+                </div>
+                
+                <!-- Next Round Button (Host Only) -->
+                <div id="hostNextRoundBtn" style="display: none; margin-top: 2rem;">
+                    <button onclick="startNextRound()" style="
+                        background: linear-gradient(90deg, var(--orange-gold), var(--blue-electric));
+                        color: white;
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        padding: 1.5rem 3rem;
+                        border: none;
+                        border-radius: 50px;
+                        cursor: pointer;
+                        box-shadow: 0 8px 0 rgba(0,0,0,0.2), 0 12px 30px rgba(0,0,0,0.3);
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                        ➡️ Start Round <span id="nextRoundNum">2</span>
+                    </button>
+                </div>
+                
+                <!-- Player waiting message -->
+                <div id="waitingForHostMsg" style="display: none; margin-top: 2rem;">
+                    <p style="color: #999; font-size: 1.2rem;">⏳ Waiting for host to start next round...</p>
                 </div>
             </div>
         </div>
@@ -1903,7 +1968,7 @@ Alex Johnson
 
         // TODO: Replace with your Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyCd4pw51gYKtMYjFyGhTVQqfIp7A8sM8TM",
+            apiKey: "AIzaSyCd4pwS1gYKtMYjFychTVQqfIp7A8sMBTM",
             authDomain: "quizcraft-e3e3c.firebaseapp.com",
             databaseURL: "https://quizcraft-e3e3c-default-rtdb.firebaseio.com",
             projectId: "quizcraft-e3e3c",
@@ -2607,6 +2672,10 @@ Alex Johnson
         let quizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
         let currentQuiz = null;
         let currentQuestionIndex = 0;
+        let currentRound = 1;
+        let questionsPerRound = 5;
+        let totalRounds = 1;
+        let roundScores = {}; // Track scores at end of each round
         let gamePin = '';
         let isHost = false;
         let currentPlayer = null;
@@ -2632,7 +2701,11 @@ Alex Johnson
             {id: 'team1', name: '🔥 Fire Team', color: 'var(--orange-bright)', bg: '#ff5a00'},
             {id: 'team2', name: '⚡ Lightning Team', color: 'var(--blue-electric)', bg: '#0d70ff'},
             {id: 'team3', name: '⭐ Gold Team', color: 'var(--orange-gold)', bg: '#ff9e01'},
-            {id: 'team4', name: '☁️ Sky Team', color: 'var(--blue-sky)', bg: '#43ccff'}
+            {id: 'team4', name: '☁️ Sky Team', color: 'var(--blue-sky)', bg: '#43ccff'},
+            {id: 'team5', name: '💚 Emerald Team', color: '#10b981', bg: '#10b981'},
+            {id: 'team6', name: '💜 Violet Team', color: '#8b5cf6', bg: '#8b5cf6'},
+            {id: 'team7', name: '🌸 Pink Team', color: '#ec4899', bg: '#ec4899'},
+            {id: 'team8', name: '🖤 Shadow Team', color: '#1f2937', bg: '#1f2937'}
         ];
 
         // POWER-UPS SYSTEM
@@ -3510,6 +3583,12 @@ For true/false questions, use answers: ["True", "False"]`;
             }
 
             currentQuiz = quizzes.find(q => q.id == quizId);
+            
+            // Calculate total rounds
+            totalRounds = Math.ceil(currentQuiz.questions.length / questionsPerRound);
+            currentRound = 1;
+            roundScores = {};
+            
             await startHostingQuiz();
         }
         window.startHosting = startHosting;
@@ -3850,6 +3929,12 @@ For true/false questions, use answers: ["True", "False"]`;
         function showHostQuestion() {
             const question = currentQuiz.questions[currentQuestionIndex];
             timeLeft = question.timeLimit;
+
+            // Update round and question display
+            const questionInRound = (currentQuestionIndex % questionsPerRound) + 1;
+            const displayRound = Math.floor(currentQuestionIndex / questionsPerRound) + 1;
+            document.getElementById('currentRoundDisplay').textContent = displayRound;
+            document.getElementById('currentQuestionDisplay').textContent = questionInRound;
 
             document.getElementById('hostQuestionText').textContent = question.question;
             const hostGrid = document.getElementById('hostAnswerGrid');
@@ -4273,8 +4358,17 @@ For true/false questions, use answers: ["True", "False"]`;
             document.getElementById('leaderboardMusic').pause();
             currentQuestionIndex++;
 
+            // Check if we've reached the end of the quiz
             if (currentQuestionIndex >= currentQuiz.questions.length) {
                 await showFinalResults();
+                return;
+            }
+
+            // Check if we've reached the end of a round
+            const isEndOfRound = (currentQuestionIndex % questionsPerRound === 0) && currentQuestionIndex > 0;
+            
+            if (isEndOfRound && currentQuestionIndex < currentQuiz.questions.length) {
+                await showRoundTransition();
             } else {
                 try {
                     await window.dbUpdate(window.dbRef(window.db, `games/${gamePin}`), {
@@ -4289,6 +4383,129 @@ For true/false questions, use answers: ["True", "False"]`;
             }
         }
         window.nextQuestion = nextQuestion;
+
+        // ROUND-BASED GAMEPLAY FUNCTIONS
+        async function showRoundTransition() {
+            currentRound++;
+            
+            try {
+                await window.dbUpdate(window.dbRef(window.db, `games/${gamePin}`), {
+                    status: 'round_transition',
+                    currentRound: currentRound
+                });
+
+                // Get current scores
+                const playersSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players`));
+                const players = playersSnapshot.val() || {};
+                const teamsSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/teams`));
+                const teams = teamsSnapshot.val() || {};
+
+                // Calculate leaderboard
+                let leaderboard = [];
+                if (teamsEnabled && Object.keys(teams).length > 0) {
+                    // Team leaderboard
+                    leaderboard = Object.entries(teams).map(([teamId, team]) => ({
+                        name: team.name,
+                        score: team.score || 0,
+                        type: 'team',
+                        color: team.color
+                    }));
+                } else {
+                    // Individual leaderboard
+                    leaderboard = Object.entries(players).map(([id, player]) => ({
+                        name: player.name,
+                        score: player.score || 0,
+                        type: 'player'
+                    }));
+                }
+
+                leaderboard.sort((a, b) => b.score - a.score);
+
+                // Save round scores for movement tracking
+                const previousRoundScores = roundScores[currentRound - 2] || {};
+                roundScores[currentRound - 1] = {};
+                leaderboard.forEach((entry, index) => {
+                    roundScores[currentRound - 1][entry.name] = { position: index + 1, score: entry.score };
+                });
+
+                // Display round transition
+                document.getElementById('completedRoundNum').textContent = currentRound - 1;
+                document.getElementById('nextRoundNum').textContent = currentRound;
+
+                // Build leaderboard display
+                const leaderboardDiv = document.getElementById('roundLeaderboard');
+                leaderboardDiv.innerHTML = leaderboard.slice(0, 5).map((entry, index) => {
+                    const medals = ['🥇', '🥈', '🥉'];
+                    const medal = index < 3 ? medals[index] : `${index + 1}.`;
+                    return `
+                        <div style="
+                            display: flex;
+                            align-items: center;
+                            padding: 1rem 1.5rem;
+                            background: ${entry.type === 'team' ? entry.color : 'var(--blue-sky)'};
+                            color: white;
+                            border-radius: 12px;
+                            font-size: 1.3rem;
+                            font-weight: 700;
+                            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                        ">
+                            <span style="margin-right: 1rem; font-size: 1.5rem;">${medal}</span>
+                            <span style="flex: 1;">${entry.name}</span>
+                            <span style="font-size: 1.5rem;">${entry.score} pts</span>
+                        </div>
+                    `;
+                }).join('');
+
+                // Show position changes
+                const movementsDiv = document.getElementById('movementsList');
+                const movements = [];
+                leaderboard.forEach((entry, newIndex) => {
+                    const previousPosition = previousRoundScores[entry.name]?.position || null;
+                    if (previousPosition !== null) {
+                        const change = previousPosition - (newIndex + 1);
+                        if (change > 0) {
+                            movements.push(`🔼 <strong>${entry.name}</strong> moved up ${change} ${change === 1 ? 'spot' : 'spots'}!`);
+                        } else if (change < 0) {
+                            movements.push(`🔽 <strong>${entry.name}</strong> dropped ${Math.abs(change)} ${Math.abs(change) === 1 ? 'spot' : 'spots'}`);
+                        }
+                    }
+                });
+
+                if (movements.length > 0) {
+                    movementsDiv.innerHTML = movements.map(m => `<p style="font-size: 1.1rem; margin: 0.5rem 0;">${m}</p>`).join('');
+                } else {
+                    movementsDiv.innerHTML = '<p style="color: #999;">No position changes this round</p>';
+                }
+
+                // Show appropriate UI for host vs players
+                if (isHost) {
+                    document.getElementById('hostNextRoundBtn').style.display = 'block';
+                    document.getElementById('waitingForHostMsg').style.display = 'none';
+                } else {
+                    document.getElementById('hostNextRoundBtn').style.display = 'none';
+                    document.getElementById('waitingForHostMsg').style.display = 'block';
+                }
+
+                showScreen('roundTransitionScreen');
+            } catch (error) {
+                console.error('Error showing round transition:', error);
+            }
+        }
+        window.showRoundTransition = showRoundTransition;
+
+        async function startNextRound() {
+            try {
+                await window.dbUpdate(window.dbRef(window.db, `games/${gamePin}`), {
+                    status: 'playing',
+                    currentQuestion: currentQuestionIndex
+                });
+
+                showHostQuestion();
+            } catch (error) {
+                console.error('Error starting next round:', error);
+            }
+        }
+        window.startNextRound = startNextRound;
 
         async function showFinalResults() {
             playSound('leaderboardMusic');
