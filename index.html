@@ -1911,7 +1911,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             storageBucket: "quizcraft-e3e3c.firebasestorage.app",
             messagingSenderId: "35069708047",
             appId: "1:35069708047:web:960f19442093a567f4a07a"
-        };
+    };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -3458,9 +3458,11 @@ For true/false questions, use answers: ["True", "False"]`;
                 if (membersDiv) {
                     const teamPlayers = playersList.filter(p => p.team === teamId);
                     if (teamPlayers.length > 0) {
+                        const caoId = currentTeams[teamId].cao;
                         membersDiv.innerHTML = teamPlayers.map(p => `
                             <div class="team-member-badge" style="
-                                background: rgba(255,255,255,0.25);
+                                background: ${p.id === caoId ? 'rgba(255,215,0,0.3)' : 'rgba(255,255,255,0.25)'};
+                                border: ${p.id === caoId ? '2px solid gold' : 'none'};
                                 padding: 0.5rem;
                                 border-radius: 8px;
                                 font-size: 0.9rem;
@@ -3469,8 +3471,13 @@ For true/false questions, use answers: ["True", "False"]`;
                                 justify-content: space-between;
                                 align-items: center;
                             ">
-                                ${p.name}
-                                <span onclick="unassignPlayer('${p.id}')" style="cursor: pointer; opacity: 0.7; font-size: 1.1rem;">❌</span>
+                                <span>
+                                    ${p.name} ${p.id === caoId ? '⭐ <span style="font-size: 0.75rem; opacity: 0.9;">CAO</span>' : ''}
+                                </span>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    ${p.id !== caoId ? `<span onclick="assignCAO('${teamId}', '${p.id}')" style="cursor: pointer; opacity: 0.7; font-size: 0.8rem; padding: 0.2rem 0.5rem; background: rgba(255,215,0,0.5); border-radius: 4px;">Make CAO</span>` : ''}
+                                    <span onclick="unassignPlayer('${p.id}')" style="cursor: pointer; opacity: 0.7; font-size: 1.1rem;">❌</span>
+                                </div>
                             </div>
                         `).join('');
                     } else {
@@ -3508,6 +3515,38 @@ For true/false questions, use answers: ["True", "False"]`;
             showNotification(`Click a team to assign ${playerName}`, 'info');
         }
         window.selectPlayerForAssignment = selectPlayerForAssignment;
+
+        // CAO (Chief Answer Officer) FUNCTIONS
+        async function assignCAO(teamId, playerId) {
+            if (!currentTeams[teamId]) return;
+            
+            // Set CAO for team
+            currentTeams[teamId].cao = playerId;
+            
+            // Update in Firebase
+            if (gamePin) {
+                await window.dbUpdate(window.dbRef(window.db, `games/${gamePin}/teams/${teamId}`), {
+                    cao: playerId
+                });
+                
+                // Mark player as CAO
+                await window.dbUpdate(window.dbRef(window.db, `games/${gamePin}/players/${playerId}`), {
+                    isCAO: true,
+                    caoForTeam: teamId
+                });
+            }
+            
+            // Refresh display
+            const playersSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players`));
+            if (playersSnapshot.exists()) {
+                const playersData = playersSnapshot.val();
+                const playersList = Object.entries(playersData).map(([id, data]) => ({ id, ...data }));
+                updateTeamRosters(playersList);
+            }
+            
+            showNotification('CAO assigned!', 'success');
+        }
+        window.assignCAO = assignCAO;
 
         async function assignPlayerToTeam(teamId) {
             if (!selectedPlayerId) {
