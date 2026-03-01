@@ -1721,10 +1721,35 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         <!-- Question Screen (Player) -->
         <div id="playerQuestionScreen" class="screen">
             <div class="card">
+                <!-- CAO Status Banner -->
+                <div id="caoStatusBanner" style="display: none; text-align: center; margin-bottom: 1rem; padding: 0.75rem; border-radius: 8px; font-weight: 600;"></div>
+                
                 <div class="timer" id="playerTimer">20</div>
                 <div class="question-container">
                     <div class="question-text" id="playerQuestionText"></div>
                     <div class="answer-grid" id="playerAnswerGrid"></div>
+                </div>
+                
+                <!-- Lock In Button (CAO only) -->
+                <div id="lockInSection" style="display: none; text-align: center; margin-top: 2rem;">
+                    <button id="lockInBtn" onclick="lockInTeamAnswer()" style="
+                        background: linear-gradient(90deg, var(--orange-gold), var(--orange-bright));
+                        color: white;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        padding: 1rem 2.5rem;
+                        border: none;
+                        border-radius: 50px;
+                        cursor: pointer;
+                        box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3);
+                        transition: all 0.3s ease;
+                        display: none;
+                    " onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                        🔒 LOCK IN FOR YOUR TEAM
+                    </button>
+                    <p id="lockInHint" style="color: #666; margin-top: 0.5rem; font-size: 0.9rem; display: none;">
+                        Select an answer first
+                    </p>
                 </div>
             </div>
         </div>
@@ -1911,7 +1936,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             storageBucket: "quizcraft-e3e3c.firebasestorage.app",
             messagingSenderId: "35069708047",
             appId: "1:35069708047:web:960f19442093a567f4a07a"
-    };
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -2616,6 +2641,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         let gamePin = '';
         let isHost = false;
         let currentPlayer = null;
+        let selectedCAOAnswer = null; // Track CAO's selected answer before lock-in
         let gameTimer = null;
         let timeLeft = 20;
         let playersListener = null;
@@ -3548,6 +3574,91 @@ For true/false questions, use answers: ["True", "False"]`;
         }
         window.assignCAO = assignCAO;
 
+        async function lockInTeamAnswer() {
+            if (selectedCAOAnswer === null) {
+                showNotification('Please select an answer first!', 'error');
+                return;
+            }
+            
+            if (!currentPlayer || !currentPlayer.team) return;
+            
+            // Get all team members
+            const playersSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players`));
+            if (!playersSnapshot.exists()) return;
+            
+            const playersData = playersSnapshot.val();
+            const teamMembers = Object.entries(playersData)
+                .filter(([id, player]) => player.team === currentPlayer.team)
+                .map(([id, player]) => ({ id, ...player }));
+            
+            // Submit answer for ALL team members
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const isCorrect = selectedCAOAnswer === question.correctIndex;
+            
+            for (const member of teamMembers) {
+                const basePoints = Math.floor((timeLeft / question.timeLimit) * 1000);
+                const pointsEarned = isCorrect ? basePoints : 0;
+                
+                // Submit answer for this team member
+                await window.dbSet(
+                    window.dbRef(window.db, `games/${gamePin}/answers/${currentQuestionIndex}/${member.id}`),
+                    {
+                        answerIndex: selectedCAOAnswer,
+                        isCorrect: isCorrect,
+                        points: pointsEarned,
+                        timestamp: Date.now(),
+                        submittedByCAO: true
+                    }
+                );
+                
+                // Update player score
+                await window.dbUpdate(
+                    window.dbRef(window.db, `games/${gamePin}/players/${member.id}`),
+                    {
+                        score: (member.score || 0) + pointsEarned
+                    }
+                );
+            }
+            
+            // Update team score
+            await window.dbUpdate(
+                window.dbRef(window.db, `games/${gamePin}/teams/${currentPlayer.team}`),
+                {
+                    score: (currentTeams[currentPlayer.team]?.score || 0) + (isCorrect ? teamMembers.length * Math.floor((timeLeft / question.timeLimit) * 1000) : 0)
+                }
+            );
+            
+            // Show confirmation screen
+            playSound(isCorrect ? 'correctSound' : 'wrongSound');
+            
+            const buttons = document.querySelectorAll('#playerAnswerGrid .answer-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === question.correctIndex) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedCAOAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            // Show locked-in message
+            setTimeout(() => {
+                showScreen('playerAnsweredScreen');
+                const answeredCard = document.querySelector('#playerAnsweredScreen .card h2');
+                if (answeredCard) {
+                    answeredCard.textContent = '✅ Answer Locked In!';
+                }
+                const answeredMsg = document.querySelector('#playerAnsweredScreen .status-message p');
+                if (answeredMsg) {
+                    answeredMsg.textContent = `${currentPlayer.name} locked in for your team!`;
+                }
+            }, 1500);
+            
+            // Reset selection
+            selectedCAOAnswer = null;
+        }
+        window.lockInTeamAnswer = lockInTeamAnswer;
+
         async function assignPlayerToTeam(teamId) {
             if (!selectedPlayerId) {
                 showNotification('Select a player first!', 'error');
@@ -3801,6 +3912,50 @@ For true/false questions, use answers: ["True", "False"]`;
             const playerGrid = document.getElementById('playerAnswerGrid');
             playerGrid.innerHTML = renderPlayerAnswerView(question);
             
+            // Check if player is CAO for their team
+            const isCAO = currentPlayer && currentPlayer.isCAO;
+            const caoStatusBanner = document.getElementById('caoStatusBanner');
+            const lockInSection = document.getElementById('lockInSection');
+            const lockInBtn = document.getElementById('lockInBtn');
+            const lockInHint = document.getElementById('lockInHint');
+            
+            if (teamsEnabled && currentPlayer && currentPlayer.team) {
+                if (isCAO) {
+                    // Player IS the CAO
+                    caoStatusBanner.style.display = 'block';
+                    caoStatusBanner.style.background = 'linear-gradient(90deg, #ffd700, #ffed4e)';
+                    caoStatusBanner.style.color = '#000';
+                    caoStatusBanner.innerHTML = '⭐ You are the CAO - Select your team\'s answer!';
+                    lockInSection.style.display = 'block';
+                    lockInHint.style.display = 'block';
+                    lockInBtn.style.display = 'none'; // Hide until answer selected
+                } else {
+                    // Player is NOT the CAO
+                    caoStatusBanner.style.display = 'block';
+                    caoStatusBanner.style.background = 'rgba(100,100,100,0.2)';
+                    caoStatusBanner.style.color = '#666';
+                    caoStatusBanner.innerHTML = '👀 View Only - Your CAO will lock in the answer';
+                    lockInSection.style.display = 'none';
+                    
+                    // Disable answer buttons for non-CAO
+                    setTimeout(() => {
+                        const answerBtns = document.querySelectorAll('#playerAnswerGrid .answer-btn');
+                        answerBtns.forEach(btn => {
+                            btn.style.opacity = '0.5';
+                            btn.style.cursor = 'not-allowed';
+                            btn.onclick = (e) => {
+                                e.preventDefault();
+                                showNotification('Only your CAO can submit answers!', 'info');
+                            };
+                        });
+                    }, 100);
+                }
+            } else {
+                // No teams or individual mode
+                caoStatusBanner.style.display = 'none';
+                lockInSection.style.display = 'none';
+            }
+            
             // Apply 50/50 power-up (only for multiple choice)
             if (activePowerUps.fiftyFifty && question.type === 'multiple-choice') {
                 setTimeout(() => {
@@ -3956,6 +4111,34 @@ For true/false questions, use answers: ["True", "False"]`;
         window.submitMultiSelectAnswer = submitMultiSelectAnswer;
 
         async function submitAnswer(answerIndex) {
+            // If CAO mode is active and player is CAO, just store the selection
+            if (teamsEnabled && currentPlayer && currentPlayer.isCAO) {
+                selectedCAOAnswer = answerIndex;
+                
+                // Show lock-in button
+                const lockInBtn = document.getElementById('lockInBtn');
+                const lockInHint = document.getElementById('lockInHint');
+                if (lockInBtn && lockInHint) {
+                    lockInBtn.style.display = 'inline-block';
+                    lockInHint.style.display = 'none';
+                }
+                
+                // Highlight selected answer
+                const buttons = document.querySelectorAll('#playerAnswerGrid .answer-btn');
+                buttons.forEach((btn, idx) => {
+                    if (idx === answerIndex) {
+                        btn.style.transform = 'scale(1.05)';
+                        btn.style.boxShadow = '0 0 20px rgba(255,215,0,0.6)';
+                    } else {
+                        btn.style.transform = 'scale(1)';
+                        btn.style.boxShadow = '';
+                    }
+                });
+                
+                return; // Don't submit yet!
+            }
+            
+            // Regular submission (non-team or non-CAO)
             const question = currentQuiz.questions[currentQuestionIndex];
             const isCorrect = answerIndex === question.correctIndex;
             
