@@ -3842,8 +3842,28 @@ For true/false questions, use answers: ["True", "False"]`;
                     showQuestionResultsForPlayer();
                 } else if (gameData.status === 'finished') {
                     showFinalResultsForPlayer();
+                } else if (gameData.status === 'round_transition') {
+                    // Show round transition for players
+                    if (document.getElementById('roundTransitionScreen')) {
+                        showScreen('roundTransitionScreen');
+                    }
                 }
             });
+            
+            // Listen to player's own data to track CAO status and team
+            if (currentPlayer && currentPlayer.id) {
+                const playerRef = window.dbRef(window.db, `games/${gamePin}/players/${currentPlayer.id}`);
+                window.dbOnValue(playerRef, (snapshot) => {
+                    const playerData = snapshot.val();
+                    if (playerData) {
+                        // Update currentPlayer with latest data
+                        currentPlayer.isCAO = playerData.isCAO || false;
+                        currentPlayer.team = playerData.team || null;
+                        currentPlayer.caoForTeam = playerData.caoForTeam || null;
+                        console.log('Player data updated:', currentPlayer);
+                    }
+                });
+            }
         }
 
         // Start game
