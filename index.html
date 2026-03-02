@@ -2020,6 +2020,56 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
         }
 
+        // BETTING SYSTEM
+        function updateBetAmount(value) {
+            currentBet = parseInt(value);
+            document.getElementById('betAmount').textContent = currentBet;
+            document.getElementById('potentialWin').textContent = `+${currentBet}`;
+            document.getElementById('potentialLoss').textContent = `-${currentBet}`;
+        }
+        window.updateBetAmount = updateBetAmount;
+
+        function showBettingScreen() {
+            const playerCoins = getPlayerCoins(currentPlayer.name);
+            document.getElementById('bettingCoinsDisplay').textContent = playerCoins;
+            
+            // Set max bet to player's coins or 500, whichever is lower
+            const maxBet = Math.min(playerCoins, 500);
+            document.getElementById('betSlider').max = maxBet;
+            
+            // Set default bet to 100 or max if player has less
+            currentBet = Math.min(100, maxBet);
+            document.getElementById('betSlider').value = currentBet;
+            updateBetAmount(currentBet);
+            
+            showScreen('bettingScreen');
+        }
+
+        function confirmBet() {
+            playSound('tickSound');
+            showPlayerQuestion();
+        }
+        window.confirmBet = confirmBet;
+
+        function showBettingResult(won, amount) {
+            const msg = document.createElement('div');
+            const bgColor = won ? 'linear-gradient(135deg, #2ecc71, #27ae60)' : 'linear-gradient(135deg, var(--orange-bright), #c0392b)';
+            const text = won ? `🎉 BET WON! +${amount} 🪙` : `💸 BET LOST! -${amount} 🪙`;
+            
+            msg.style.cssText = `
+                position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%);
+                padding: 2rem 3rem; background: ${bgColor};
+                color: white; border-radius: 24px; font-size: 2rem; font-weight: 700;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.4); z-index: 10000;
+                animation: pulse 0.5s ease 2; text-align: center;
+            `;
+            msg.textContent = text;
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+            
+            // Reset bet for next question
+            currentBet = 100;
+        }
 
         function checkStreakBonus() {
             let bonus = 0;
@@ -2896,9 +2946,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     currentQuestion: -1,
                     hostId: Date.now().toString(),
                     createdAt: Date.now(),
-                    bettingEnabled: bettingEnabled,
-                    teamsEnabled: teamsEnabled,
-                    teams: teamsEnabled ? currentTeams : null
+                    bettingEnabled: bettingEnabled, // Save betting setting
+                    teamsEnabled: false,            // Initialize teams as disabled
+                    teams: null                     // Initialize teams object as null
                 });
 
                 document.getElementById('gamePinDisplay').textContent = gamePin;
@@ -3720,13 +3770,13 @@ For true/false questions, use answers: ["True", "False"]`;
 
                 await window.dbSet(
                     window.dbRef(window.db, `games/${gamePin}/players/${currentPlayer.id}`),
-                    {
-                        name: currentPlayer.name,
-                        score: 0,
+                    { 
+                        name: currentPlayer.name, 
+                        score: 0, 
                         coins: currentPlayer.coins,
-                        team: null,
-                        isCAO: false,
-                        caoForTeam: null
+                        team: null,         // Initialize team as null
+                        isCAO: false,       // Initialize CAO status as false
+                        caoForTeam: null    // Initialize CAO team assignment as null
                     }
                 );
 
@@ -3769,7 +3819,7 @@ For true/false questions, use answers: ["True", "False"]`;
 
         function listenToGameState() {
             const gameRef = window.dbRef(window.db, `games/${gamePin}`);
-            gameStateListener = window.dbOnValue(gameRef, (snapshot) => {
+            gameStateListener = window.dbOnValue(gameRef, async (snapshot) => {
                 const gameData = snapshot.val();
                 
                 if (!gameData) {
@@ -3781,6 +3831,18 @@ For true/false questions, use answers: ["True", "False"]`;
                 if (gameData.status === 'playing' && gameData.currentQuestion !== undefined) {
                     currentQuestionIndex = gameData.currentQuestion;
                     currentQuiz = gameData.quiz;
+                    
+                    // Refresh player state before showing question (ensures CAO status is current)
+                    if (currentPlayer && currentPlayer.id) {
+                        const playerSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players/${currentPlayer.id}`));
+                        if (playerSnapshot.exists()) {
+                            const freshData = playerSnapshot.val();
+                            currentPlayer.isCAO = freshData.isCAO || false;
+                            currentPlayer.team = freshData.team || null;
+                            currentPlayer.caoForTeam = freshData.caoForTeam || null;
+                            console.log('Refreshed player state before question:', currentPlayer);
+                        }
+                    }
                     
                     // Show betting screen first
                     if (bettingEnabled) {
@@ -3867,26 +3929,13 @@ For true/false questions, use answers: ["True", "False"]`;
             listenToAnswers();
         }
 
-        async function showPlayerQuestion() {
+        function showPlayerQuestion() {
+            console.log('🎮 showPlayerQuestion() called!');
+            console.log('Current player:', currentPlayer);
+            console.log('Teams enabled:', teamsEnabled);
+            
             const question = currentQuiz.questions[currentQuestionIndex];
             timeLeft = question.timeLimit;
-
-            // Refresh player state from Firebase right before rendering the question
-            if (teamsEnabled && currentPlayer && currentPlayer.id) {
-                try {
-                    const freshPlayerSnapshot = await window.dbGet(
-                        window.dbRef(window.db, `games/${gamePin}/players/${currentPlayer.id}`)
-                    );
-                    if (freshPlayerSnapshot.exists()) {
-                        const freshPlayer = freshPlayerSnapshot.val();
-                        currentPlayer.isCAO = freshPlayer.isCAO || false;
-                        currentPlayer.team = freshPlayer.team || null;
-                        currentPlayer.caoForTeam = freshPlayer.caoForTeam || null;
-                    }
-                } catch (error) {
-                    console.error('Error refreshing player role before question:', error);
-                }
-            }
             
             // Apply Time Freeze power-up
             if (activePowerUps.timeFreeze) {
@@ -4055,11 +4104,6 @@ For true/false questions, use answers: ["True", "False"]`;
         window.toggleMultiSelect = toggleMultiSelect;
 
         async function submitMultiSelectAnswer() {
-            if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
-                showNotification('Only your CAO can submit answers!', 'info');
-                return;
-            }
-
             const question = currentQuiz.questions[currentQuestionIndex];
             const correctSet = new Set(question.correctIndices);
             const selectedSet = new Set(selectedIndices);
@@ -4115,12 +4159,12 @@ For true/false questions, use answers: ["True", "False"]`;
         window.submitMultiSelectAnswer = submitMultiSelectAnswer;
 
         async function submitAnswer(answerIndex) {
-            // In team mode, non-CAO players can never submit answers
+            // HARD BLOCK: Non-CAO players cannot submit in team mode
             if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
-                showNotification('Only your CAO can submit answers!', 'info');
-                return;
+                showNotification('Only your Chief Answer Officer can submit answers!', 'error');
+                return; // STOP HERE - no further processing
             }
-
+            
             // If CAO mode is active and player is CAO, just store the selection
             if (teamsEnabled && currentPlayer && currentPlayer.isCAO) {
                 selectedCAOAnswer = answerIndex;
@@ -4243,11 +4287,6 @@ For true/false questions, use answers: ["True", "False"]`;
         window.submitAnswer = submitAnswer;
 
         async function submitTextAnswer() {
-            if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
-                showNotification('Only your CAO can submit answers!', 'info');
-                return;
-            }
-
             const question = currentQuiz.questions[currentQuestionIndex];
             const userAnswer = document.getElementById('textInputAnswer')?.value.toLowerCase().trim();
             
