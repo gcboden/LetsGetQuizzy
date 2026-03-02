@@ -3950,6 +3950,10 @@ For true/false questions, use answers: ["True", "False"]`;
         }
 
         function showPlayerQuestion() {
+            console.log('🎮 showPlayerQuestion() called!');
+            console.log('Current player:', currentPlayer);
+            console.log('Teams enabled:', teamsEnabled);
+            
             const question = currentQuiz.questions[currentQuestionIndex];
             timeLeft = question.timeLimit;
             
