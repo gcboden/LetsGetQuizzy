@@ -2930,6 +2930,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             isHost = true;
             currentQuestionIndex = 0;
 
+            console.log('🎮 Creating game with bettingEnabled:', bettingEnabled);
+
             try {
                 await window.dbSet(window.dbRef(window.db, `games/${gamePin}`), {
                     quiz: currentQuiz,
@@ -2941,6 +2943,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     teamsEnabled: false,            // Initialize teams as disabled
                     teams: null                     // Initialize teams object as null
                 });
+                
+                console.log('✅ Game created in Firebase with betting:', bettingEnabled);
 
                 document.getElementById('gamePinDisplay').textContent = gamePin;
                 showScreen('lobbyScreen');
@@ -3826,7 +3830,12 @@ For true/false questions, use answers: ["True", "False"]`;
                     // Refresh game settings from Firebase
                     bettingEnabled = gameData.bettingEnabled !== undefined ? gameData.bettingEnabled : true;
                     teamsEnabled = gameData.teamsEnabled || false;
-                    console.log('Refreshed game settings - Betting:', bettingEnabled, 'Teams:', teamsEnabled);
+                    console.log('🔄 Refreshed game settings:', {
+                        bettingEnabledFromFirebase: gameData.bettingEnabled,
+                        bettingEnabledLocal: bettingEnabled,
+                        teamsEnabled: teamsEnabled,
+                        willShowBetting: bettingEnabled
+                    });
                     
                     // Refresh player state before showing question (ensures CAO status is current)
                     if (currentPlayer && currentPlayer.id) {
