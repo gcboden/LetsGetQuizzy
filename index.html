@@ -2029,28 +2029,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         window.updateBetAmount = updateBetAmount;
 
-        function showBettingScreen() {
-            const playerCoins = getPlayerCoins(currentPlayer.name);
-            document.getElementById('bettingCoinsDisplay').textContent = playerCoins;
-            
-            // Set max bet to player's coins or 500, whichever is lower
-            const maxBet = Math.min(playerCoins, 500);
-            document.getElementById('betSlider').max = maxBet;
-            
-            // Set default bet to 100 or max if player has less
-            currentBet = Math.min(100, maxBet);
-            document.getElementById('betSlider').value = currentBet;
-            updateBetAmount(currentBet);
-            
-            showScreen('bettingScreen');
-        }
-
-        function confirmBet() {
-            playSound('tickSound');
-            showPlayerQuestion();
-        }
-        window.confirmBet = confirmBet;
-
         function showBettingResult(won, amount) {
             const msg = document.createElement('div');
             const bgColor = won ? 'linear-gradient(135deg, #2ecc71, #27ae60)' : 'linear-gradient(135deg, var(--orange-bright), #c0392b)';
@@ -4041,25 +4019,28 @@ For true/false questions, use answers: ["True", "False"]`;
         }
 
         function renderPlayerAnswerView(question) {
+            // Check if we should allow clicks (CAO or not in team mode)
+            const allowClicks = !teamsEnabled || !currentPlayer || !currentPlayer.team || currentPlayer.isCAO;
+            
             if (question.type === 'text-input') {
                 return `
                     <div class="text-input-container">
-                        <input type="text" class="text-input-answer" id="textInputAnswer" placeholder="Type your answer..." autocomplete="off">
-                        <button class="btn btn-primary submit-answer-btn" onclick="submitTextAnswer()">Submit Answer</button>
+                        <input type="text" class="text-input-answer" id="textInputAnswer" placeholder="Type your answer..." autocomplete="off" ${!allowClicks ? 'disabled' : ''}>
+                        <button class="btn btn-primary submit-answer-btn" onclick="submitTextAnswer()" ${!allowClicks ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>Submit Answer</button>
                     </div>
                 `;
             } else if (question.type === 'multiple-select') {
                 return `
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;" id="multiSelectGrid">
                         ${question.answers.map((answer, idx) => `
-                            <div class="multi-select-item" onclick="toggleMultiSelect(${idx})" data-index="${idx}">${answer}</div>
+                            <div class="multi-select-item ${!allowClicks ? 'disabled' : ''}" ${allowClicks ? `onclick="toggleMultiSelect(${idx})"` : ''} data-index="${idx}" style="${!allowClicks ? 'opacity:0.5; cursor:not-allowed;' : ''}">${answer}</div>
                         `).join('')}
                     </div>
-                    <button class="btn btn-primary submit-answer-btn" onclick="submitMultiSelectAnswer()">Submit Answer</button>
+                    <button class="btn btn-primary submit-answer-btn" onclick="submitMultiSelectAnswer()" ${!allowClicks ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>Submit Answer</button>
                 `;
             } else {
                 return question.answers.map((answer, idx) => `
-                    <button class="answer-btn option-${idx}" onclick="submitAnswer(${idx})">${answer}</button>
+                    <button class="answer-btn option-${idx}" ${allowClicks ? `onclick="submitAnswer(${idx})"` : ''} ${!allowClicks ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>${answer}</button>
                 `).join('');
             }
         }
@@ -4091,6 +4072,12 @@ For true/false questions, use answers: ["True", "False"]`;
         // Multi-select functionality
         let selectedIndices = [];
         function toggleMultiSelect(index) {
+            // HARD BLOCK: Non-CAO players cannot select in team mode
+            if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
+                showNotification('Only your Chief Answer Officer can submit answers!', 'error');
+                return;
+            }
+            
             playSound('tickSound');
             const item = document.querySelector(`.multi-select-item[data-index="${index}"]`);
             if (selectedIndices.includes(index)) {
@@ -4104,6 +4091,12 @@ For true/false questions, use answers: ["True", "False"]`;
         window.toggleMultiSelect = toggleMultiSelect;
 
         async function submitMultiSelectAnswer() {
+            // HARD BLOCK: Non-CAO players cannot submit in team mode
+            if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
+                showNotification('Only your Chief Answer Officer can submit answers!', 'error');
+                return;
+            }
+            
             const question = currentQuiz.questions[currentQuestionIndex];
             const correctSet = new Set(question.correctIndices);
             const selectedSet = new Set(selectedIndices);
@@ -4287,6 +4280,12 @@ For true/false questions, use answers: ["True", "False"]`;
         window.submitAnswer = submitAnswer;
 
         async function submitTextAnswer() {
+            // HARD BLOCK: Non-CAO players cannot submit in team mode
+            if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
+                showNotification('Only your Chief Answer Officer can submit answers!', 'error');
+                return;
+            }
+            
             const question = currentQuiz.questions[currentQuestionIndex];
             const userAnswer = document.getElementById('textInputAnswer')?.value.toLowerCase().trim();
             
