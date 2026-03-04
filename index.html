@@ -2274,9 +2274,11 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     
                     const loginScreen = document.getElementById('loginScreen');
                     const signupScreen = document.getElementById('signupScreen');
+                    const landingScreen = document.getElementById('landingScreen');
                     
                     if (loginScreen) loginScreen.classList.remove('active');
                     if (signupScreen) signupScreen.classList.remove('active');
+                    if (landingScreen) landingScreen.classList.remove('active');
                     
                     // showScreen will handle hiding/showing nav appropriately
                     window.showScreen('homeScreen');
@@ -2284,8 +2286,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     window.currentUser = null;
                     console.log('No user logged in');
                     
-                    // showScreen will handle hiding nav
-                    window.showScreen('loginScreen');
+                    // Show landing page for logged-out users
+                    window.showScreen('landingScreen');
                 }
             });
         });
