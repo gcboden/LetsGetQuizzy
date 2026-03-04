@@ -197,6 +197,26 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
 
         .card {
             background: white;
@@ -1250,8 +1270,225 @@
 
     <div class="stars" id="stars"></div>
     <div class="container">
+        <!-- Landing Page (Pre-Login) -->
+        <div id="landingScreen" class="screen active">
+            <!-- Hero Section -->
+            <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden;">
+                
+                <!-- Animated Background Elements -->
+                <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.1; animation: float 6s ease-in-out infinite;"></div>
+                <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.1; animation: float 8s ease-in-out infinite reverse;"></div>
+                <div style="position: absolute; top: 50%; left: 15%; width: 60px; height: 60px; border-radius: 50%; background: var(--orange-gold); opacity: 0.05; animation: float 7s ease-in-out infinite;"></div>
+                
+                <!-- Logo -->
+                <div style="margin-bottom: 2rem; animation: fadeInDown 0.8s ease;">
+                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 500px; width: 90%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));">
+                </div>
+                
+                <!-- Main Headline -->
+                <h1 style="
+                    font-size: clamp(2rem, 5vw, 3.5rem);
+                    font-weight: 900;
+                    background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright), var(--blue-electric));
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.2;
+                    animation: fadeInUp 0.8s ease 0.2s both;
+                ">
+                    Turn Review Into a Game Show
+                </h1>
+                
+                <!-- Subheadline -->
+                <p style="
+                    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+                    color: #666;
+                    max-width: 700px;
+                    margin: 0 auto 3rem;
+                    line-height: 1.6;
+                    animation: fadeInUp 0.8s ease 0.4s both;
+                ">
+                    Multiplayer quiz platform with <strong style="color: var(--blue-electric);">teams</strong>, 
+                    <strong style="color: var(--orange-gold);">confidence wagers</strong>, and 
+                    a <strong style="color: var(--blue-sky);">CAO system</strong> that makes students actually care
+                </p>
+                
+                <!-- CTA Buttons -->
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; animation: fadeInUp 0.8s ease 0.6s both;">
+                    <button onclick="tryDemo()" style="
+                        background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
+                        color: white;
+                        border: none;
+                        padding: 1.5rem 3rem;
+                        border-radius: 50px;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        box-shadow: 0 8px 0 rgba(255,152,0,0.3), 0 12px 30px rgba(255,152,0,0.4);
+                        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                        position: relative;
+                        overflow: hidden;
+                    " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 0 rgba(255,152,0,0.3), 0 16px 40px rgba(255,152,0,0.5)';" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 0 rgba(255,152,0,0.3), 0 12px 30px rgba(255,152,0,0.4)';">
+                        <span style="position: relative; z-index: 1;">🎮 Try Demo Game</span>
+                    </button>
+                    
+                    <button onclick="showScreen('loginScreen')" style="
+                        background: white;
+                        color: var(--blue-electric);
+                        border: 3px solid var(--blue-electric);
+                        padding: 1.5rem 3rem;
+                        border-radius: 50px;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        box-shadow: 0 8px 0 rgba(13,112,255,0.2), 0 12px 30px rgba(13,112,255,0.2);
+                        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                    " onmouseover="this.style.transform='translateY(-5px)'; this.style.background='var(--blue-electric)'; this.style.color='white';" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.background='white'; this.style.color='var(--blue-electric)';">
+                        Start Free →
+                    </button>
+                </div>
+                
+                <!-- Scroll hint -->
+                <div style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite;">
+                    <div style="color: #999; font-size: 0.9rem; margin-bottom: 0.5rem;">Learn more</div>
+                    <div style="font-size: 1.5rem;">↓</div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.03) 0%, rgba(255,193,7,0.03) 100%);">
+                <div style="max-width: 1200px; margin: 0 auto;">
+                    <h2 style="text-align: center; font-size: 2.5rem; color: var(--blue-electric); margin-bottom: 4rem;">
+                        Built for Real Classrooms
+                    </h2>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;">
+                        <!-- Feature 1: Team Play -->
+                        <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 3.5rem; margin-bottom: 1rem;">👥</div>
+                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 1rem;">Chief Answer Officer</h3>
+                            <p style="color: #666; line-height: 1.6;">
+                                Teams elect a CAO who locks in answers. Works with <strong>one device per team</strong> OR everyone on their phones. Perfect for any setup.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature 2: Confidence Wagers -->
+                        <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 3.5rem; margin-bottom: 1rem;">💰</div>
+                            <h3 style="color: var(--orange-gold); font-size: 1.5rem; margin-bottom: 1rem;">Confidence Wagers</h3>
+                            <p style="color: #666; line-height: 1.6;">
+                                Students wager coins based on confidence. Risk/reward mechanics keep them <strong>actually engaged</strong> instead of just guessing.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature 3: Rounds System -->
+                        <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🎯</div>
+                            <h3 style="color: var(--blue-sky); font-size: 1.5rem; margin-bottom: 1rem;">Rounds & Momentum</h3>
+                            <p style="color: #666; line-height: 1.6;">
+                                Structure your quiz with rounds and leaderboards. Build momentum like a real game show—<strong>not a worksheet</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- How It Works -->
+            <div style="padding: 5rem 2rem;">
+                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                    <h2 style="font-size: 2.5rem; color: var(--blue-electric); margin-bottom: 1rem;">
+                        Quick Setup, Zero Friction
+                    </h2>
+                    <p style="font-size: 1.2rem; color: #666; margin-bottom: 4rem;">
+                        From quiz creation to gameplay in under 3 minutes
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: left;">
+                        <div>
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
+                                color: white;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1rem;
+                            ">1</div>
+                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem;">Create Quiz</h4>
+                            <p style="color: #666;">Write questions or use AI to generate them. Takes 2 minutes.</p>
+                        </div>
+                        
+                        <div>
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
+                                color: white;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1rem;
+                            ">2</div>
+                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem;">Host Game</h4>
+                            <p style="color: #666;">Students join with a PIN. Set up teams in seconds.</p>
+                        </div>
+                        
+                        <div>
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, var(--orange-bright), #ff6b6b);
+                                color: white;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1rem;
+                            ">3</div>
+                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem;">Run Like a Game Show</h4>
+                            <p style="color: #666;">Reveal answers, show leaderboards, keep the energy high.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Final CTA -->
+            <div style="padding: 5rem 2rem; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); text-align: center; color: white;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Ready to Make Review Actually Fun?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.9;">
+                    Free for classrooms. No credit card required.
+                </p>
+                <button onclick="showScreen('signupScreen')" style="
+                    background: white;
+                    color: var(--blue-electric);
+                    border: none;
+                    padding: 1.5rem 3.5rem;
+                    border-radius: 50px;
+                    font-size: 1.4rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    Start Free Today 🚀
+                </button>
+            </div>
+        </div>
+
         <!-- Login Screen -->
-        <div id="loginScreen" class="screen active">
+        <div id="loginScreen" class="screen">
             <!-- Logo above the card -->
             <div style="text-align: center; margin-bottom: 2rem;">
                 <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 400px; width: 90%;">
@@ -2958,6 +3195,23 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             displayRecentQuizzes();
         }
         window.goHome = goHome;
+        
+        // Try Demo - Guest Mode
+        async function tryDemo() {
+            // Generate random guest name
+            const guestNumber = Math.floor(Math.random() * 9999);
+            const guestName = `Guest${guestNumber}`;
+            
+            // Show join screen and auto-fill
+            showScreen('joinScreen');
+            document.getElementById('playerName').value = guestName;
+            document.getElementById('gamePinInput').value = 'DEMO';
+            document.getElementById('gamePinInput').placeholder = 'Enter the demo PIN or create your own game!';
+            
+            // Show notification
+            showNotification(`👋 Welcome ${guestName}! Enter a game PIN to join or sign up to host your own games.`, 'info');
+        }
+        window.tryDemo = tryDemo;
 
         // Display recent quizzes on home screen
         function displayRecentQuizzes() {
