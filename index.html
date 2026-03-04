@@ -1276,213 +1276,234 @@
             <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden;">
                 
                 <!-- Animated Background Elements -->
-                <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.1; animation: float 6s ease-in-out infinite;"></div>
-                <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.1; animation: float 8s ease-in-out infinite reverse;"></div>
-                <div style="position: absolute; top: 50%; left: 15%; width: 60px; height: 60px; border-radius: 50%; background: var(--orange-gold); opacity: 0.05; animation: float 7s ease-in-out infinite;"></div>
+                <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.08; animation: float 6s ease-in-out infinite;"></div>
+                <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.08; animation: float 8s ease-in-out infinite reverse;"></div>
                 
                 <!-- Logo -->
                 <div style="margin-bottom: 2rem; animation: fadeInDown 0.8s ease;">
-                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 500px; width: 90%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));">
+                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 450px; width: 85%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));">
                 </div>
                 
                 <!-- Main Headline -->
                 <h1 style="
-                    font-size: clamp(2rem, 5vw, 3.5rem);
-                    font-weight: 900;
-                    background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright), var(--blue-electric));
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
+                    font-size: clamp(2rem, 4.5vw, 3.2rem);
+                    font-weight: 800;
+                    color: var(--blue-electric);
                     margin-bottom: 1.5rem;
-                    line-height: 1.2;
+                    line-height: 1.3;
+                    max-width: 900px;
                     animation: fadeInUp 0.8s ease 0.2s both;
                 ">
-                    Turn Review Into a Game Show
+                    Turn review and instruction into a live, team-based learning experience.
                 </h1>
                 
                 <!-- Subheadline -->
                 <p style="
-                    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-                    color: #666;
-                    max-width: 700px;
+                    font-size: clamp(1rem, 2.2vw, 1.25rem);
+                    color: #555;
+                    max-width: 850px;
                     margin: 0 auto 3rem;
-                    line-height: 1.6;
+                    line-height: 1.7;
                     animation: fadeInUp 0.8s ease 0.4s both;
                 ">
-                    Multiplayer quiz platform with <strong style="color: var(--blue-electric);">teams</strong>, 
-                    <strong style="color: var(--orange-gold);">confidence wagers</strong>, and 
-                    a <strong style="color: var(--blue-sky);">CAO system</strong> that makes students actually care
+                    Let's Get Quizzy is a classroom-friendly quiz platform that helps instructors turn topics, concepts, and learning outcomes into interactive team play. Designed for college courses, Writing 150 sessions, library instruction, faculty workshops, and staff trainings, it brings more energy, participation, and collaboration into the room <strong style="color: var(--blue-electric);">without sacrificing instructional purpose.</strong>
                 </p>
                 
                 <!-- CTA Buttons -->
                 <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; animation: fadeInUp 0.8s ease 0.6s both;">
-                    <button onclick="tryDemo()" style="
-                        background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
+                    <button onclick="showScreen('signupScreen')" style="
+                        background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
                         color: white;
                         border: none;
-                        padding: 1.5rem 3rem;
-                        border-radius: 50px;
-                        font-size: 1.3rem;
+                        padding: 1.3rem 3rem;
+                        border-radius: 12px;
+                        font-size: 1.2rem;
                         font-weight: 700;
                         cursor: pointer;
-                        box-shadow: 0 8px 0 rgba(255,152,0,0.3), 0 12px 30px rgba(255,152,0,0.4);
-                        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                        position: relative;
-                        overflow: hidden;
-                    " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 0 rgba(255,152,0,0.3), 0 16px 40px rgba(255,152,0,0.5)';" 
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 0 rgba(255,152,0,0.3), 0 12px 30px rgba(255,152,0,0.4)';">
-                        <span style="position: relative; z-index: 1;">🎮 Try Demo Game</span>
+                        box-shadow: 0 6px 20px rgba(13,112,255,0.3);
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(13,112,255,0.4)';" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(13,112,255,0.3)';">
+                        Start Free
                     </button>
                     
-                    <button onclick="showScreen('loginScreen')" style="
+                    <button onclick="document.getElementById('supportingSection').scrollIntoView({behavior: 'smooth'})" style="
                         background: white;
                         color: var(--blue-electric);
-                        border: 3px solid var(--blue-electric);
-                        padding: 1.5rem 3rem;
-                        border-radius: 50px;
-                        font-size: 1.3rem;
+                        border: 2px solid var(--blue-electric);
+                        padding: 1.3rem 3rem;
+                        border-radius: 12px;
+                        font-size: 1.2rem;
                         font-weight: 700;
                         cursor: pointer;
-                        box-shadow: 0 8px 0 rgba(13,112,255,0.2), 0 12px 30px rgba(13,112,255,0.2);
-                        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                    " onmouseover="this.style.transform='translateY(-5px)'; this.style.background='var(--blue-electric)'; this.style.color='white';" 
-                       onmouseout="this.style.transform='translateY(0)'; this.style.background='white'; this.style.color='var(--blue-electric)';">
-                        Start Free →
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='rgba(13,112,255,0.05)';" 
+                       onmouseout="this.style.background='white';">
+                        See How It Works
                     </button>
-                </div>
-                
-                <!-- Scroll hint -->
-                <div style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite;">
-                    <div style="color: #999; font-size: 0.9rem; margin-bottom: 0.5rem;">Learn more</div>
-                    <div style="font-size: 1.5rem;">↓</div>
                 </div>
             </div>
             
-            <!-- Features Section -->
-            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.03) 0%, rgba(255,193,7,0.03) 100%);">
-                <div style="max-width: 1200px; margin: 0 auto;">
-                    <h2 style="text-align: center; font-size: 2.5rem; color: var(--blue-electric); margin-bottom: 4rem;">
-                        Built for Real Classrooms
+            <!-- Supporting Value Statement -->
+            <div id="supportingSection" style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.02) 0%, white 100%);">
+                <div style="max-width: 950px; margin: 0 auto; text-align: center;">
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 2rem; font-weight: 700;">
+                        Built for instructors who want more than passive review.
                     </h2>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;">
-                        <!-- Feature 1: Team Play -->
-                        <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="font-size: 3.5rem; margin-bottom: 1rem;">👥</div>
-                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 1rem;">Chief Answer Officer</h3>
-                            <p style="color: #666; line-height: 1.6;">
-                                Teams elect a CAO who locks in answers. Works with <strong>one device per team</strong> OR everyone on their phones. Perfect for any setup.
+                    <p style="font-size: 1.2rem; color: #555; line-height: 1.8; max-width: 850px; margin: 0 auto;">
+                        Let's Get Quizzy helps students engage with course content through team discussion, shared decision-making, and active participation. Whether you are reviewing key concepts, checking understanding, reinforcing subject knowledge, or creating a more memorable class session, the platform is designed to support <strong style="color: var(--blue-electric);">meaningful learning in a format that feels dynamic and collaborative.</strong>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Feature Highlights -->
+            <div style="padding: 5rem 2rem; background: white;">
+                <div style="max-width: 1100px; margin: 0 auto;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
+                        
+                        <!-- Feature 1 -->
+                        <div style="padding: 2.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-left: 4px solid var(--blue-electric); border-radius: 12px;">
+                            <h3 style="color: var(--blue-electric); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
+                                Team-based learning, not just individual competition
+                            </h3>
+                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
+                                Students can work in teams, discuss each question, and submit a final answer together. This creates a more collaborative environment and encourages discussion, peer learning, and shared problem-solving.
                             </p>
                         </div>
                         
-                        <!-- Feature 2: Confidence Wagers -->
-                        <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="font-size: 3.5rem; margin-bottom: 1rem;">💰</div>
-                            <h3 style="color: var(--orange-gold); font-size: 1.5rem; margin-bottom: 1rem;">Confidence Wagers</h3>
-                            <p style="color: #666; line-height: 1.6;">
-                                Students wager coins based on confidence. Risk/reward mechanics keep them <strong>actually engaged</strong> instead of just guessing.
+                        <!-- Feature 2 -->
+                        <div style="padding: 2.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,158,1,0.05)); border-left: 4px solid var(--orange-gold); border-radius: 12px;">
+                            <h3 style="color: var(--orange-gold); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
+                                Structured for real instruction
+                            </h3>
+                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
+                                Use Let's Get Quizzy for review sessions, formative assessment, concept checks, writing and research instruction, staff development, and workshop facilitation. It adapts to a range of instructional settings without requiring a major change to your lesson plan.
                             </p>
                         </div>
                         
-                        <!-- Feature 3: Rounds System -->
-                        <div style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🎯</div>
-                            <h3 style="color: var(--blue-sky); font-size: 1.5rem; margin-bottom: 1rem;">Rounds & Momentum</h3>
-                            <p style="color: #666; line-height: 1.6;">
-                                Structure your quiz with rounds and leaderboards. Build momentum like a real game show—<strong>not a worksheet</strong>.
+                        <!-- Feature 3 -->
+                        <div style="padding: 2.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.05), rgba(102,187,255,0.05)); border-left: 4px solid var(--blue-sky); border-radius: 12px;">
+                            <h3 style="color: var(--blue-sky); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
+                                Flexible classroom control
+                            </h3>
+                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
+                                Keep the experience simple for straightforward review, or add optional rounds and strategy elements when you want more energy and momentum. Instructors remain in control of how game-based the session becomes.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- How It Works -->
-            <div style="padding: 5rem 2rem;">
-                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-                    <h2 style="font-size: 2.5rem; color: var(--blue-electric); margin-bottom: 1rem;">
-                        Quick Setup, Zero Friction
+            <!-- Why It Feels Different -->
+            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(255,193,7,0.03) 0%, rgba(255,158,1,0.03) 100%);">
+                <div style="max-width: 950px; margin: 0 auto;">
+                    <h2 style="text-align: center; font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 3rem; font-weight: 700;">
+                        Why it feels different
                     </h2>
-                    <p style="font-size: 1.2rem; color: #666; margin-bottom: 4rem;">
-                        From quiz creation to gameplay in under 3 minutes
-                    </p>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: left;">
-                        <div>
-                            <div style="
-                                width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
-                                color: white;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.5rem;
-                                font-weight: 700;
-                                margin-bottom: 1rem;
-                            ">1</div>
-                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem;">Create Quiz</h4>
-                            <p style="color: #666;">Write questions or use AI to generate them. Takes 2 minutes.</p>
+                    <div style="display: grid; gap: 2.5rem;">
+                        <!-- Difference 1 -->
+                        <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">
+                                More than a quiz game
+                            </h3>
+                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
+                                Most quiz platforms focus on speed, individual answers, and point totals. Let's Get Quizzy is built around <strong>team play, classroom discussion, and hosted pacing</strong>, making it a better fit for instructors who value collaboration and engagement alongside content mastery.
+                            </p>
                         </div>
                         
-                        <div>
-                            <div style="
-                                width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
-                                color: white;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.5rem;
-                                font-weight: 700;
-                                margin-bottom: 1rem;
-                            ">2</div>
-                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem;">Host Game</h4>
-                            <p style="color: #666;">Students join with a PIN. Set up teams in seconds.</p>
+                        <!-- Difference 2 -->
+                        <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                            <h3 style="color: var(--orange-gold); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">
+                                Designed for discussion-rich environments
+                            </h3>
+                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
+                                It works especially well in settings where students are already seated in groups, working in teams, or participating in collaborative learning activities. That makes it a natural fit for seminars, Writing 150 instruction, table-based classrooms, library workshops, and campus trainings.
+                            </p>
                         </div>
                         
-                        <div>
-                            <div style="
-                                width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, var(--orange-bright), #ff6b6b);
-                                color: white;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.5rem;
-                                font-weight: 700;
-                                margin-bottom: 1rem;
-                            ">3</div>
-                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem;">Run Like a Game Show</h4>
-                            <p style="color: #666;">Reveal answers, show leaderboards, keep the energy high.</p>
+                        <!-- Difference 3 -->
+                        <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                            <h3 style="color: var(--blue-sky); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">
+                                A stronger fit for learning outcomes
+                            </h3>
+                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem; margin-bottom: 1rem;">
+                                Let's Get Quizzy can support:
+                            </p>
+                            <ul style="color: #555; line-height: 2; font-size: 1.05rem; margin-left: 1.5rem;">
+                                <li>Concept review and reinforcement</li>
+                                <li>Recall and low-stakes assessment</li>
+                                <li>Active participation and engagement</li>
+                                <li>Collaborative problem-solving</li>
+                                <li>Discussion-based learning</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Use Cases -->
+            <div style="padding: 5rem 2rem; background: white;">
+                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 3rem; font-weight: 700;">
+                        Great for:
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-radius: 12px;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
+                            <strong style="color: var(--blue-electric); font-size: 1.1rem;">College & university courses</strong>
+                        </div>
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,158,1,0.05)); border-radius: 12px;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">✍️</div>
+                            <strong style="color: var(--orange-gold); font-size: 1.1rem;">Writing 150 sessions</strong>
+                        </div>
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.05), rgba(102,187,255,0.05)); border-radius: 12px;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                            <strong style="color: var(--blue-sky); font-size: 1.1rem;">Library instruction</strong>
+                        </div>
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-radius: 12px;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+                            <strong style="color: var(--blue-electric); font-size: 1.1rem;">Faculty & staff workshops</strong>
+                        </div>
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,158,1,0.05)); border-radius: 12px;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+                            <strong style="color: var(--orange-gold); font-size: 1.1rem;">Student employee training</strong>
+                        </div>
+                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.05), rgba(102,187,255,0.05)); border-radius: 12px;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
+                            <strong style="color: var(--blue-sky); font-size: 1.1rem;">Professional development</strong>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Final CTA -->
-            <div style="padding: 5rem 2rem; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); text-align: center; color: white;">
-                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Ready to Make Review Actually Fun?</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.9;">
-                    Free for classrooms. No credit card required.
+            <div style="padding: 6rem 2rem; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); text-align: center; color: white;">
+                <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.4;">
+                    You bring the subject matter.
+                </h2>
+                <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.4;">
+                    Your students bring the discussion.
+                </h2>
+                <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 2rem; font-weight: 600; line-height: 1.4;">
+                    Let's Get Quizzy brings the energy and structure.
+                </h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    Create a more interactive, collaborative, and memorable learning experience.
                 </p>
                 <button onclick="showScreen('signupScreen')" style="
                     background: white;
                     color: var(--blue-electric);
                     border: none;
-                    padding: 1.5rem 3.5rem;
-                    border-radius: 50px;
-                    font-size: 1.4rem;
+                    padding: 1.5rem 4rem;
+                    border-radius: 12px;
+                    font-size: 1.3rem;
                     font-weight: 700;
                     cursor: pointer;
                     box-shadow: 0 8px 30px rgba(0,0,0,0.3);
                     transition: all 0.3s ease;
                 " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                    Start Free Today 🚀
+                    Start Free
                 </button>
             </div>
         </div>
