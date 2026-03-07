@@ -3340,6 +3340,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         
         // Launch Host Demo (entry point)
         function launchHostDemo() {
+            console.log('launchHostDemo called!');
             // Step 0: Quiz selection
             showDemoTooltip(
                 '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Choose Your Example</h2>' +
@@ -3727,6 +3728,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         });
         
         window.launchHostDemo = launchHostDemo;
+        window.startDemo = startDemo;
+        window.nextDemoStep = nextDemoStep;
+        window.toggleDemoTeams = toggleDemoTeams;
+        window.assignDemoCaptain = assignDemoCaptain;
 
         // Display recent quizzes on home screen
         function displayRecentQuizzes() {
