@@ -1275,13 +1275,13 @@
             <!-- Hero Section -->
             <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden;">
                 
-                <!-- Animated Background Elements -->
-                <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.08; animation: float 6s ease-in-out infinite;"></div>
-                <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.08; animation: float 8s ease-in-out infinite reverse;"></div>
+                <!-- Subtle Background Elements -->
+                <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.06; animation: float 6s ease-in-out infinite;"></div>
+                <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.06; animation: float 8s ease-in-out infinite reverse;"></div>
                 
                 <!-- Logo -->
                 <div style="margin-bottom: 2rem; animation: fadeInDown 0.8s ease;">
-                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 450px; width: 85%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));">
+                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="max-width: 450px; width: 85%; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.12));">
                 </div>
                 
                 <!-- Main Headline -->
@@ -1294,7 +1294,7 @@
                     max-width: 900px;
                     animation: fadeInUp 0.8s ease 0.2s both;
                 ">
-                    Turn review and instruction into a live, team-based learning experience.
+                    Bring trivia-night energy to classroom review.
                 </h1>
                 
                 <!-- Subheadline -->
@@ -1302,11 +1302,21 @@
                     font-size: clamp(1rem, 2.2vw, 1.25rem);
                     color: #555;
                     max-width: 850px;
-                    margin: 0 auto 3rem;
+                    margin: 0 auto 1rem;
                     line-height: 1.7;
                     animation: fadeInUp 0.8s ease 0.4s both;
                 ">
-                    Let's Get Quizzy is a classroom-friendly quiz platform that helps instructors turn topics, concepts, and learning outcomes into interactive team play. Designed for college courses, Writing 150 sessions, library instruction, faculty workshops, and staff trainings, it brings more energy, participation, and collaboration into the room <strong style="color: var(--blue-electric);">without sacrificing instructional purpose.</strong>
+                    Host live, team-based quiz games that reinforce topics, concepts, and learning outcomes—with a pace and structure that keeps students engaged.
+                </p>
+                
+                <!-- Support Line -->
+                <p style="
+                    font-size: clamp(0.95rem, 2vw, 1.1rem);
+                    color: #777;
+                    margin-bottom: 3rem;
+                    animation: fadeInUp 0.8s ease 0.5s both;
+                ">
+                    Great for K–12 classrooms, college courses, Writing 150 sessions, and trainings
                 </p>
                 
                 <!-- CTA Buttons -->
@@ -1327,7 +1337,7 @@
                         Start Free
                     </button>
                     
-                    <button onclick="document.getElementById('supportingSection').scrollIntoView({behavior: 'smooth'})" style="
+                    <button onclick="launchHostDemo()" style="
                         background: white;
                         color: var(--blue-electric);
                         border: 2px solid var(--blue-electric);
@@ -1339,139 +1349,152 @@
                         transition: all 0.3s ease;
                     " onmouseover="this.style.background='rgba(13,112,255,0.05)';" 
                        onmouseout="this.style.background='white';">
-                        See How It Works
+                        See It in Action
                     </button>
                 </div>
             </div>
             
-            <!-- Supporting Value Statement -->
-            <div id="supportingSection" style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.02) 0%, white 100%);">
-                <div style="max-width: 950px; margin: 0 auto; text-align: center;">
-                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 2rem; font-weight: 700;">
-                        Built for instructors who want more than passive review.
-                    </h2>
-                    <p style="font-size: 1.2rem; color: #555; line-height: 1.8; max-width: 850px; margin: 0 auto;">
-                        Let's Get Quizzy helps students engage with course content through team discussion, shared decision-making, and active participation. Whether you are reviewing key concepts, checking understanding, reinforcing subject knowledge, or creating a more memorable class session, the platform is designed to support <strong style="color: var(--blue-electric);">meaningful learning in a format that feels dynamic and collaborative.</strong>
-                    </p>
-                </div>
-            </div>
-            
-            <!-- Feature Highlights -->
-            <div style="padding: 5rem 2rem; background: white;">
+            <!-- Feature Cards -->
+            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.02) 0%, white 100%);">
                 <div style="max-width: 1100px; margin: 0 auto;">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
                         
                         <!-- Feature 1 -->
-                        <div style="padding: 2.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-left: 4px solid var(--blue-electric); border-radius: 12px;">
+                        <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
                             <h3 style="color: var(--blue-electric); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Team-based learning, not just individual competition
+                                Team-based learning (without chaos)
                             </h3>
                             <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Students can work in teams, discuss each question, and submit a final answer together. This creates a more collaborative environment and encourages discussion, peer learning, and shared problem-solving.
+                                Students collaborate in teams, discuss each question, and choose a Team Captain to submit the final answer—so teamwork feels clear and manageable.
                             </p>
                         </div>
                         
                         <!-- Feature 2 -->
-                        <div style="padding: 2.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,158,1,0.05)); border-left: 4px solid var(--orange-gold); border-radius: 12px;">
+                        <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
                             <h3 style="color: var(--orange-gold); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Structured for real instruction
+                                Round-based play for pacing and momentum
                             </h3>
                             <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Use Let's Get Quizzy for review sessions, formative assessment, concept checks, writing and research instruction, staff development, and workshop facilitation. It adapts to a range of instructional settings without requiring a major change to your lesson plan.
+                                Run quizzes in rounds to create natural pauses for discussion, feedback, and leaderboards. It feels like a hosted event, not a worksheet.
                             </p>
                         </div>
                         
                         <!-- Feature 3 -->
-                        <div style="padding: 2.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.05), rgba(102,187,255,0.05)); border-left: 4px solid var(--blue-sky); border-radius: 12px;">
+                        <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
                             <h3 style="color: var(--blue-sky); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Flexible classroom control
+                                Built for real teaching environments
                             </h3>
                             <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Keep the experience simple for straightforward review, or add optional rounds and strategy elements when you want more energy and momentum. Instructors remain in control of how game-based the session becomes.
+                                Use phones, laptops, or classroom devices. Keep it simple—or enable optional strategy features when you want more energy.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Why It Feels Different -->
+            <!-- Why It's Different -->
             <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(255,193,7,0.03) 0%, rgba(255,158,1,0.03) 100%);">
                 <div style="max-width: 950px; margin: 0 auto;">
-                    <h2 style="text-align: center; font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 3rem; font-weight: 700;">
-                        Why it feels different
+                    <div style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                        <p style="color: #555; line-height: 1.8; font-size: 1.15rem; text-align: center;">
+                            Most quiz tools focus on speed and individual points. Let's Get Quizzy is designed for <strong style="color: var(--blue-electric);">collaboration, discussion, and instructor-led pacing</strong>, making it a strong fit for classrooms that value engagement and active learning.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- How It Works -->
+            <div style="padding: 5rem 2rem; background: white;">
+                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 1rem; font-weight: 700;">
+                        How it works
                     </h2>
+                    <p style="font-size: 1.1rem; color: #666; margin-bottom: 4rem;">
+                        Three simple steps to get started
+                    </p>
                     
-                    <div style="display: grid; gap: 2.5rem;">
-                        <!-- Difference 1 -->
-                        <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">
-                                More than a quiz game
-                            </h3>
-                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Most quiz platforms focus on speed, individual answers, and point totals. Let's Get Quizzy is built around <strong>team play, classroom discussion, and hosted pacing</strong>, making it a better fit for instructors who value collaboration and engagement alongside content mastery.
-                            </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: left;">
+                        <!-- Step 1 -->
+                        <div>
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
+                                color: white;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1rem;
+                            ">1</div>
+                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">Create a quiz from your content</h4>
+                            <p style="color: #666; line-height: 1.6;">Build around your unit, readings, vocabulary, or learning outcomes (and optionally generate a first draft with AI).</p>
                         </div>
                         
-                        <!-- Difference 2 -->
-                        <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <h3 style="color: var(--orange-gold); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">
-                                Designed for discussion-rich environments
-                            </h3>
-                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                It works especially well in settings where students are already seated in groups, working in teams, or participating in collaborative learning activities. That makes it a natural fit for seminars, Writing 150 instruction, table-based classrooms, library workshops, and campus trainings.
-                            </p>
+                        <!-- Step 2 -->
+                        <div>
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
+                                color: white;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1rem;
+                            ">2</div>
+                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">Host a live game</h4>
+                            <p style="color: #666; line-height: 1.6;">Students join with a PIN. Turn on teams if you want collaborative play.</p>
                         </div>
                         
-                        <!-- Difference 3 -->
-                        <div style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <h3 style="color: var(--blue-sky); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">
-                                A stronger fit for learning outcomes
-                            </h3>
-                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem; margin-bottom: 1rem;">
-                                Let's Get Quizzy can support:
-                            </p>
-                            <ul style="color: #555; line-height: 2; font-size: 1.05rem; margin-left: 1.5rem;">
-                                <li>Concept review and reinforcement</li>
-                                <li>Recall and low-stakes assessment</li>
-                                <li>Active participation and engagement</li>
-                                <li>Collaborative problem-solving</li>
-                                <li>Discussion-based learning</li>
-                            </ul>
+                        <!-- Step 3 -->
+                        <div>
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                background: linear-gradient(135deg, var(--blue-sky), #66BBFF);
+                                color: white;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1rem;
+                            ">3</div>
+                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">Run it like a trivia host</h4>
+                            <p style="color: #666; line-height: 1.6;">Move through rounds, reveal answers, show leaderboards, and end with a memorable final question.</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Use Cases -->
-            <div style="padding: 5rem 2rem; background: white;">
+            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.02) 0%, white 100%);">
                 <div style="max-width: 900px; margin: 0 auto; text-align: center;">
                     <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 3rem; font-weight: 700;">
-                        Great for:
+                        Perfect for:
                     </h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
-                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-radius: 12px;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
-                            <strong style="color: var(--blue-electric); font-size: 1.1rem;">College & university courses</strong>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; text-align: left;">
+                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Review days & test prep</div>
                         </div>
-                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,158,1,0.05)); border-radius: 12px;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">✍️</div>
-                            <strong style="color: var(--orange-gold); font-size: 1.1rem;">Writing 150 sessions</strong>
+                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Concept checks & formative assessment</div>
                         </div>
-                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.05), rgba(102,187,255,0.05)); border-radius: 12px;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
-                            <strong style="color: var(--blue-sky); font-size: 1.1rem;">Library instruction</strong>
+                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Vocabulary and content reinforcement</div>
                         </div>
-                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-radius: 12px;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
-                            <strong style="color: var(--blue-electric); font-size: 1.1rem;">Faculty & staff workshops</strong>
+                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Writing 150 / research instruction practice</div>
                         </div>
-                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,158,1,0.05)); border-radius: 12px;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
-                            <strong style="color: var(--orange-gold); font-size: 1.1rem;">Student employee training</strong>
-                        </div>
-                        <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.05), rgba(102,187,255,0.05)); border-radius: 12px;">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
-                            <strong style="color: var(--blue-sky); font-size: 1.1rem;">Professional development</strong>
+                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Staff training & team learning</div>
                         </div>
                     </div>
                 </div>
@@ -1479,33 +1502,79 @@
             
             <!-- Final CTA -->
             <div style="padding: 6rem 2rem; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); text-align: center; color: white;">
-                <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.4;">
-                    You bring the subject matter.
-                </h2>
-                <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.4;">
-                    Your students bring the discussion.
-                </h2>
-                <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 2rem; font-weight: 600; line-height: 1.4;">
-                    Let's Get Quizzy brings the energy and structure.
+                <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 1.5rem; font-weight: 700; line-height: 1.4;">
+                    Make review more engaging—without making teaching harder.
                 </h2>
                 <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto;">
-                    Create a more interactive, collaborative, and memorable learning experience.
+                    Start free, run a game in minutes, and scale up when you need bigger groups or advanced features.
                 </p>
-                <button onclick="showScreen('signupScreen')" style="
-                    background: white;
-                    color: var(--blue-electric);
-                    border: none;
-                    padding: 1.5rem 4rem;
-                    border-radius: 12px;
-                    font-size: 1.3rem;
-                    font-weight: 700;
-                    cursor: pointer;
-                    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                    Start Free
-                </button>
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="showScreen('signupScreen')" style="
+                        background: white;
+                        color: var(--blue-electric);
+                        border: none;
+                        padding: 1.5rem 3.5rem;
+                        border-radius: 12px;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        Start Free
+                    </button>
+                    <button onclick="launchHostDemo()" style="
+                        background: rgba(255,255,255,0.15);
+                        color: white;
+                        border: 2px solid white;
+                        padding: 1.5rem 3.5rem;
+                        border-radius: 12px;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        backdrop-filter: blur(10px);
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                        See It in Action
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- Guided Host Demo Screen -->
+        <div id="demoScreen" class="screen">
+            <!-- Demo Overlay (tooltip/caption system) -->
+            <div id="demoOverlay" style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                display: none;
+                z-index: 10000;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(3px);
+            ">
+                <div id="demoTooltip" style="
+                    background: white;
+                    padding: 2.5rem;
+                    border-radius: 16px;
+                    max-width: 550px;
+                    width: 90%;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+                    text-align: center;
+                ">
+                    <div id="demoTooltipContent"></div>
+                    <button id="demoNextBtn" class="btn btn-primary" style="margin-top: 2rem; padding: 1rem 3rem; font-size: 1.1rem;">
+                        Continue
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Demo Host View (simulates actual host screen) -->
+            <div id="demoHostView"></div>
         </div>
 
         <!-- Login Screen -->
@@ -3235,6 +3304,429 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             showNotification(`👋 Welcome ${guestName}! Enter a game PIN to join or sign up to host your own games.`, 'info');
         }
         window.tryDemo = tryDemo;
+        
+        // ============================================
+        // GUIDED HOST DEMO SYSTEM
+        // ============================================
+        
+        let demoStep = 0;
+        let demoQuizType = null;
+        const demoPlayers = [];
+        let demoTeamsEnabled = false;
+        
+        // Demo quiz examples
+        const demoQuizzes = {
+            classroom: {
+                title: "State Capitals Review",
+                questions: [
+                    { text: "What is the capital of California?", options: ["Los Angeles", "San Francisco", "Sacramento", "San Diego"], correct: 2 },
+                    { text: "What is the capital of Texas?", options: ["Houston", "Dallas", "Austin", "San Antonio"], correct: 2 }
+                ]
+            },
+            college: {
+                title: "Writing 150: Research Skills",
+                questions: [
+                    { text: "Which source type is considered a primary source?", options: ["Textbook summary", "Original research article", "Wikipedia entry", "Review article"], correct: 1 },
+                    { text: "What is the main purpose of a thesis statement?", options: ["To introduce the topic", "To present the main argument", "To conclude the essay", "To cite sources"], correct: 1 }
+                ]
+            }
+        };
+        
+        // Demo player names
+        const demoPlayerNames = {
+            classroom: ["Emma", "Liam", "Sophia", "Noah", "Olivia", "Mason"],
+            college: ["Alex", "Jordan", "Taylor", "Morgan", "Casey", "Riley"]
+        };
+        
+        // Launch Host Demo (entry point)
+        function launchHostDemo() {
+            // Step 0: Quiz selection
+            showDemoTooltip(
+                '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Choose Your Example</h2>' +
+                '<p style="color: #666; margin-bottom: 2rem; line-height: 1.6;">See how the same demo works for different teaching contexts.</p>' +
+                '<div style="display: grid; gap: 1rem;">' +
+                    '<button onclick="startDemo(\'classroom\')" class="btn btn-primary" style="padding: 1.5rem;">📝 Classroom Review (K–12)</button>' +
+                    '<button onclick="startDemo(\'college\')" class="btn btn-secondary" style="padding: 1.5rem;">✍️ Writing 150 / College Review</button>' +
+                '</div>',
+                false // hide continue button
+            );
+        }
+        
+        function startDemo(quizType) {
+            demoQuizType = quizType;
+            demoStep = 1;
+            showScreen('demoScreen');
+            runDemoStep();
+        }
+        
+        function runDemoStep() {
+            const overlay = document.getElementById('demoOverlay');
+            overlay.style.display = 'flex';
+            
+            switch(demoStep) {
+                case 1:
+                    // Welcome
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Welcome to the Host View</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">This guided demo shows how you can host a live, team-based quiz game in your classroom. You\'ll see exactly what you control as the instructor.</p>'
+                    );
+                    renderDemoHost('lobby');
+                    break;
+                    
+                case 2:
+                    // Quiz loaded + PIN shown
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Students Join with a PIN</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Share the PIN or QR code. Students can join from any device—or use one shared device per team.</p>'
+                    );
+                    renderDemoHost('lobby');
+                    break;
+                    
+                case 3:
+                    // Fake players start joining
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Players Are Joining...</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Watch as students join the game. You\'ll see their names appear in real-time.</p>'
+                    );
+                    simulatePlayersJoining();
+                    break;
+                    
+                case 4:
+                    // Enable teams
+                    showDemoTooltip(
+                        '<h2 style="color: var(--orange-gold); margin-bottom: 1rem;">Turn On Team Mode</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Click the <strong>"Enable Teams"</strong> toggle to group players into teams for collaborative play.</p>'
+                    );
+                    renderDemoHost('lobbyTeamToggle');
+                    break;
+                    
+                case 5:
+                    // Assign Team Captains
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Assign Team Captains</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Click one player on each team to designate them as the <strong>Team Captain</strong>. They submit the final answer after the team discusses.</p>'
+                    );
+                    renderDemoHost('assignCaptains');
+                    break;
+                    
+                case 6:
+                    // Start game
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Ready to Play!</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Now click <strong>"Start Game"</strong> to begin the first round.</p>'
+                    );
+                    renderDemoHost('readyToStart');
+                    break;
+                    
+                case 7:
+                    // Show question
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Teams Discuss & Captain Submits</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">The question appears on all devices. Teams talk through it together, then the Captain locks in their answer. Only Captains can submit—everyone else sees "View Only."</p>'
+                    );
+                    renderDemoHost('question');
+                    setTimeout(() => {
+                        simulateAnswers();
+                    }, 2000);
+                    break;
+                    
+                case 8:
+                    // Show results
+                    showDemoTooltip(
+                        '<h2 style="color: var(--orange-gold); margin-bottom: 1rem;">Reveal the Answer</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Click <strong>"Show Results"</strong> to reveal which teams got it right and update the leaderboard.</p>'
+                    );
+                    renderDemoHost('results');
+                    break;
+                    
+                case 9:
+                    // Round break / leaderboard
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-sky); margin-bottom: 1rem;">Round-Based Pacing</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">Use rounds to create natural pauses. Show the leaderboard, discuss answers, or tease what\'s coming next. It keeps momentum high.</p>'
+                    );
+                    renderDemoHost('leaderboard');
+                    break;
+                    
+                case 10:
+                    // Final wager tease
+                    showDemoTooltip(
+                        '<h2 style="color: var(--orange-gold); margin-bottom: 1rem;">Optional: Final Wager</h2>' +
+                        '<p style="color: #666; line-height: 1.7;">End with a dramatic final question where teams can wager points. It\'s optional, but students love the game-show moment.</p>' +
+                        '<p style="color: #999; font-size: 0.95rem; margin-top: 1rem;"><em>You can also enable power-ups, strategy rounds, and other features when you want more energy.</em></p>'
+                    );
+                    renderDemoHost('finalWager');
+                    break;
+                    
+                case 11:
+                    // End / CTA
+                    showDemoTooltip(
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1.5rem;">That\'s It!</h2>' +
+                        '<p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">You just saw how to host a team-based quiz game with pacing, collaboration, and energy. Ready to create your own?</p>' +
+                        '<div style="display: grid; gap: 1rem;">' +
+                            '<button onclick="showScreen(\'signupScreen\')" class="btn btn-primary" style="padding: 1.2rem;">Start Free</button>' +
+                            '<button onclick="showScreen(\'landingScreen\')" class="btn btn-secondary" style="padding: 1.2rem;">Back to Home</button>' +
+                        '</div>',
+                        false
+                    );
+                    break;
+            }
+        }
+        
+        function showDemoTooltip(content, showContinue = true) {
+            document.getElementById('demoTooltipContent').innerHTML = content;
+            document.getElementById('demoNextBtn').style.display = showContinue ? 'inline-block' : 'none';
+            document.getElementById('demoOverlay').style.display = 'flex';
+        }
+        
+        function renderDemoHost(scene) {
+            const hostView = document.getElementById('demoHostView');
+            const quiz = demoQuizzes[demoQuizType];
+            
+            if (scene === 'lobby') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
+                        <div style="background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); color: white; padding: 3rem; border-radius: 16px; text-align: center; margin-bottom: 2rem;">
+                            <h2 style="font-size: 3rem; margin-bottom: 0.5rem;">PIN: 1234</h2>
+                            <p style="opacity: 0.9;">Students join at letsgetquizzy.live</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                            <h3 style="color: var(--blue-electric); margin-bottom: 1rem;">Waiting for Players...</h3>
+                            <div id="demoPlayerList"></div>
+                        </div>
+                    </div>
+                `;
+            } else if (scene === 'lobbyTeamToggle') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                            <label style="display: flex; align-items: center; gap: 1rem; font-size: 1.2rem; cursor: pointer;">
+                                <input type="checkbox" id="demoTeamsToggle" onchange="toggleDemoTeams()" style="width: 24px; height: 24px;">
+                                <span style="color: var(--blue-electric); font-weight: 600;">Enable Teams</span>
+                            </label>
+                        </div>
+                        <div id="demoPlayerList">${renderDemoPlayers(false)}</div>
+                    </div>
+                `;
+            } else if (scene === 'assignCaptains') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
+                        <div id="demoPlayerList">${renderDemoPlayers(true)}</div>
+                    </div>
+                `;
+            } else if (scene === 'readyToStart') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
+                        <div id="demoPlayerList" style="margin-bottom: 2rem;">${renderDemoPlayers(true, true)}</div>
+                        <div style="text-align: center;">
+                            <button class="btn btn-primary" style="padding: 1.5rem 4rem; font-size: 1.3rem;" onclick="nextDemoStep()">Start Game</button>
+                        </div>
+                    </div>
+                `;
+            } else if (scene === 'question') {
+                const q = quiz.questions[0];
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">Question 1</h2>
+                        <div style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 2rem;">${q.text}</h3>
+                            <div style="display: grid; gap: 1rem;">
+                                ${q.options.map((opt, i) => `
+                                    <div style="padding: 1rem; background: #f5f5f5; border-radius: 8px; font-size: 1.1rem;">
+                                        ${String.fromCharCode(65 + i)}. ${opt}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div id="demoAnswerStatus" style="text-align: center; color: #666;"></div>
+                    </div>
+                `;
+            } else if (scene === 'results') {
+                const q = quiz.questions[0];
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">Question 1 - Results</h2>
+                        <div style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 2rem;">${q.text}</h3>
+                            <div style="display: grid; gap: 1rem;">
+                                ${q.options.map((opt, i) => `
+                                    <div style="padding: 1rem; background: ${i === q.correct ? '#d4edda' : '#f5f5f5'}; border-radius: 8px; font-size: 1.1rem; border: ${i === q.correct ? '3px solid #28a745' : 'none'};">
+                                        ${String.fromCharCode(65 + i)}. ${opt} ${i === q.correct ? '✓' : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue to Leaderboard</button>
+                        </div>
+                    </div>
+                `;
+            } else if (scene === 'leaderboard') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">🏆 Round 1 Complete</h2>
+                        <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                            <h3 style="color: var(--orange-gold); margin-bottom: 1.5rem; text-align: center;">Leaderboard</h3>
+                            <div style="display: grid; gap: 1rem;">
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, #FFD700, #FFA500); color: white; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 1.3rem; font-weight: 700;">🥇 Team Lightning</span>
+                                    <span style="font-size: 1.3rem; font-weight: 700;">100 pts</span>
+                                </div>
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: white; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 1.2rem; font-weight: 700;">🥈 Team Thunder</span>
+                                    <span style="font-size: 1.2rem; font-weight: 700;">0 pts</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue</button>
+                        </div>
+                    </div>
+                `;
+            } else if (scene === 'finalWager') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto; text-align: center;">
+                        <h2 style="color: var(--orange-gold); margin-bottom: 2rem; font-size: 2.5rem;">⚡ Final Wager ⚡</h2>
+                        <div style="background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); color: white; padding: 4rem 2rem; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                            <p style="font-size: 1.5rem; margin-bottom: 2rem;">Teams can wager up to all their points on the final question!</p>
+                            <p style="font-size: 1.2rem; opacity: 0.9;">It's the most exciting moment of the game.</p>
+                        </div>
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Finish Demo</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderDemoPlayers(showTeams = false, showCaptains = false) {
+            if (!showTeams) {
+                return `
+                    <div style="display: grid; gap: 0.5rem;">
+                        ${demoPlayers.map(p => `
+                            <div style="padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+                                ${p.name}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                const team1 = demoPlayers.slice(0, 3);
+                const team2 = demoPlayers.slice(3, 6);
+                return `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-left: 4px solid var(--blue-electric);">
+                            <h3 style="color: var(--blue-electric); margin-bottom: 1rem;">⚡ Team Lightning</h3>
+                            ${team1.map((p, i) => `
+                                <div onclick="assignDemoCaptain(0, ${i})" style="padding: 0.8rem; background: ${p.isCaptain ? 'linear-gradient(135deg, #FFD700, #FFA500)' : '#f5f5f5'}; color: ${p.isCaptain ? 'white' : '#333'}; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;">
+                                    ${p.name} ${p.isCaptain ? '⭐ Captain' : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-left: 4px solid var(--orange-gold);">
+                            <h3 style="color: var(--orange-gold); margin-bottom: 1rem;">🔥 Team Thunder</h3>
+                            ${team2.map((p, i) => `
+                                <div onclick="assignDemoCaptain(1, ${i})" style="padding: 0.8rem; background: ${p.isCaptain ? 'linear-gradient(135deg, #FFD700, #FFA500)' : '#f5f5f5'}; color: ${p.isCaptain ? 'white' : '#333'}; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;">
+                                    ${p.name} ${p.isCaptain ? '⭐ Captain' : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function simulatePlayersJoining() {
+            const names = demoPlayerNames[demoQuizType];
+            let count = 0;
+            const interval = setInterval(() => {
+                if (count < 6) {
+                    demoPlayers.push({ name: names[count], isCaptain: false });
+                    const playerList = document.getElementById('demoPlayerList');
+                    if (playerList) {
+                        playerList.innerHTML = `
+                            <div style="display: grid; gap: 0.5rem;">
+                                ${demoPlayers.map(p => `
+                                    <div style="padding: 1rem; background: #f5f5f5; border-radius: 8px; animation: fadeInUp 0.3s ease;">
+                                        ${p.name}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                    count++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(nextDemoStep, 800);
+                }
+            }, 600);
+        }
+        
+        function toggleDemoTeams() {
+            demoTeamsEnabled = document.getElementById('demoTeamsToggle').checked;
+            if (demoTeamsEnabled) {
+                setTimeout(nextDemoStep, 500);
+            }
+        }
+        
+        function assignDemoCaptain(teamIndex, playerIndex) {
+            const globalIndex = teamIndex === 0 ? playerIndex : playerIndex + 3;
+            
+            // Remove captain from all players on this team
+            if (teamIndex === 0) {
+                demoPlayers.slice(0, 3).forEach(p => p.isCaptain = false);
+            } else {
+                demoPlayers.slice(3, 6).forEach(p => p.isCaptain = false);
+            }
+            
+            // Assign new captain
+            demoPlayers[globalIndex].isCaptain = true;
+            renderDemoHost('assignCaptains');
+            
+            // Check if both teams have captains
+            const team1HasCaptain = demoPlayers.slice(0, 3).some(p => p.isCaptain);
+            const team2HasCaptain = demoPlayers.slice(3, 6).some(p => p.isCaptain);
+            
+            if (team1HasCaptain && team2HasCaptain) {
+                setTimeout(nextDemoStep, 1000);
+            }
+        }
+        
+        function simulateAnswers() {
+            const status = document.getElementById('demoAnswerStatus');
+            if (!status) return;
+            
+            let count = 0;
+            const interval = setInterval(() => {
+                count++;
+                status.innerHTML = `<p style="font-size: 1.1rem;">${count} of 2 teams have answered...</p>`;
+                
+                if (count >= 2) {
+                    clearInterval(interval);
+                    status.innerHTML = `<p style="font-size: 1.2rem; color: var(--blue-electric); font-weight: 600;">✓ All teams have answered!</p>`;
+                    setTimeout(nextDemoStep, 1500);
+                }
+            }, 1500);
+        }
+        
+        function nextDemoStep() {
+            demoStep++;
+            runDemoStep();
+        }
+        
+        // Attach to next button
+        document.addEventListener('DOMContentLoaded', function() {
+            const nextBtn = document.getElementById('demoNextBtn');
+            if (nextBtn) {
+                nextBtn.onclick = nextDemoStep;
+            }
+        });
+        
+        window.launchHostDemo = launchHostDemo;
 
         // Display recent quizzes on home screen
         function displayRecentQuizzes() {
