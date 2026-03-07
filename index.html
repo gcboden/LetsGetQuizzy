@@ -1541,38 +1541,38 @@
             </div>
         </div>
 
+        <!-- Demo Overlay (tooltip/caption system) - MUST be outside screens to be visible -->
+        <div id="demoOverlay" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        ">
+            <div id="demoTooltip" style="
+                background: white;
+                padding: 2.5rem;
+                border-radius: 16px;
+                max-width: 550px;
+                width: 90%;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+                text-align: center;
+            ">
+                <div id="demoTooltipContent"></div>
+                <button id="demoNextBtn" class="btn btn-primary" style="margin-top: 2rem; padding: 1rem 3rem; font-size: 1.1rem;">
+                    Continue
+                </button>
+            </div>
+        </div>
+
         <!-- Guided Host Demo Screen -->
         <div id="demoScreen" class="screen">
-            <!-- Demo Overlay (tooltip/caption system) -->
-            <div id="demoOverlay" style="
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.7);
-                display: none;
-                z-index: 10000;
-                align-items: center;
-                justify-content: center;
-                backdrop-filter: blur(3px);
-            ">
-                <div id="demoTooltip" style="
-                    background: white;
-                    padding: 2.5rem;
-                    border-radius: 16px;
-                    max-width: 550px;
-                    width: 90%;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-                    text-align: center;
-                ">
-                    <div id="demoTooltipContent"></div>
-                    <button id="demoNextBtn" class="btn btn-primary" style="margin-top: 2rem; padding: 1rem 3rem; font-size: 1.1rem;">
-                        Continue
-                    </button>
-                </div>
-            </div>
-            
             <!-- Demo Host View (simulates actual host screen) -->
             <div id="demoHostView"></div>
         </div>
