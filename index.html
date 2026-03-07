@@ -2384,6 +2384,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
     </script>
 
     <script>
+        console.log('🎮 LetsGetQuizzy Script Loaded!');
+        
         // Sound management
         let soundEnabled = true;
 
@@ -3475,9 +3477,27 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         
         function showDemoTooltip(content, showContinue = true) {
-            document.getElementById('demoTooltipContent').innerHTML = content;
-            document.getElementById('demoNextBtn').style.display = showContinue ? 'inline-block' : 'none';
-            document.getElementById('demoOverlay').style.display = 'flex';
+            console.log('showDemoTooltip called!');
+            const tooltipContent = document.getElementById('demoTooltipContent');
+            const nextBtn = document.getElementById('demoNextBtn');
+            const overlay = document.getElementById('demoOverlay');
+            
+            console.log('Elements found:', {
+                tooltipContent: !!tooltipContent,
+                nextBtn: !!nextBtn,
+                overlay: !!overlay
+            });
+            
+            if (!tooltipContent || !nextBtn || !overlay) {
+                console.error('Missing demo elements!');
+                return;
+            }
+            
+            tooltipContent.innerHTML = content;
+            nextBtn.style.display = showContinue ? 'inline-block' : 'none';
+            overlay.style.display = 'flex';
+            
+            console.log('Overlay display set to:', overlay.style.display);
         }
         
         function renderDemoHost(scene) {
