@@ -1382,10 +1382,10 @@
                         <!-- Feature 3 -->
                         <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
                             <h3 style="color: var(--blue-sky); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Built for real teaching environments
+                                Earn Coins & Buy Power-Ups
                             </h3>
                             <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Use phones, laptops, or classroom devices. Keep it simple—or enable optional strategy features when you want more energy.
+                                Students earn coins for correct answers, then spend them on strategic advantages like Extra Time, 50/50, or Safety Net. It adds achievement, leveling-up, and tactical decisions—turning review into something that feels like a video game.
                             </p>
                         </div>
                     </div>
@@ -1542,9 +1542,21 @@
         </div>
 
         <!-- Guided Host Demo Screen -->
-        <div id="demoScreen" class="screen" style="background: #f5f5f5; min-height: 100vh;">
+        <div id="demoScreen" class="screen" style="background: #f5f5f5; min-height: 100vh; position: relative;">
+            <!-- Animated Background Logo -->
+            <div id="demoBackground" style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0.1;
+                animation: pulse 3s ease-in-out infinite;
+            ">
+                <img src="letsgetquizzy_logo.png" alt="" style="max-width: 400px; width: 80vw;">
+            </div>
+            
             <!-- Demo Host View (simulates actual host screen) -->
-            <div id="demoHostView"></div>
+            <div id="demoHostView" style="position: relative; z-index: 1;"></div>
             
             <!-- Floating Tooltip - Bottom Right Corner -->
             <div id="demoTooltip" style="
@@ -1554,18 +1566,25 @@
                 background: white;
                 padding: 2rem;
                 border-radius: 16px;
-                max-width: 400px;
+                max-width: 420px;
                 box-shadow: 0 10px 40px rgba(0,0,0,0.3);
                 border: 3px solid var(--blue-electric);
                 z-index: 10000;
                 display: none;
             ">
-                <div id="demoTooltipContent"></div>
+                <div id="demoTooltipContent" style="line-height: 1.6;"></div>
                 <button id="demoNextBtn" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%; padding: 1rem; font-size: 1.1rem;">
                     Continue →
                 </button>
             </div>
         </div>
+
+        <style>
+            @keyframes pulse {
+                0%, 100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1); }
+                50% { opacity: 0.15; transform: translate(-50%, -50%) scale(1.05); }
+            }
+        </style>
 
         <!-- Login Screen -->
         <div id="loginScreen" class="screen">
@@ -3364,16 +3383,16 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     // Welcome
                     renderDemoHost('lobby');
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Welcome to the Host View</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">This guided demo shows how you can host a live, team-based quiz game in your classroom. You\'ll see exactly what you control as the instructor.</p>'
+                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Welcome to the Host View! 👋</h3>' +
+                        '<p style="color: #666;">This quick demo shows how you host a live, team-based quiz game. You\'ll see exactly what you control as the instructor.</p>'
                     );
                     break;
                     
                 case 2:
                     // Quiz loaded + PIN shown
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Students Join with a PIN</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Share the PIN or QR code. Students can join from any device—or use one shared device per team.</p>'
+                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Students Join with a PIN</h3>' +
+                        '<p style="color: #666;">Just share the PIN or QR code. Students can join from their phones, laptops, or you can use one shared device per team—whatever works for your classroom!</p>'
                     );
                     renderDemoHost('lobby');
                     break;
@@ -3381,8 +3400,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 case 3:
                     // Fake players start joining
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Players Are Joining...</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Watch as students join the game. You\'ll see their names appear in real-time.</p>'
+                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Here They Come! 🙋</h3>' +
+                        '<p style="color: #666;">Watch as students join the game. Their names pop up in real-time so you know who\'s in.</p>'
                     );
                     simulatePlayersJoining();
                     break;
@@ -3390,8 +3409,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 case 4:
                     // Enable teams
                     showDemoTooltip(
-                        '<h2 style="color: var(--orange-gold); margin-bottom: 1rem;">Turn On Team Mode</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Click the <strong>"Enable Teams"</strong> toggle to group players into teams for collaborative play.</p>'
+                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">Let\'s Get Collaborative! 🤝</h3>' +
+                        '<p style="color: #666;">Ok, let\'s get these students interacting and collaborating—click the <strong>"Enable Teams"</strong> toggle to group them into teams.</p>'
                     );
                     renderDemoHost('lobbyTeamToggle');
                     break;
@@ -3399,8 +3418,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 case 5:
                     // Assign Team Captains
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Assign Team Captains</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Click one player on each team to designate them as the <strong>Team Captain</strong>. They submit the final answer after the team discusses.</p>'
+                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Pick Your Team Captains 👑</h3>' +
+                        '<p style="color: #666;">They\'re a team, so they discuss and answer as a team. We use <strong>Team Captains</strong>—or as we like to call them, <strong>CAOs (Chief Answer Officers)</strong>—so one person submits for the whole team. Click one player on each team to designate them.</p>'
                     );
                     renderDemoHost('assignCaptains');
                     break;
@@ -3408,8 +3427,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 case 6:
                     // Start game
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Ready to Play!</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Now click <strong>"Start Game"</strong> to begin the first round.</p>'
+                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Ready to Play! 🎮</h3>' +
+                        '<p style="color: #666;">Perfect! Now click <strong>"Start Game"</strong> to launch the first round.</p>'
                     );
                     renderDemoHost('readyToStart');
                     break;
@@ -3417,8 +3436,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 case 7:
                     // Show question
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Teams Discuss & Captain Submits</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">The question appears on all devices. Teams talk through it together, then the Captain locks in their answer. Only Captains can submit—everyone else sees "View Only."</p>'
+                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Teams Discuss, CAO Submits ✍️</h3>' +
+                        '<p style="color: #666;">The question appears on all devices. Teams talk it through together, then the CAO locks in their answer. Only CAOs can submit—everyone else sees "View Only."</p>'
                     );
                     renderDemoHost('question');
                     setTimeout(() => {
@@ -3429,36 +3448,53 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 case 8:
                     // Show results
                     showDemoTooltip(
-                        '<h2 style="color: var(--orange-gold); margin-bottom: 1rem;">Reveal the Answer</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Click <strong>"Show Results"</strong> to reveal which teams got it right and update the leaderboard.</p>'
+                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">The Big Reveal! 🎉</h3>' +
+                        '<p style="color: #666;">Click <strong>"Show Results"</strong> to reveal which teams got it right. This is the fun part—everyone sees who nailed it!</p>'
                     );
                     renderDemoHost('results');
                     break;
                     
                 case 9:
-                    // Round break / leaderboard
+                    // Coins earned
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-sky); margin-bottom: 1rem;">Round-Based Pacing</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">Use rounds to create natural pauses. Show the leaderboard, discuss answers, or tease what\'s coming next. It keeps momentum high.</p>'
+                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">Coins Earned! 💰</h3>' +
+                        '<p style="color: #666;"><strong>Team Lightning earned 100 coins!</strong> <img src="coinMoney.png" style="width: 20px; vertical-align: middle;"> Teams collect coins for correct answers, then spend them strategically on power-ups between rounds.</p>'
+                    );
+                    renderDemoHost('coinsEarned');
+                    break;
+                    
+                case 10:
+                    // Round break / power-up shop
+                    showDemoTooltip(
+                        '<h3 style="color: var(--blue-sky); margin-bottom: 0.5rem;">Power-Up Shop! 🛒</h3>' +
+                        '<p style="color: #666;">Between rounds, teams can spend their coins on power-ups like <strong>50/50, Extra Time, or Safety Net</strong>. They discuss as a team which advantage to buy—adding strategy and leveling-up vibes like a video game!</p>'
+                    );
+                    renderDemoHost('powerupShop');
+                    break;
+                    
+                case 11:
+                    // Leaderboard
+                    showDemoTooltip(
+                        '<h3 style="color: var(--blue-sky); margin-bottom: 0.5rem;">Round-Based Momentum 📊</h3>' +
+                        '<p style="color: #666;">Use rounds to create natural pauses. Show the leaderboard, discuss answers, and build excitement for what\'s next. It keeps the energy high!</p>'
                     );
                     renderDemoHost('leaderboard');
                     break;
                     
-                case 10:
+                case 12:
                     // Final wager tease
                     showDemoTooltip(
-                        '<h2 style="color: var(--orange-gold); margin-bottom: 1rem;">Optional: Final Wager</h2>' +
-                        '<p style="color: #666; line-height: 1.7;">End with a dramatic final question where teams can wager points. It\'s optional, but students love the game-show moment.</p>' +
-                        '<p style="color: #999; font-size: 0.95rem; margin-top: 1rem;"><em>You can also enable power-ups, strategy rounds, and other features when you want more energy.</em></p>'
+                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">Optional: Final Wager ⚡</h3>' +
+                        '<p style="color: #666;">Want a dramatic ending? Teams can wager <em>all their coins</em> on a final question. It\'s optional, but students absolutely love the game-show moment!</p>'
                     );
                     renderDemoHost('finalWager');
                     break;
                     
-                case 11:
+                case 13:
                     // End / CTA
                     showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1.5rem;">That\'s It!</h2>' +
-                        '<p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">You just saw how to host a team-based quiz game with pacing, collaboration, and energy. Ready to create your own?</p>' +
+                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">That\'s It! 🎉</h2>' +
+                        '<p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">You just saw how to host a team-based quiz game with collaboration, strategy, and energy. Ready to create your own?</p>' +
                         '<div style="display: grid; gap: 1rem;">' +
                             '<button onclick="showScreen(\'signupScreen\')" class="btn btn-primary" style="padding: 1.2rem;">Start Free</button>' +
                             '<button onclick="showScreen(\'landingScreen\')" class="btn btn-secondary" style="padding: 1.2rem;">Back to Home</button>' +
@@ -3575,6 +3611,57 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                             </div>
                         </div>
                         <div style="text-align: center;">
+                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue</button>
+                        </div>
+                    </div>
+                `;
+            } else if (scene === 'coinsEarned') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto; text-align: center;">
+                        <div style="background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); color: white; padding: 4rem 2rem; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 2rem; animation: bounce 0.6s ease;">
+                            <h2 style="font-size: 3rem; margin-bottom: 1rem;">🎉 Coins Earned! 🎉</h2>
+                            <div style="font-size: 5rem; margin: 2rem 0;">
+                                <img src="coinMoney.png" style="width: 100px; animation: spin 1s ease;">
+                            </div>
+                            <p style="font-size: 2rem; font-weight: 700;">Team Lightning: +100 coins</p>
+                        </div>
+                        <button class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.2rem;" onclick="nextDemoStep()">Continue</button>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            from { transform: rotateY(0deg); }
+                            to { transform: rotateY(360deg); }
+                        }
+                    </style>
+                `;
+            } else if (scene === 'powerupShop') {
+                hostView.innerHTML = `
+                    <div style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">🛒 Power-Up Shop</h2>
+                        <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Teams can spend their coins on strategic advantages!</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.1), rgba(66,153,225,0.1)); border-radius: 12px; text-align: center;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⏰</div>
+                                    <h4 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Extra Time</h4>
+                                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">+10 seconds</p>
+                                    <p style="color: var(--orange-gold); font-weight: 700;"><img src="coinMoney.png" style="width: 16px; vertical-align: middle;"> 50 coins</p>
+                                </div>
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,158,1,0.1)); border-radius: 12px; text-align: center;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</div>
+                                    <h4 style="color: var(--orange-gold); margin-bottom: 0.5rem;">50/50</h4>
+                                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Remove 2 wrong answers</p>
+                                    <p style="color: var(--orange-gold); font-weight: 700;"><img src="coinMoney.png" style="width: 16px; vertical-align: middle;"> 75 coins</p>
+                                </div>
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.1), rgba(102,187,255,0.1)); border-radius: 12px; text-align: center;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🛡️</div>
+                                    <h4 style="color: var(--blue-sky); margin-bottom: 0.5rem;">Safety Net</h4>
+                                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">No penalty if wrong</p>
+                                    <p style="color: var(--orange-gold); font-weight: 700;"><img src="coinMoney.png" style="width: 16px; vertical-align: middle;"> 100 coins</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 2rem;">
                             <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue to Leaderboard</button>
                         </div>
                     </div>
