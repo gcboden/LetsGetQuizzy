@@ -3333,16 +3333,20 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         // Launch Host Demo (entry point)
         function launchHostDemo() {
             console.log('launchHostDemo called!');
-            // Step 0: Quiz selection
-            showDemoTooltip(
-                '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Choose Your Example</h2>' +
-                '<p style="color: #666; margin-bottom: 2rem; line-height: 1.6;">See how the same demo works for different teaching contexts.</p>' +
-                '<div style="display: grid; gap: 1rem;">' +
-                    '<button onclick="startDemo(\'classroom\')" class="btn btn-primary" style="padding: 1.5rem;">📝 Classroom Review (K–12)</button>' +
-                    '<button onclick="startDemo(\'college\')" class="btn btn-secondary" style="padding: 1.5rem;">✍️ Writing 150 / College Review</button>' +
-                '</div>',
-                false // hide continue button
-            );
+            // Show demo screen first
+            showScreen('demoScreen');
+            // Then show quiz selection tooltip
+            setTimeout(() => {
+                showDemoTooltip(
+                    '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Choose Your Example</h2>' +
+                    '<p style="color: #666; margin-bottom: 2rem; line-height: 1.6;">See how the same demo works for different teaching contexts.</p>' +
+                    '<div style="display: grid; gap: 1rem;">' +
+                        '<button onclick="startDemo(\'classroom\')" class="btn btn-primary" style="padding: 1.5rem;">📝 Classroom Review (K–12)</button>' +
+                        '<button onclick="startDemo(\'college\')" class="btn btn-secondary" style="padding: 1.5rem;">✍️ Writing 150 / College Review</button>' +
+                    '</div>',
+                    false // hide continue button
+                );
+            }, 100); // Small delay to let screen render
         }
         
         function startDemo(quizType) {
