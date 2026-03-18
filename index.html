@@ -1145,6 +1145,120 @@
                 padding-top: 70px;
             }
             
+            /* Landing Page Mobile Nav */
+            #landingScreen nav {
+                padding: 0.75rem 1rem !important;
+            }
+            
+            #landingScreen nav img {
+                height: 40px !important;
+            }
+            
+            /* Show hamburger, hide nav links on mobile */
+            #landingScreen .hamburger {
+                display: flex !important;
+            }
+            
+            #landingNavLinks {
+                position: fixed !important;
+                top: 60px !important;
+                right: -100% !important;
+                width: 250px !important;
+                height: calc(100vh - 60px) !important;
+                background: white !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 2rem 1.5rem !important;
+                box-shadow: -4px 0 20px rgba(0,0,0,0.15) !important;
+                transition: right 0.3s ease !important;
+                z-index: 999 !important;
+                gap: 0 !important;
+            }
+            
+            #landingNavLinks.active {
+                right: 0 !important;
+            }
+            
+            #landingNavLinks a,
+            #landingNavLinks button {
+                width: 100% !important;
+                text-align: left !important;
+                padding: 1rem !important;
+                border-radius: 8px !important;
+                margin-bottom: 0.5rem !important;
+                color: #333 !important;
+            }
+            
+            #landingNavLinks button {
+                margin-top: 1rem !important;
+            }
+            
+            /* Landing Page Hero - Mobile Optimized */
+            #landingScreen h1 {
+                font-size: 2rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            #landingScreen p {
+                font-size: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* CTA Buttons - Above the Fold on Mobile */
+            #landingScreen > div:nth-child(2) {
+                min-height: 100vh !important;
+                padding: 1rem !important;
+                justify-content: flex-start !important;
+                padding-top: 80px !important;
+            }
+            
+            #landingScreen button:not(#landingNavLinks button) {
+                padding: 1rem 2rem !important;
+                font-size: 1rem !important;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            /* Dashboard Mobile Nav */
+            #homeScreen nav {
+                padding: 0.75rem 1rem !important;
+                flex-wrap: wrap !important;
+            }
+            
+            #homeScreen nav img {
+                height: 35px !important;
+            }
+            
+            #homeScreen nav > div:first-child > div {
+                display: none !important;
+            }
+            
+            #homeScreen nav button {
+                padding: 0.5rem 1rem !important;
+                font-size: 0.85rem !important;
+            }
+            
+            /* Dashboard Content */
+            #homeScreen > div {
+                padding: 1.5rem 1rem !important;
+            }
+            
+            #homeScreen h1 {
+                font-size: 1.5rem !important;
+            }
+            
+            /* Quick Action Cards - Stack on Mobile */
+            #homeScreen > div > div:nth-child(2) {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            /* Quiz Cards Grid */
+            #recentQuizzesList {
+                grid-template-columns: 1fr !important;
+            }
+            
             /* Push logo up on mobile homepage */
             .home-logo {
                 padding: 1rem 0 1rem 0 !important;
@@ -1216,6 +1330,28 @@
                 height: 50px;
                 font-size: 1.2rem;
             }
+            
+            /* Login/Signup Screens - Stack on Mobile */
+            #loginScreen > div,
+            #signupScreen > div {
+                grid-template-columns: 1fr !important;
+            }
+            
+            #loginScreen > div > div:first-child,
+            #signupScreen > div > div:first-child {
+                min-height: 30vh !important;
+                padding: 2rem !important;
+            }
+            
+            #loginScreen h1,
+            #signupScreen h1 {
+                font-size: 1.8rem !important;
+            }
+            
+            #loginScreen p,
+            #signupScreen p {
+                font-size: 1rem !important;
+            }
         }
     </style>
 </head>
@@ -1275,7 +1411,7 @@
         <!-- Landing Page (Pre-Login) -->
         <div id="landingScreen" class="screen active">
             <!-- Landing Page Nav Bar -->
-            <nav style="
+            <nav id="landingNav" style="
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -1292,8 +1428,15 @@
                 <!-- Logo -->
                 <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 55px; cursor: pointer;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                 
+                <!-- Hamburger Menu (Mobile Only) -->
+                <div class="hamburger" onclick="toggleLandingMenu()" style="display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001;">
+                    <span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: 0.3s;"></span>
+                    <span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: 0.3s;"></span>
+                    <span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: 0.3s;"></span>
+                </div>
+                
                 <!-- Nav Links -->
-                <div style="display: flex; gap: 2rem; align-items: center;">
+                <div id="landingNavLinks" style="display: flex; gap: 2rem; align-items: center;">
                     <a href="#" onclick="launchHostDemo(); return false;" style="
                         color: #333;
                         text-decoration: none;
@@ -1303,7 +1446,7 @@
                     " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
                         See Demo
                     </a>
-                    <a href="#" onclick="showScreen('joinScreen'); return false;" style="
+                    <a href="#" onclick="showScreen('joinScreen'); closeLandingMenu(); return false;" style="
                         color: #333;
                         text-decoration: none;
                         font-weight: 600;
@@ -1312,7 +1455,7 @@
                     " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
                         Join Game
                     </a>
-                    <a href="#" onclick="showScreen('loginScreen'); return false;" style="
+                    <a href="#" onclick="showScreen('loginScreen'); closeLandingMenu(); return false;" style="
                         color: #333;
                         text-decoration: none;
                         font-weight: 600;
@@ -1321,7 +1464,7 @@
                     " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
                         Log In
                     </a>
-                    <button onclick="showScreen('signupScreen')" style="
+                    <button onclick="showScreen('signupScreen'); closeLandingMenu();" style="
                         background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
                         color: white;
                         border: none;
@@ -3420,8 +3563,21 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             overlay.classList.remove('active');
             hamburger.classList.remove('active');
         }
+        
+        function toggleLandingMenu() {
+            const navLinks = document.getElementById('landingNavLinks');
+            navLinks.classList.toggle('active');
+        }
+        
+        function closeLandingMenu() {
+            const navLinks = document.getElementById('landingNavLinks');
+            navLinks.classList.remove('active');
+        }
+        
         window.toggleMobileMenu = toggleMobileMenu;
         window.closeMobileMenu = closeMobileMenu;
+        window.toggleLandingMenu = toggleLandingMenu;
+        window.closeLandingMenu = closeLandingMenu;
 
         // Authentication State
         let currentUser = null;
