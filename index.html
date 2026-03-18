@@ -1274,6 +1274,38 @@
     <div class="container">
         <!-- Landing Page (Pre-Login) -->
         <div id="landingScreen" class="screen active">
+            <!-- Landing Page Nav Bar -->
+            <nav style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                padding: 1rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 1000;
+            ">
+                <!-- Logo -->
+                <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 45px;">
+                
+                <!-- Right Side - Join Game link -->
+                <div style="display: flex; gap: 1.5rem; align-items: center;">
+                    <a href="#" onclick="showScreen('joinScreen'); return false;" style="
+                        color: var(--orange-gold);
+                        text-decoration: none;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                        transition: opacity 0.2s;
+                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                        Join Game
+                    </a>
+                </div>
+            </nav>
+            
             <!-- Hero Section -->
             <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden;">
                 
