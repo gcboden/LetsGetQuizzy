@@ -26,6 +26,7 @@
 
         body {
             font-family: 'SN Pro', sans-serif;
+            background-color: #a8c8d8; /* fallback that matches the blue bg image */
             background-image: url('AdobeStock_634478978_simpleBlueBG.jpeg');
             background-size: cover;
             background-position: center top;
@@ -37,8 +38,27 @@
         @media (max-width: 768px) {
             body {
                 background-attachment: scroll;
-                background-size: 100% auto;
+                background-size: cover;
                 background-position: center top;
+                min-height: 100%;
+            }
+
+            /* Pin the bg image behind the landing hero so it doesn't gap to white */
+            #landingScreen {
+                background-color: transparent;
+            }
+
+            /* Hero on mobile: own background so content below (white sections) 
+               doesn't bleed through when body bg image runs out */
+            #landingHero {
+                background-image: url('AdobeStock_634478978_simpleBlueBG.jpeg');
+                background-size: cover;
+                background-position: center top;
+                background-attachment: scroll;
+            }
+
+            #landingScreen > div:first-of-type {
+                background-color: transparent;
             }
         }
 
@@ -1545,7 +1565,7 @@
             </nav>
             
             <!-- Hero Section -->
-            <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; padding-top: 80px; position: relative; overflow: hidden;">
+            <div id="landingHero" style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; padding-top: 80px; position: relative; overflow: hidden; background: transparent;">
                 
                 <!-- Subtle Background Elements -->
                 <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.06; animation: float 6s ease-in-out infinite;"></div>
@@ -1798,10 +1818,10 @@
             
             <!-- Final CTA -->
             <div style="padding: 6rem 2rem; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); text-align: center; color: white;">
-                <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 1.5rem; font-weight: 700; line-height: 1.4;">
+                <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 1.5rem; font-weight: 700; line-height: 1.4; color: white;">
                     Make review more engaging—without making teaching harder.
                 </h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto; color: white;">
                     Start free, run a game in minutes, and scale up when you need bigger groups or advanced features.
                 </p>
                 <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
