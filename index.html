@@ -27,38 +27,24 @@
         body {
             font-family: 'SN Pro', sans-serif;
             background-color: #a8c8d8; /* fallback that matches the blue bg image */
-            background-image: url('AdobeStock_634478978_simpleBlueBG.jpeg');
+            background-image: url('AdobeStock_634478978_simpleBlueBG_mobile.jpeg');
             background-size: cover;
             background-position: center top;
             background-attachment: fixed;
             background-repeat: no-repeat;
         }
 
-        /* Mobile background fix — background-attachment: fixed causes zoom/blur on iOS/Android */
+        /* Mobile — disable fixed attachment (causes zoom/blur on iOS/Android) */
         @media (max-width: 768px) {
             body {
                 background-attachment: scroll;
-                background-size: cover;
-                background-position: center top;
-                min-height: 100%;
             }
 
-            /* Pin the bg image behind the landing hero so it doesn't gap to white */
-            #landingScreen {
-                background-color: transparent;
-            }
-
-            /* Hero on mobile: own background so content below (white sections) 
-               doesn't bleed through when body bg image runs out */
             #landingHero {
-                background-image: url('AdobeStock_634478978_simpleBlueBG.jpeg');
+                background-image: url('AdobeStock_634478978_simpleBlueBG_mobile.jpeg');
                 background-size: cover;
                 background-position: center top;
                 background-attachment: scroll;
-            }
-
-            #landingScreen > div:first-of-type {
-                background-color: transparent;
             }
         }
 
