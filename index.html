@@ -1639,16 +1639,6 @@
                     padding: 3rem;
                 ">
                     <div style="max-width: 450px; width: 100%; margin: 0 auto;">
-                        <button onclick="showScreen('landingScreen')" style="
-                            background: none;
-                            border: none;
-                            color: #666;
-                            font-size: 1rem;
-                            cursor: pointer;
-                            margin-bottom: 2rem;
-                            padding: 0;
-                        ">← BACK</button>
-                        
                         <h2 style="color: var(--orange-gold); font-size: 2rem; margin-bottom: 0.5rem;">Sign in</h2>
                         <p style="color: #666; margin-bottom: 2.5rem;">Let's get quizzy with it</p>
                         
@@ -1764,16 +1754,6 @@
                     padding: 3rem;
                 ">
                     <div style="max-width: 450px; width: 100%; margin: 0 auto;">
-                        <button onclick="showScreen('landingScreen')" style="
-                            background: none;
-                            border: none;
-                            color: #666;
-                            font-size: 1rem;
-                            cursor: pointer;
-                            margin-bottom: 2rem;
-                            padding: 0;
-                        ">← BACK</button>
-                        
                         <h2 style="color: var(--blue-electric); font-size: 2rem; margin-bottom: 0.5rem;">Create your account</h2>
                         <p style="color: #666; margin-bottom: 2.5rem;">Start creating amazing quiz games</p>
                         
@@ -1863,9 +1843,8 @@
         <div id="homeScreen" class="screen">
             <!-- Top Navigation Bar -->
             <nav style="
-                background: white;
-                border-bottom: 2px solid #f0f0f0;
-                padding: 1rem 2rem;
+                background: transparent;
+                padding: 1.5rem 2rem;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -1875,7 +1854,7 @@
             ">
                 <!-- Logo -->
                 <div style="display: flex; align-items: center; gap: 2rem;">
-                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 40px;">
+                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 50px;">
                     
                     <!-- Nav Links -->
                     <div style="display: flex; gap: 1.5rem;">
@@ -3577,7 +3556,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             document.getElementById(screenId).classList.add('active');
             
             // Show/hide nav bar based on screen
-            if (screenId === 'homeScreen' || screenId === 'loginScreen' || screenId === 'signupScreen') {
+            if (screenId === 'homeScreen' || screenId === 'loginScreen' || screenId === 'signupScreen' || screenId === 'landingScreen') {
                 document.body.classList.remove('has-nav');
             } else {
                 document.body.classList.add('has-nav');
