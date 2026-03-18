@@ -1290,19 +1290,51 @@
                 z-index: 1000;
             ">
                 <!-- Logo -->
-                <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 45px;">
+                <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 55px; cursor: pointer;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                 
-                <!-- Right Side - Join Game link -->
-                <div style="display: flex; gap: 1.5rem; align-items: center;">
-                    <a href="#" onclick="showScreen('joinScreen'); return false;" style="
-                        color: var(--orange-gold);
+                <!-- Nav Links -->
+                <div style="display: flex; gap: 2rem; align-items: center;">
+                    <a href="#" onclick="launchHostDemo(); return false;" style="
+                        color: #333;
                         text-decoration: none;
-                        font-weight: 700;
-                        font-size: 1.1rem;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        transition: opacity 0.2s;
+                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                        See Demo
+                    </a>
+                    <a href="#" onclick="showScreen('joinScreen'); return false;" style="
+                        color: #333;
+                        text-decoration: none;
+                        font-weight: 600;
+                        font-size: 1rem;
                         transition: opacity 0.2s;
                     " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
                         Join Game
                     </a>
+                    <a href="#" onclick="showScreen('loginScreen'); return false;" style="
+                        color: #333;
+                        text-decoration: none;
+                        font-weight: 600;
+                        font-size: 1rem;
+                        transition: opacity 0.2s;
+                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                        Log In
+                    </a>
+                    <button onclick="showScreen('signupScreen')" style="
+                        background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
+                        color: white;
+                        border: none;
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 8px;
+                        font-weight: 700;
+                        font-size: 1rem;
+                        cursor: pointer;
+                        transition: transform 0.2s, box-shadow 0.2s;
+                        box-shadow: 0 4px 12px rgba(13,112,255,0.3);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(13,112,255,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(13,112,255,0.3)'">
+                        Start Free
+                    </button>
                 </div>
             </nav>
             
