@@ -28,9 +28,18 @@
             font-family: 'SN Pro', sans-serif;
             background-image: url('AdobeStock_634478978_simpleBlueBG.jpeg');
             background-size: cover;
-            background-position: center;
+            background-position: center top;
             background-attachment: fixed;
             background-repeat: no-repeat;
+        }
+
+        /* Mobile background fix — background-attachment: fixed causes zoom/blur on iOS/Android */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+                background-size: 100% auto;
+                background-position: center top;
+            }
         }
 
         body.has-nav {
@@ -1146,51 +1155,61 @@
             }
             
             /* Landing Page Mobile Nav */
-            #landingScreen nav {
-                padding: 0.75rem 1rem !important;
+            #landingNav {
+                padding: 0 !important;
             }
-            
-            #landingScreen nav img {
-                height: 40px !important;
-            }
-            
-            /* Show hamburger, hide nav links on mobile */
-            #landingScreen .hamburger {
+
+            /* Show hamburger on mobile, hide desktop centered links */
+            #landingHamburger {
                 display: flex !important;
             }
-            
-            #landingNavLinks {
+
+            #landingNav #landingNavLinks {
                 position: fixed !important;
-                top: 60px !important;
+                top: 0 !important;
                 right: -100% !important;
-                width: 250px !important;
-                height: calc(100vh - 60px) !important;
+                left: auto !important;
+                transform: none !important;
+                width: 260px !important;
+                height: 100vh !important;
                 background: white !important;
                 flex-direction: column !important;
                 align-items: flex-start !important;
-                padding: 2rem 1.5rem !important;
-                box-shadow: -4px 0 20px rgba(0,0,0,0.15) !important;
+                padding: 4rem 1.5rem 2rem !important;
+                box-shadow: -4px 0 24px rgba(0,0,0,0.18) !important;
                 transition: right 0.3s ease !important;
-                z-index: 999 !important;
+                z-index: 998 !important;
                 gap: 0 !important;
             }
-            
-            #landingNavLinks.active {
+
+            #landingNav #landingNavLinks.active {
                 right: 0 !important;
             }
-            
-            #landingNavLinks a,
-            #landingNavLinks button {
+
+            #landingNav #landingNavLinks a {
+                color: #333 !important;
+                text-shadow: none !important;
                 width: 100% !important;
                 text-align: left !important;
                 padding: 1rem !important;
                 border-radius: 8px !important;
                 margin-bottom: 0.5rem !important;
-                color: #333 !important;
             }
-            
-            #landingNavLinks button {
-                margin-top: 1rem !important;
+
+            #landingNav #landingNavLinks button {
+                width: 100% !important;
+                text-align: center !important;
+                margin-top: 0.5rem !important;
+            }
+
+            /* Hide right-side spacer on mobile */
+            #landingNav > div > div:last-of-type:not(#landingNavLinks):not(#landingHamburger) {
+                display: none !important;
+            }
+
+            /* Hide scroll-reveal logo on mobile (hero logo is enough) */
+            #landingNavLogo {
+                display: none !important;
             }
             
             /* Landing Page Hero - Mobile Optimized */
@@ -1210,7 +1229,7 @@
                 min-height: 100vh !important;
                 padding: 1rem !important;
                 justify-content: flex-start !important;
-                padding-top: 80px !important;
+                padding-top: 40px !important;
             }
             
             #landingScreen button:not(#landingNavLinks button) {
@@ -1410,85 +1429,140 @@
     <div class="container">
         <!-- Landing Page (Pre-Login) -->
         <div id="landingScreen" class="screen active">
-            <!-- Landing Page Nav Bar -->
+            <!-- Landing Page Nav Bar — transparent bar with centered links; logo fades in on scroll -->
             <nav id="landingNav" style="
                 position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                padding: 1rem 2rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
                 z-index: 1000;
+                background: transparent;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
             ">
-                <!-- Logo -->
-                <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 55px; cursor: pointer;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                
-                <!-- Hamburger Menu (Mobile Only) -->
-                <div class="hamburger" onclick="toggleLandingMenu()" style="display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001;">
-                    <span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: 0.3s;"></span>
-                    <span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: 0.3s;"></span>
-                    <span style="width: 25px; height: 3px; background: #333; border-radius: 2px; transition: 0.3s;"></span>
-                </div>
-                
-                <!-- Nav Links -->
-                <div id="landingNavLinks" style="display: flex; gap: 2rem; align-items: center;">
-                    <a href="#" onclick="launchHostDemo(); return false;" style="
-                        color: #333;
-                        text-decoration: none;
-                        font-weight: 600;
-                        font-size: 1rem;
-                        transition: opacity 0.2s;
-                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
-                        See Demo
-                    </a>
-                    <a href="#" onclick="showScreen('joinScreen'); closeLandingMenu(); return false;" style="
-                        color: #333;
-                        text-decoration: none;
-                        font-weight: 600;
-                        font-size: 1rem;
-                        transition: opacity 0.2s;
-                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
-                        Join Game
-                    </a>
-                    <a href="#" onclick="showScreen('loginScreen'); closeLandingMenu(); return false;" style="
-                        color: #333;
-                        text-decoration: none;
-                        font-weight: 600;
-                        font-size: 1rem;
-                        transition: opacity 0.2s;
-                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
-                        Log In
-                    </a>
-                    <button onclick="showScreen('signupScreen'); closeLandingMenu();" style="
-                        background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
-                        color: white;
-                        border: none;
-                        padding: 0.75rem 1.5rem;
-                        border-radius: 8px;
-                        font-weight: 700;
-                        font-size: 1rem;
+                <!-- Inner wrapper: logo left (hidden until scroll), links center, signup right -->
+                <div style="
+                    max-width: 1300px;
+                    margin: 0 auto;
+                    padding: 0 2rem;
+                    height: 66px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    position: relative;
+                ">
+                    <!-- Scroll-reveal logo (left side) — hidden until user scrolls -->
+                    <img id="landingNavLogo"
+                         src="letsgetquizzy_logo.png"
+                         alt="Let's Get Quizzy!"
+                         onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+                         style="
+                             height: 44px;
+                             cursor: pointer;
+                             opacity: 0;
+                             transform: translateX(-10px);
+                             transition: opacity 0.4s ease, transform 0.4s ease;
+                             flex-shrink: 0;
+                         ">
+
+                    <!-- Centered nav links (desktop) -->
+                    <div id="landingNavLinks" style="
+                        position: absolute;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        display: flex;
+                        gap: 2rem;
+                        align-items: center;
+                    ">
+                        <a href="#" onclick="launchHostDemo(); return false;" style="
+                            color: white;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: 1rem;
+                            transition: opacity 0.2s;
+                            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+                        " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                            See Demo
+                        </a>
+                        <a href="#" onclick="showScreen('joinScreen'); closeLandingMenu(); return false;" style="
+                            color: white;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: 1rem;
+                            transition: opacity 0.2s;
+                            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+                        " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                            Join Game
+                        </a>
+                        <a href="#" onclick="showScreen('loginScreen'); closeLandingMenu(); return false;" style="
+                            color: white;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: 1rem;
+                            transition: opacity 0.2s;
+                            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+                        " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                            Log In
+                        </a>
+                        <button onclick="showScreen('signupScreen'); closeLandingMenu();" style="
+                            background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
+                            color: white;
+                            border: none;
+                            padding: 0.6rem 1.4rem;
+                            border-radius: 8px;
+                            font-weight: 700;
+                            font-size: 1rem;
+                            cursor: pointer;
+                            transition: transform 0.2s, box-shadow 0.2s;
+                            box-shadow: 0 4px 12px rgba(13,112,255,0.4);
+                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(13,112,255,0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(13,112,255,0.4)'">
+                            Start Free
+                        </button>
+                    </div>
+
+                    <!-- Right side spacer (balances logo on left) — desktop only -->
+                    <div style="width: 120px; flex-shrink: 0;"></div>
+
+                    <!-- Hamburger Menu (Mobile Only) -->
+                    <div id="landingHamburger" onclick="toggleLandingMenu()" style="
+                        display: none;
+                        flex-direction: column;
+                        gap: 5px;
                         cursor: pointer;
-                        transition: transform 0.2s, box-shadow 0.2s;
-                        box-shadow: 0 4px 12px rgba(13,112,255,0.3);
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(13,112,255,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(13,112,255,0.3)'">
-                        Start Free
-                    </button>
+                        z-index: 1001;
+                        padding: 8px;
+                        position: absolute;
+                        right: 1rem;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    ">
+                        <span style="width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
+                        <span style="width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
+                        <span style="width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
+                    </div>
                 </div>
             </nav>
             
             <!-- Hero Section -->
-            <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden;">
+            <div style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; padding-top: 80px; position: relative; overflow: hidden;">
                 
                 <!-- Subtle Background Elements -->
                 <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.06; animation: float 6s ease-in-out infinite;"></div>
                 <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.06; animation: float 8s ease-in-out infinite reverse;"></div>
+
+                <!-- BIG CENTERED HERO LOGO -->
+                <div style="animation: fadeInDown 0.7s ease; margin-bottom: 2.5rem;">
+                    <img src="letsgetquizzy_logo.png"
+                         alt="Let's Get Quizzy!"
+                         style="
+                             width: min(560px, 85vw);
+                             height: auto;
+                             filter: drop-shadow(0 8px 32px rgba(0,0,0,0.22));
+                         ">
+                </div>
                 
-                <!-- Main Headline (replaced logo) -->
+                <!-- Main Headline -->
                 <h1 style="
                     font-size: clamp(2.5rem, 5.5vw, 4rem);
                     font-weight: 900;
@@ -1496,7 +1570,7 @@
                     margin-bottom: 1.5rem;
                     line-height: 1.2;
                     max-width: 1000px;
-                    animation: fadeInDown 0.8s ease;
+                    animation: fadeInDown 0.8s ease 0.1s both;
                 ">
                     Turn classroom review into a live team game
                 </h1>
@@ -3535,11 +3609,49 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // Add scroll listener for nav background
         window.addEventListener('scroll', () => {
+            // Existing header-bar (post-login screens)
             const header = document.querySelector('.header-bar');
-            if (window.scrollY > 20) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+            if (header) {
+                if (window.scrollY > 20) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+
+            // Landing nav: blur bar + logo fade-in on scroll
+            const landingNav = document.getElementById('landingNav');
+            const landingNavLogo = document.getElementById('landingNavLogo');
+            const landingNavLinks = document.getElementById('landingNavLinks');
+            if (landingNav) {
+                if (window.scrollY > 60) {
+                    // Blurred bar appears
+                    landingNav.style.background = 'rgba(255,255,255,0.12)';
+                    landingNav.style.backdropFilter = 'blur(18px)';
+                    landingNav.style.webkitBackdropFilter = 'blur(18px)';
+                    landingNav.style.boxShadow = '0 1px 0 rgba(255,255,255,0.15)';
+                    // Logo fades in
+                    if (landingNavLogo) {
+                        landingNavLogo.style.opacity = '1';
+                        landingNavLogo.style.transform = 'translateX(0)';
+                    }
+                    // Update link colors to stay readable on blurred bar
+                    if (landingNavLinks) {
+                        landingNavLinks.querySelectorAll('a').forEach(a => {
+                            a.style.color = 'white';
+                        });
+                    }
+                } else {
+                    landingNav.style.background = 'transparent';
+                    landingNav.style.backdropFilter = 'none';
+                    landingNav.style.webkitBackdropFilter = 'none';
+                    landingNav.style.boxShadow = 'none';
+                    // Logo fades out
+                    if (landingNavLogo) {
+                        landingNavLogo.style.opacity = '0';
+                        landingNavLogo.style.transform = 'translateX(-10px)';
+                    }
+                }
             }
         });
 
@@ -3566,12 +3678,33 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         
         function toggleLandingMenu() {
             const navLinks = document.getElementById('landingNavLinks');
+            const hamburger = document.getElementById('landingHamburger');
             navLinks.classList.toggle('active');
+            // Animate hamburger bars to X when open
+            if (hamburger) {
+                const bars = hamburger.querySelectorAll('span');
+                if (navLinks.classList.contains('active')) {
+                    bars[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+                    bars[1].style.opacity = '0';
+                    bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                } else {
+                    bars[0].style.transform = '';
+                    bars[1].style.opacity = '1';
+                    bars[2].style.transform = '';
+                }
+            }
         }
         
         function closeLandingMenu() {
             const navLinks = document.getElementById('landingNavLinks');
+            const hamburger = document.getElementById('landingHamburger');
             navLinks.classList.remove('active');
+            if (hamburger) {
+                const bars = hamburger.querySelectorAll('span');
+                bars[0].style.transform = '';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = '';
+            }
         }
         
         window.toggleMobileMenu = toggleMobileMenu;
