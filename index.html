@@ -5036,7 +5036,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         async function generateQuizWithAI() {
             const topic = document.getElementById('aiTopic').value.trim();
-            const questionCount = document.getElementById('aiQuestionCount').value;
+            const numQuestions = document.getElementById('aiQuestionCount').value;
             const difficulty = document.getElementById('aiDifficulty').value;
             const questionType = document.getElementById('aiQuestionType').value;
             
@@ -5060,7 +5060,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     },
                     body: JSON.stringify({
                         topic,
-                        questionCount,
+                        questionCount: numQuestions,
                         difficulty,
                         questionType
                     })
