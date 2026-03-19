@@ -64,7 +64,9 @@ For true/false questions, use answers: ["True", "False"]`;
         }
 
         const data = await response.json();
-        const quizData = JSON.parse(data.content[0].text);
+        // Strip markdown code fences if Claude wrapped the JSON in them
+        const rawText = data.content[0].text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        const quizData = JSON.parse(rawText);
 
         // Send the generated quiz back to the browser
         return res.status(200).json(quizData);
