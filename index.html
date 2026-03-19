@@ -5071,6 +5071,16 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 }
                 
                 const quizData = await response.json();
+
+                // Check for error response from our server
+                if (quizData.error) {
+                    throw new Error(quizData.error);
+                }
+
+                // Validate we got what we expected
+                if (!quizData.title || !quizData.questions) {
+                    throw new Error(`Unexpected response shape: ${JSON.stringify(quizData)}`);
+                }
                 
                 // Populate the quiz form
                 document.getElementById('quizTitle').value = quizData.title;
@@ -5123,7 +5133,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             } catch (error) {
                 console.error('AI Generation Error:', error);
                 playSound('wrongSound');
-                alert('❌ Failed to generate quiz. Please check your API key and try again.');
+                alert(`❌ Failed to generate quiz: ${error.message}`);
             } finally {
                 // Reset UI
                 document.getElementById('aiGeneratorStatus').style.display = 'none';
