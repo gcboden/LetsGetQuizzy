@@ -1464,7 +1464,7 @@
                          alt="Let's Get Quizzy!"
                          onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
                          style="
-                             height: 44px;
+                             height: 52px;
                              cursor: pointer;
                              opacity: 0;
                              transform: translateX(-10px);
@@ -1482,33 +1482,33 @@
                         align-items: center;
                     ">
                         <a href="#" onclick="launchHostDemo(); return false;" style="
-                            color: white;
+                            color: #1a1a2e;
                             text-decoration: none;
-                            font-weight: 600;
+                            font-weight: 700;
                             font-size: 1rem;
                             transition: opacity 0.2s;
-                            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-                        " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                            text-shadow: none;
+                        " onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
                             See Demo
                         </a>
                         <a href="#" onclick="showScreen('joinScreen'); closeLandingMenu(); return false;" style="
-                            color: white;
+                            color: #1a1a2e;
                             text-decoration: none;
-                            font-weight: 600;
+                            font-weight: 700;
                             font-size: 1rem;
                             transition: opacity 0.2s;
-                            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-                        " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                            text-shadow: none;
+                        " onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
                             Join Game
                         </a>
                         <a href="#" onclick="showScreen('loginScreen'); closeLandingMenu(); return false;" style="
-                            color: white;
+                            color: #1a1a2e;
                             text-decoration: none;
-                            font-weight: 600;
+                            font-weight: 700;
                             font-size: 1rem;
                             transition: opacity 0.2s;
-                            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-                        " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                            text-shadow: none;
+                        " onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
                             Log In
                         </a>
                         <button onclick="showScreen('signupScreen'); closeLandingMenu();" style="
@@ -2141,7 +2141,7 @@
             ">
                 <!-- Logo -->
                 <div style="display: flex; align-items: center; gap: 2rem;">
-                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 50px;">
+                    <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height: 70px;">
                     
                     <!-- Nav Links -->
                     <div style="display: flex; gap: 1.5rem;">
@@ -2165,7 +2165,7 @@
                         " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
                             Create Quiz
                         </a>
-                        <a href="#" onclick="showAIQuizModal(); return false;" style="
+                        <a href="#" onclick="showAIGenerator(); return false;" style="
                             color: var(--blue-electric);
                             text-decoration: none;
                             font-weight: 600;
@@ -2306,7 +2306,7 @@
                             font-weight: 600;
                             cursor: pointer;
                         ">Create Your First Quiz</button>
-                        <button onclick="showAIQuizModal()" style="
+                        <button onclick="showAIGenerator()" style="
                             background: white;
                             color: var(--blue-electric);
                             border: 2px solid var(--blue-electric);
