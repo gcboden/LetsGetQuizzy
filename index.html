@@ -5051,46 +5051,18 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             document.getElementById('generateBtn').textContent = 'Generating...';
             
             try {
-                // Build the prompt for Claude
-                const prompt = `Generate a ${difficulty} difficulty quiz about: ${topic}
 
-Requirements:
-- Create ${questionCount} questions
-- Question type: ${questionType}
-- Make questions educational and engaging
-- Ensure correct answers are accurate
-
-Response format (JSON only, no markdown):
-{
-  "title": "Quiz title",
-  "questions": [
-    {
-      "question": "Question text",
-      "type": "multiple-choice" or "true-false",
-      "answers": ["Answer 1", "Answer 2", "Answer 3", "Answer 4"],
-      "correctIndex": 0,
-      "timeLimit": 20
-    }
-  ]
-}
-
-For true/false questions, use answers: ["True", "False"]`;
-
-                // Call Anthropic API
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                // Call our secure Vercel serverless function (API key stays on the server)
+                const response = await fetch('/api/generate-quiz', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': 'YOUR_ANTHROPIC_API_KEY', // User will need to add this
-                        'anthropic-version': '2023-06-01'
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'claude-3-5-sonnet-20241022',
-                        max_tokens: 4096,
-                        messages: [{
-                            role: 'user',
-                            content: prompt
-                        }]
+                        topic,
+                        questionCount,
+                        difficulty,
+                        questionType
                     })
                 });
                 
@@ -5098,8 +5070,7 @@ For true/false questions, use answers: ["True", "False"]`;
                     throw new Error(`API Error: ${response.status}`);
                 }
                 
-                const data = await response.json();
-                const quizData = JSON.parse(data.content[0].text);
+                const quizData = await response.json();
                 
                 // Populate the quiz form
                 document.getElementById('quizTitle').value = quizData.title;
