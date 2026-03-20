@@ -2990,8 +2990,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     if (signupScreen) signupScreen.classList.remove('active');
                     if (landingScreen) landingScreen.classList.remove('active');
                     
+                    // showScreen first, THEN show/hide AI buttons
+                    window.showScreen('homeScreen');
+
                     // Check if this user is on the AI access whitelist
-                    // Store emails in Firebase at: aiAccess/{sanitized_email}/allowed: true
                     try {
                         const emailKey = user.email.replace(/\./g, '_').replace(/@/g, '_at_');
                         const accessSnap = await get(ref(getDatabase(app), `aiAccess/${emailKey}`));
@@ -3005,14 +3007,11 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                             if (el) el.style.display = hasAIAccess ? (id === 'aiNavBtnHeader' ? 'inline-flex' : 'inline-block') : 'none';
                         });
 
-                        console.log('AI access:', hasAIAccess);
+                        console.log('AI access:', hasAIAccess, 'for', emailKey);
                     } catch (e) {
                         console.log('AI access check failed, defaulting to no access', e);
                         window.userHasAIAccess = false;
                     }
-
-                    // showScreen will handle hiding/showing nav appropriately
-                    window.showScreen('homeScreen');
                 } else {
                     window.currentUser = null;
                     window.userHasAIAccess = false;
