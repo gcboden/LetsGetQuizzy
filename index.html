@@ -5180,8 +5180,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 });
                 
                 playSound('correctSound');
-                alert(`✨ Quiz generated successfully! ${quizData.questions.length} questions created.`);
                 closeAIGenerator();
+                // Navigate to create quiz screen so the user can review and edit their generated quiz
+                showScreen('createQuizScreen');
+                alert(`✨ Quiz generated! Review your ${quizData.questions.length} questions below, make any edits, then hit Save.`);
                 
             } catch (error) {
                 console.error('AI Generation Error:', error);
