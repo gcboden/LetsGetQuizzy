@@ -1419,7 +1419,7 @@
                 <a class="nav-link" onclick="goToCreateQuiz();">Create Quiz</a>
                 <a class="nav-link" onclick="goToHostScreen();">Host Game</a>
                 <a class="nav-link" onclick="showScreen('joinScreen'); closeMobileMenu();">Join Game</a>
-                <a class="nav-link ai-maker-btn" onclick="showAIGenerator(); closeMobileMenu();">✨ AI Quiz Maker</a>
+                <a id="aiNavBtnHeader" class="nav-link ai-maker-btn" onclick="showAIGenerator(); closeMobileMenu();" style="display:none;">✨ AI Quiz Maker</a>
                 <a class="nav-link" onclick="logout(); closeMobileMenu();" style="color: var(--orange-bright);">Logout</a>
             </nav>
         </div>
@@ -2165,7 +2165,7 @@
                         " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
                             Create Quiz
                         </a>
-                        <a href="#" onclick="showAIGenerator(); return false;" style="
+                        <a id="aiNavBtnDashboard" href="#" onclick="showAIGenerator(); return false;" style="
                             color: var(--blue-electric);
                             text-decoration: none;
                             font-weight: 700;
@@ -2177,7 +2177,7 @@
                             background-origin: padding-box, border-box;
                             background-clip: padding-box, border-box;
                             transition: all 0.2s;
-                            display: inline-block;
+                            display: none;
                         " onmouseover="this.style.backgroundImage='linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky)), linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky))'; this.style.color='white';" onmouseout="this.style.backgroundImage='linear-gradient(white, white), linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky))'; this.style.color='var(--blue-electric)';">
                             ✨ AI Quiz Maker
                         </a>
@@ -2311,7 +2311,7 @@
                             font-weight: 600;
                             cursor: pointer;
                         ">Create Your First Quiz</button>
-                        <button onclick="showAIGenerator()" style="
+                        <button id="aiNavBtnEmpty" onclick="showAIGenerator()" style="
                             background: white;
                             color: var(--blue-electric);
                             border: 2px solid var(--blue-electric);
@@ -2320,6 +2320,7 @@
                             font-size: 1.1rem;
                             font-weight: 600;
                             cursor: pointer;
+                            display: none;
                         ">✨ Use AI Quiz Maker</button>
                     </div>
                 </div>
@@ -2976,7 +2977,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // Set up auth state listener
         document.addEventListener('DOMContentLoaded', () => {
-            onAuthStateChanged(auth, (user) => {
+            onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     window.currentUser = user;
                     console.log('User logged in:', user.email);
@@ -2989,10 +2990,32 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     if (signupScreen) signupScreen.classList.remove('active');
                     if (landingScreen) landingScreen.classList.remove('active');
                     
+                    // Check if this user is on the AI access whitelist
+                    // Store emails in Firebase at: aiAccess/{sanitized_email}/allowed: true
+                    try {
+                        const emailKey = user.email.replace(/\./g, '_').replace(/@/g, '_at_');
+                        const accessSnap = await get(ref(getDatabase(app), `aiAccess/${emailKey}`));
+                        const hasAIAccess = accessSnap.exists() && accessSnap.val().allowed === true;
+                        window.userHasAIAccess = hasAIAccess;
+
+                        // Show or hide all AI Quiz Maker buttons based on access
+                        const aiButtons = ['aiNavBtnHeader', 'aiNavBtnDashboard', 'aiNavBtnEmpty'];
+                        aiButtons.forEach(id => {
+                            const el = document.getElementById(id);
+                            if (el) el.style.display = hasAIAccess ? (id === 'aiNavBtnHeader' ? 'inline-flex' : 'inline-block') : 'none';
+                        });
+
+                        console.log('AI access:', hasAIAccess);
+                    } catch (e) {
+                        console.log('AI access check failed, defaulting to no access', e);
+                        window.userHasAIAccess = false;
+                    }
+
                     // showScreen will handle hiding/showing nav appropriately
                     window.showScreen('homeScreen');
                 } else {
                     window.currentUser = null;
+                    window.userHasAIAccess = false;
                     console.log('No user logged in');
                     
                     // Show landing page for logged-out users
@@ -5048,6 +5071,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // AI Quiz Generator Functions
         function showAIGenerator() {
+            if (!window.userHasAIAccess) {
+                alert('✨ AI Quiz Maker is currently in beta. Stay tuned!');
+                return;
+            }
             const modal = document.getElementById('aiGeneratorModal');
             modal.style.display = 'flex';
             // Clear previous topic so it feels fresh each time
