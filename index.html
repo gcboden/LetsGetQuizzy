@@ -2168,12 +2168,17 @@
                         <a href="#" onclick="showAIGenerator(); return false;" style="
                             color: var(--blue-electric);
                             text-decoration: none;
-                            font-weight: 600;
-                            padding: 0.5rem 1rem;
-                            border-radius: 8px;
-                            background: rgba(13,112,255,0.1);
-                            transition: background 0.2s;
-                        " onmouseover="this.style.background='rgba(13,112,255,0.15)'" onmouseout="this.style.background='rgba(13,112,255,0.1)'">
+                            font-weight: 700;
+                            padding: 0.5rem 1.2rem;
+                            border-radius: 20px;
+                            font-size: 0.95rem;
+                            border: 2px solid transparent;
+                            background-image: linear-gradient(white, white), linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky));
+                            background-origin: padding-box, border-box;
+                            background-clip: padding-box, border-box;
+                            transition: all 0.2s;
+                            display: inline-block;
+                        " onmouseover="this.style.backgroundImage='linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky)), linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky))'; this.style.color='white';" onmouseout="this.style.backgroundImage='linear-gradient(white, white), linear-gradient(90deg, var(--orange-gold), var(--orange-bright), var(--blue-electric), var(--blue-sky))'; this.style.color='var(--blue-electric)';">
                             ✨ AI Quiz Maker
                         </a>
                     </div>
@@ -2341,8 +2346,19 @@
         </div>
 
         <!-- AI Quiz Generator Modal -->
-        <div id="aiGeneratorModal" class="screen" style="display: none;">
-            <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <!-- AI Quiz Generator Modal — fixed overlay, not a screen -->
+        <div id="aiGeneratorModal" style="
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        ">
+            <div class="card" style="max-width: 700px; width: 100%; margin: 0 auto; max-height: 90vh; overflow-y: auto;">
                 <h2>🤖 AI Quiz Generator</h2>
                 <p style="text-align: center; color: #666; margin-bottom: 2rem;">
                     Tell me what you want a quiz about, and I'll create it for you!
@@ -3632,19 +3648,19 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             if (landingNav) {
                 if (window.scrollY > 60) {
                     // Blurred bar appears
-                    landingNav.style.background = 'rgba(255,255,255,0.12)';
+                    landingNav.style.background = 'rgba(255,255,255,0.25)';
                     landingNav.style.backdropFilter = 'blur(18px)';
                     landingNav.style.webkitBackdropFilter = 'blur(18px)';
-                    landingNav.style.boxShadow = '0 1px 0 rgba(255,255,255,0.15)';
+                    landingNav.style.boxShadow = '0 1px 0 rgba(255,255,255,0.2)';
                     // Logo fades in
                     if (landingNavLogo) {
                         landingNavLogo.style.opacity = '1';
                         landingNavLogo.style.transform = 'translateX(0)';
                     }
-                    // Update link colors to stay readable on blurred bar
+                    // Keep links dark — readable on blurred bar
                     if (landingNavLinks) {
                         landingNavLinks.querySelectorAll('a').forEach(a => {
-                            a.style.color = 'white';
+                            a.style.color = '#1a1a2e';
                         });
                     }
                 } else {
@@ -3656,6 +3672,12 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     if (landingNavLogo) {
                         landingNavLogo.style.opacity = '0';
                         landingNavLogo.style.transform = 'translateX(-10px)';
+                    }
+                    // Reset links to dark
+                    if (landingNavLinks) {
+                        landingNavLinks.querySelectorAll('a').forEach(a => {
+                            a.style.color = '#1a1a2e';
+                        });
                     }
                 }
             }
@@ -3911,6 +3933,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // Navigation
         function showScreen(screenId) {
+            // Always close AI modal when navigating
+            document.getElementById('aiGeneratorModal').style.display = 'none';
+
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             
@@ -5023,14 +5048,15 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // AI Quiz Generator Functions
         function showAIGenerator() {
-            document.getElementById('aiGeneratorModal').style.display = 'block';
-            document.getElementById('createQuizScreen').style.display = 'none';
+            const modal = document.getElementById('aiGeneratorModal');
+            modal.style.display = 'flex';
+            // Clear previous topic so it feels fresh each time
+            document.getElementById('aiTopic').value = '';
         }
         window.showAIGenerator = showAIGenerator;
 
         function closeAIGenerator() {
             document.getElementById('aiGeneratorModal').style.display = 'none';
-            document.getElementById('createQuizScreen').style.display = 'block';
         }
         window.closeAIGenerator = closeAIGenerator;
 
