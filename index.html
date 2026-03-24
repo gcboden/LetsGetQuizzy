@@ -2184,22 +2184,66 @@
                     </div>
                 </div>
                 
-                <!-- User Menu -->
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span id="userNameDisplay" style="color: #666; font-size: 0.9rem;"></span>
-                    <button onclick="logout()" style="
-                        background: white;
-                        color: var(--orange-gold);
-                        border: 2px solid var(--orange-gold);
-                        padding: 0.5rem 1.5rem;
-                        border-radius: 8px;
-                        font-weight: 600;
+                <!-- User Profile Dropdown -->
+                <div style="position: relative;">
+                    <div id="profileBtn" onclick="toggleProfileDropdown()" style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.6rem;
                         cursor: pointer;
-                        font-size: 0.9rem;
-                        transition: all 0.2s ease;
-                    " onmouseover="this.style.background='var(--orange-gold)'; this.style.color='white';" onmouseout="this.style.background='white'; this.style.color='var(--orange-gold)';">
-                        Logout
-                    </button>
+                        padding: 0.4rem 0.8rem 0.4rem 0.4rem;
+                        border-radius: 50px;
+                        border: 2px solid #e0e0e0;
+                        background: white;
+                        transition: all 0.2s;
+                        user-select: none;
+                    " onmouseover="this.style.borderColor='var(--blue-electric)'" onmouseout="this.style.borderColor='#e0e0e0'">
+                        <!-- Avatar circle -->
+                        <div id="profileAvatar" style="
+                            width: 34px;
+                            height: 34px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
+                            color: white;
+                            font-weight: 700;
+                            font-size: 0.95rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-shrink: 0;
+                        ">?</div>
+                        <span id="profileName" style="font-weight: 600; color: #333; font-size: 0.95rem;"></span>
+                        <span style="color: #999; font-size: 0.8rem;">▾</span>
+                    </div>
+                    <!-- Dropdown -->
+                    <div id="profileDropdown" style="
+                        display: none;
+                        position: absolute;
+                        top: calc(100% + 8px);
+                        right: 0;
+                        background: white;
+                        border-radius: 12px;
+                        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                        border: 1px solid #e0e0e0;
+                        min-width: 160px;
+                        overflow: hidden;
+                        z-index: 500;
+                        animation: dropdownSlide 0.15s ease;
+                    ">
+                        <div onclick="logout()" style="
+                            padding: 0.9rem 1.2rem;
+                            cursor: pointer;
+                            color: var(--orange-bright);
+                            font-weight: 600;
+                            font-size: 0.95rem;
+                            transition: background 0.15s;
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                        " onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='white'">
+                            🚪 Logout
+                        </div>
+                    </div>
                 </div>
             </nav>
             
@@ -2207,10 +2251,10 @@
             <div style="padding: 3rem 2rem; max-width: 1400px; margin: 0 auto;">
                 <!-- Welcome Header -->
                 <div style="margin-bottom: 3rem;">
-                    <h1 style="color: var(--blue-electric); font-size: 2rem; margin-bottom: 0.5rem;">
-                        Welcome back! 👋
+                    <h1 id="dashboardWelcome" style="color: var(--blue-electric); font-size: 2rem; margin-bottom: 0.5rem; text-align: left;">
+                        Hello!
                     </h1>
-                    <p style="color: #666; font-size: 1.1rem;">
+                    <p style="color: #666; font-size: 1.1rem; text-align: left;">
                         Ready to create your next epic quiz game?
                     </p>
                 </div>
@@ -2993,6 +3037,15 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     // showScreen first, THEN show/hide AI buttons
                     window.showScreen('homeScreen');
 
+                    // Set user's name in welcome header and profile avatar
+                    const userName = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
+                    const welcomeEl = document.getElementById('dashboardWelcome');
+                    if (welcomeEl) welcomeEl.textContent = `Hello, ${userName}!`;
+                    const profileName = document.getElementById('profileName');
+                    if (profileName) profileName.textContent = userName;
+                    const profileAvatar = document.getElementById('profileAvatar');
+                    if (profileAvatar) profileAvatar.textContent = userName.charAt(0).toUpperCase();
+
                     // Check if this user is on the AI access whitelist
                     try {
                         const emailKey = user.email.replace(/\./g, '_').replace(/@/g, '_at_');
@@ -3007,7 +3060,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                             if (el) el.style.display = hasAIAccess ? (id === 'aiNavBtnHeader' ? 'inline-flex' : 'inline-block') : 'none';
                         });
 
-                        console.log('AI access:', hasAIAccess, 'for', emailKey);
+                        // Load this user's quizzes from Firebase
+                    if (window.loadUserQuizzes) window.loadUserQuizzes();
                     } catch (e) {
                         console.log('AI access check failed, defaulting to no access', e);
                         window.userHasAIAccess = false;
@@ -3705,6 +3759,20 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
         });
 
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+        window.toggleProfileDropdown = toggleProfileDropdown;
+
+        // Close profile dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#profileBtn') && !e.target.closest('#profileDropdown')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown) dropdown.style.display = 'none';
+            }
+        });
+
         // Mobile menu functions
         function toggleMobileMenu() {
             const nav = document.getElementById('mobileNav');
@@ -3896,7 +3964,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.logout = logout;
 
         // Game state
-        let quizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
+        let quizzes = [];
         let currentQuiz = null;
         let currentQuestionIndex = 0;
         let currentRound = 1;
@@ -4769,40 +4837,36 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         function duplicateQuiz(quizId, event) {
             event.stopPropagation();
             playSound('correctSound');
-            
+            if (!window.currentUser) return;
+            const uid = window.currentUser.uid;
             const quiz = quizzes.find(q => q.id == quizId);
             if (!quiz) return;
-            
+            const newId = Date.now();
             const duplicatedQuiz = {
-                id: Date.now(),
+                id: newId,
                 title: quiz.title + ' (Copy)',
-                questions: JSON.parse(JSON.stringify(quiz.questions)) // Deep copy
+                questions: JSON.parse(JSON.stringify(quiz.questions)),
+                createdBy: uid,
+                createdAt: newId
             };
-            
-            quizzes.push(duplicatedQuiz);
-            localStorage.setItem('quizzes', JSON.stringify(quizzes));
-            
-            displayRecentQuizzes();
-            loadQuizzes();
-            
-            // Show a brief notification
-            alert(`Quiz duplicated! "${duplicatedQuiz.title}" has been added to your quizzes.`);
+            window.dbSet(window.dbRef(window.db, `userQuizzes/${uid}/${newId}`), duplicatedQuiz)
+                .then(() => {
+                    loadUserQuizzes();
+                    alert(`Quiz duplicated! "${duplicatedQuiz.title}" has been added to your quizzes.`);
+                });
         }
         window.duplicateQuiz = duplicateQuiz;
 
         function deleteQuiz(quizId, event) {
             event.stopPropagation();
-            
+            if (!window.currentUser) return;
+            const uid = window.currentUser.uid;
             const quiz = quizzes.find(q => q.id == quizId);
             if (!quiz) return;
-            
             if (confirm(`Are you sure you want to delete "${quiz.title}"? This cannot be undone.`)) {
                 playSound('wrongSound');
-                quizzes = quizzes.filter(q => q.id !== quizId);
-                localStorage.setItem('quizzes', JSON.stringify(quizzes));
-                
-                displayRecentQuizzes();
-                loadQuizzes();
+                window.dbRemove(window.dbRef(window.db, `userQuizzes/${uid}/${quizId}`))
+                    .then(() => loadUserQuizzes());
             }
         }
         window.deleteQuiz = deleteQuiz;
@@ -5033,38 +5097,44 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return;
             }
 
+            // Save to Firebase under user's UID
+            if (!window.currentUser) { alert('Please log in to save quizzes!'); return; }
+            const uid = window.currentUser.uid;
+
             // Check if we're editing an existing quiz
             if (editingQuizId) {
-                const quizIndex = quizzes.findIndex(q => q.id === editingQuizId);
-                if (quizIndex !== -1) {
-                    quizzes[quizIndex] = { 
-                        id: editingQuizId, 
-                        title, 
-                        questions,
-                        createdBy: currentUser ? currentUser.uid : 'anonymous',
-                        updatedAt: Date.now()
-                    };
-                    alert('Quiz updated successfully!');
-                }
-                editingQuizId = null;
-            } else {
-                const quiz = { 
-                    id: Date.now(), 
-                    title, 
+                const updatedQuiz = {
+                    id: editingQuizId,
+                    title,
                     questions,
-                    createdBy: currentUser ? currentUser.uid : 'anonymous',
+                    createdBy: uid,
+                    updatedAt: Date.now()
+                };
+                window.dbSet(window.dbRef(window.db, `userQuizzes/${uid}/${editingQuizId}`), updatedQuiz)
+                    .then(() => {
+                        alert('Quiz updated successfully!');
+                        editingQuizId = null;
+                        loadUserQuizzes();
+                    });
+            } else {
+                const quizId = Date.now();
+                const quiz = {
+                    id: quizId,
+                    title,
+                    questions,
+                    createdBy: uid,
                     createdAt: Date.now()
                 };
-                quizzes.push(quiz);
-                alert('Quiz saved successfully!');
+                window.dbSet(window.dbRef(window.db, `userQuizzes/${uid}/${quizId}`), quiz)
+                    .then(() => {
+                        alert('Quiz saved successfully!');
+                        loadUserQuizzes();
+                    });
             }
-            
-            localStorage.setItem('quizzes', JSON.stringify(quizzes));
             goHome();
             document.getElementById('quizTitle').value = '';
             document.getElementById('questionsContainer').innerHTML = '';
             questionCount = 0;
-            loadQuizzes();
         }
         window.saveQuiz = saveQuiz;
 
@@ -5212,6 +5282,26 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
         }
         window.toggleRoundSettings = toggleRoundSettings;
+
+        // Load quizzes from Firebase for the current user
+        async function loadUserQuizzes() {
+            if (!window.currentUser) return;
+            const uid = window.currentUser.uid;
+            try {
+                const snap = await window.dbGet(window.dbRef(window.db, `userQuizzes/${uid}`));
+                if (snap.exists()) {
+                    quizzes = Object.values(snap.val()).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+                } else {
+                    quizzes = [];
+                }
+            } catch (e) {
+                console.error('Error loading quizzes:', e);
+                quizzes = [];
+            }
+            displayRecentQuizzes();
+            loadQuizzes();
+        }
+        window.loadUserQuizzes = loadUserQuizzes;
 
         function loadQuizzes() {
             const select = document.getElementById('quizSelect');
@@ -6764,9 +6854,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
         }
 
-        // Initialize
+        // Initialize — quizzes load after auth via loadUserQuizzes()
         loadQuizzes();
-        displayRecentQuizzes();
     </script>
 </body>
 </html>
