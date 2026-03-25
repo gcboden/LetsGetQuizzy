@@ -4030,7 +4030,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             document.getElementById(screenId).classList.add('active');
             
             // Show/hide nav bar based on screen
-            if (screenId === 'homeScreen' || screenId === 'loginScreen' || screenId === 'signupScreen' || screenId === 'landingScreen') {
+            if (screenId === 'homeScreen' || screenId === 'loginScreen' || screenId === 'signupScreen' || screenId === 'landingScreen' || screenId === 'joinScreen') {
                 document.body.classList.remove('has-nav');
             } else {
                 document.body.classList.add('has-nav');
@@ -4075,8 +4075,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 responseTimes: []
             };
             
-            showScreen('homeScreen');
-            displayRecentQuizzes();
+            // Route to landing if not logged in, dashboard if logged in
+            if (window.currentUser) {
+                showScreen('homeScreen');
+                displayRecentQuizzes();
+            } else {
+                showScreen('landingScreen');
+            }
         }
         window.goHome = goHome;
         
