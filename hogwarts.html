@@ -880,19 +880,17 @@
 <div id="landingScreen" class="screen active">
     <div class="crest-icon">⚡</div>
     <div class="title-main">Hogwarts School of<br>Software & Sorcery</div>
-    <div class="title-sub">Trivia Challenge</div>
-    <div class="title-event">BYU Library · The Great Hall of Knowledge</div>
     <div class="gold-divider"></div>
     <div class="role-cards">
         <div class="role-card" onclick="showScreen('hostSetupScreen')">
             <div class="role-icon">🎓</div>
             <div class="role-title">Professor</div>
-            <div class="role-desc">Host and manage the trivia challenge for your house</div>
+            <div class="role-desc">Host and manage the trivia challenge</div>
         </div>
         <div class="role-card" onclick="showScreen('playerJoinScreen')">
             <div class="role-icon">🪄</div>
             <div class="role-title">Student</div>
-            <div class="role-desc">Join a game and buzz in to answer for your house</div>
+            <div class="role-desc">Join a game and buzz in for your house</div>
         </div>
     </div>
 </div>
@@ -1701,12 +1699,18 @@
         showScreen('resultsScreen');
     }
 
-    // ── Auto-fill PIN from URL param ──
+    // ── Auto-fill PIN from URL param — QR scan goes straight to join ──
     const urlParams = new URLSearchParams(window.location.search);
     const urlPin = urlParams.get('pin');
     if (urlPin) {
         showScreen('playerJoinScreen');
         document.getElementById('joinPin').value = urlPin;
+        // If they came via QR they're definitely a student — hide the PIN field label
+        // and mark it as read-only so they can't mess with it
+        const pinInput = document.getElementById('joinPin');
+        pinInput.readOnly = true;
+        pinInput.style.opacity = '0.6';
+        pinInput.style.cursor = 'default';
     }
 </script>
 </body>
