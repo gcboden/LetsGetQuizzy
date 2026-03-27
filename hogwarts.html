@@ -34,20 +34,24 @@
         body {
             font-family: 'EB Garamond', serif;
             background: var(--dark);
+            background-image: url('cloudy_backdrop.png');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: var(--parchment);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ── Starfield background ── */
+        /* ── Subtle gold overlay on top of backdrop ── */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
             background:
                 radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(116,0,1,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(14,26,64,0.3) 0%, transparent 70%);
+                radial-gradient(ellipse at 80% 80%, rgba(116,0,1,0.04) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
         }
@@ -836,29 +840,29 @@
         .mt1 { margin-top: 1rem; }
         .mt2 { margin-top: 2rem; }
 
-        /* Floating candles decoration */
+        /* Floating candles — hover in place, gently bobbing */
         .candles {
             position: fixed;
-            top: 0; left: 0; right: 0;
+            inset: 0;
             pointer-events: none;
             z-index: 0;
-            height: 100vh;
             overflow: hidden;
         }
 
         .candle {
             position: absolute;
-            bottom: -20px;
-            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
-            animation: candleFloat var(--dur) ease-in-out infinite;
-            animation-delay: var(--delay);
-            opacity: 0.4;
+            font-size: var(--size, 1.5rem);
+            animation: candleBob var(--dur, 4s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: var(--opacity, 0.5);
+            filter: drop-shadow(0 0 6px rgba(255,200,50,0.4));
         }
 
-        @keyframes candleFloat {
-            0% { transform: translateY(0) rotate(-2deg); opacity: 0.3; }
-            50% { transform: translateY(-100vh) rotate(2deg); opacity: 0.5; }
-            100% { transform: translateY(-120vh) rotate(-2deg); opacity: 0; }
+        @keyframes candleBob {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            25% { transform: translateY(-12px) rotate(1deg); }
+            50% { transform: translateY(-6px) rotate(-1deg); }
+            75% { transform: translateY(-14px) rotate(2deg); }
         }
 
         @media (max-width: 640px) {
@@ -1233,21 +1237,47 @@
 <script>
     // ── Stars & candles ──
     const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 80; i++) {
         const s = document.createElement('div');
         s.className = 'star';
-        const size = Math.random() * 2.5 + 0.5;
+        const size = Math.random() * 2 + 0.5;
         s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*4}s;`;
         starsEl.appendChild(s);
     }
+
+    // Hovering candles — random positions flanking the page, varying sizes
     const candlesEl = document.getElementById('candles');
-    for (let i = 0; i < 8; i++) {
+    const candlePositions = [
+        // Left side flanking
+        { left: '2%',  top: '8%'  },
+        { left: '5%',  top: '28%' },
+        { left: '1%',  top: '48%' },
+        { left: '6%',  top: '68%' },
+        { left: '3%',  top: '85%' },
+        // Right side flanking
+        { left: '92%', top: '12%' },
+        { left: '95%', top: '32%' },
+        { left: '91%', top: '52%' },
+        { left: '94%', top: '72%' },
+        { left: '92%', top: '88%' },
+        // A few scattered in background at low opacity
+        { left: '15%', top: '15%' },
+        { left: '80%', top: '25%' },
+        { left: '20%', top: '75%' },
+        { left: '75%', top: '80%' },
+    ];
+
+    candlePositions.forEach((pos, i) => {
         const c = document.createElement('div');
         c.className = 'candle';
         c.textContent = '🕯️';
-        c.style.cssText = `left:${10+i*12}%;--dur:${8+Math.random()*8}s;--delay:${Math.random()*6}s;`;
+        const size = 1.2 + Math.random() * 1.6; // 1.2rem to 2.8rem
+        const opacity = 0.3 + Math.random() * 0.35;
+        const dur = 3 + Math.random() * 4;
+        const delay = Math.random() * 5;
+        c.style.cssText = `left:${pos.left};top:${pos.top};--size:${size.toFixed(1)}rem;--opacity:${opacity.toFixed(2)};--dur:${dur.toFixed(1)}s;--delay:${delay.toFixed(1)}s;`;
         candlesEl.appendChild(c);
-    }
+    });
 
     // ── Screen management ──
     function showScreen(id) {
