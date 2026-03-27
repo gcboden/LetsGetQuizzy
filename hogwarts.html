@@ -1022,7 +1022,7 @@
                     </div>
                     <div class="house-row ravenclaw" id="lb-ravenclaw">
                         <div>
-                            <div class="house-name">🦅 Ravenclaw</div>
+                            <div class="house-name"><img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;"> Ravenclaw</div>
                             <div class="house-members" id="members-ravenclaw">No students yet</div>
                         </div>
                         <div class="house-points" id="pts-ravenclaw">0</div>
@@ -1092,7 +1092,7 @@
             <div class="game-leaderboard">
                 <div class="house-row gryffindor"><span>🦁 Gryffindor</span><span class="house-points" id="game-pts-gryffindor">0</span></div>
                 <div class="house-row hufflepuff"><span>🦡 Hufflepuff</span><span class="house-points" id="game-pts-hufflepuff">0</span></div>
-                <div class="house-row ravenclaw"><span>🦅 Ravenclaw</span><span class="house-points" id="game-pts-ravenclaw">0</span></div>
+                <div class="house-row ravenclaw"><span><img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;"> Ravenclaw</span><span class="house-points" id="game-pts-ravenclaw">0</span></div>
                 <div class="house-row slytherin"><span>🐍 Slytherin</span><span class="house-points" id="game-pts-slytherin">0</span></div>
             </div>
         </div>
@@ -1125,7 +1125,7 @@
                 <span class="house-emoji">🦡</span>Hufflepuff
             </div>
             <div class="house-option ravenclaw" onclick="selectHouse('ravenclaw', this)">
-                <span class="house-emoji">🦅</span>Ravenclaw
+                <span class="house-emoji"><img src="raven.png" style="width:1.8rem;height:1.8rem;vertical-align:middle;object-fit:contain;"></span>Ravenclaw
             </div>
             <div class="house-option slytherin" onclick="selectHouse('slytherin', this)">
                 <span class="house-emoji">🐍</span>Slytherin
@@ -1177,7 +1177,7 @@
             <div>🦡 <span id="p-pts-hufflepuff">0</span></div>
         </div>
         <div style="font-family:'Cinzel', serif; font-size:0.8rem; text-align:center;">
-            <div>🦅 <span id="p-pts-ravenclaw">0</span></div>
+            <div><img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;"> <span id="p-pts-ravenclaw">0</span></div>
         </div>
         <div style="font-family:'Cinzel', serif; font-size:0.8rem; text-align:center;">
             <div>🐍 <span id="p-pts-slytherin">0</span></div>
@@ -1277,7 +1277,7 @@
     const houseConfig = {
         gryffindor: { name: 'Gryffindor', emoji: '🦁', color: '#740001' },
         hufflepuff:  { name: 'Hufflepuff',  emoji: '🦡', color: '#ecb939' },
-        ravenclaw:   { name: 'Ravenclaw',   emoji: '🦅', color: '#0e1a40' },
+        ravenclaw:   { name: 'Ravenclaw',   emoji: '<img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;">', color: '#0e1a40' },
         slytherin:   { name: 'Slytherin',   emoji: '🐍', color: '#1a472a' },
     };
 
@@ -1594,7 +1594,12 @@
 
             // Show wait screen
             const house = houseConfig[selectedHouse];
-            document.getElementById('playerCrestBig').textContent = house.emoji;
+            const crestEl = document.getElementById('playerCrestBig');
+            if (selectedHouse === 'ravenclaw') {
+                crestEl.innerHTML = '<img src="raven.png" style="width:8rem;height:8rem;object-fit:contain;">';
+            } else {
+                crestEl.textContent = house.emoji;
+            }
             document.getElementById('playerHouseNameBig').textContent = house.name;
             document.getElementById('playerHouseNameBig').style.color = selectedHouse === 'hufflepuff' ? '#ecb939' : selectedHouse === 'ravenclaw' ? '#8899cc' : selectedHouse === 'slytherin' ? '#88cc99' : '#ffaaaa';
             document.getElementById('playerNameDisplay').textContent = name;
