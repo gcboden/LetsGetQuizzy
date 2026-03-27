@@ -877,9 +877,11 @@
 <!-- ══════════════════════════════════
      LANDING — PICK YOUR ROLE
 ══════════════════════════════════ -->
-<div id="landingScreen" class="screen active">
+<div id="landingScreen" class="screen active" style="display:block;">
     <div class="crest-icon">⚡</div>
     <div class="title-main">Hogwarts School of<br>Software & Sorcery</div>
+    <div class="title-sub">Trivia Challenge</div>
+    <div class="title-event">BYU Library · The Great Hall of Knowledge</div>
     <div class="gold-divider"></div>
     <div class="role-cards">
         <div class="role-card" onclick="showScreen('hostSetupScreen')">
@@ -898,7 +900,7 @@
 <!-- ══════════════════════════════════
      HOST SETUP
 ══════════════════════════════════ -->
-<div id="hostSetupScreen" class="screen">
+<div id="hostSetupScreen" class="screen" style="display:none;">
     <div class="screen-header">
         <div class="screen-title">⚗️ Prepare Your Lesson</div>
         <div class="gold-divider"></div>
@@ -970,7 +972,7 @@
 <!-- ══════════════════════════════════
      HOST LOBBY
 ══════════════════════════════════ -->
-<div id="hostLobbyScreen" class="screen">
+<div id="hostLobbyScreen" class="screen" style="display:none;">
     <div class="screen-header">
         <div class="screen-title">⚡ The Great Hall Awaits</div>
         <div class="gold-divider"></div>
@@ -1041,7 +1043,7 @@
 <!-- ══════════════════════════════════
      HOST GAME
 ══════════════════════════════════ -->
-<div id="hostGameScreen" class="screen">
+<div id="hostGameScreen" class="screen" style="display:none;">
     <div class="game-layout" style="padding: 1.5rem;">
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
@@ -1100,7 +1102,7 @@
 <!-- ══════════════════════════════════
      PLAYER JOIN
 ══════════════════════════════════ -->
-<div id="playerJoinScreen" class="screen">
+<div id="playerJoinScreen" class="screen" style="display:none;">
     <div style="text-align:center; margin-bottom:2rem;">
         <div style="font-size:3rem; margin-bottom:0.5rem;">⚡</div>
         <div class="screen-title">Enter the Great Hall</div>
@@ -1141,7 +1143,7 @@
 <!-- ══════════════════════════════════
      PLAYER WAITING
 ══════════════════════════════════ -->
-<div id="playerWaitScreen" class="screen">
+<div id="playerWaitScreen" class="screen" style="display:none;">
     <div class="house-crest-big" id="playerCrestBig">⚡</div>
     <div class="player-house-name" id="playerHouseNameBig" style="color: var(--gold-bright);"></div>
     <div class="gold-divider"></div>
@@ -1153,7 +1155,7 @@
 <!-- ══════════════════════════════════
      PLAYER BUZZ SCREEN
 ══════════════════════════════════ -->
-<div id="playerBuzzScreen" class="screen">
+<div id="playerBuzzScreen" class="screen" style="display:none;">
     <div style="font-family:'Cinzel', serif; font-size:0.85rem; color: var(--gold); letter-spacing:0.1em; margin-bottom:0.5rem;" id="buzzQuestionNum">QUESTION 1</div>
 
     <div class="question-for-player" id="buzzQuestionText" style="display:none;"></div>
@@ -1186,7 +1188,7 @@
 <!-- ══════════════════════════════════
      RESULTS
 ══════════════════════════════════ -->
-<div id="resultsScreen" class="screen">
+<div id="resultsScreen" class="screen" style="display:none;">
     <div class="trophy">🏆</div>
     <div class="title-main" style="font-size:clamp(1.5rem,4vw,2.5rem);">The House Cup</div>
     <div class="gold-divider"></div>
@@ -1249,8 +1251,13 @@
 
     // ── Screen management ──
     function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active');
+            s.style.display = 'none';
+        });
+        const el = document.getElementById(id);
+        el.classList.add('active');
+        el.style.display = 'block';
         window.scrollTo(0, 0);
     }
     window.showScreen = showScreen;
