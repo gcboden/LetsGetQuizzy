@@ -79,6 +79,7 @@
         /* ── Screens ── */
         .screen { display: none; position: relative; z-index: 1; }
         .screen.active { display: block; }
+        .screen.flex-screen.active { display: flex; }
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(24px); }
@@ -773,6 +774,17 @@
             cursor: not-allowed;
             animation: none;
         }
+        .buzz-btn.locked {
+            background: radial-gradient(circle at 35% 35%, #666, #444, #222);
+            box-shadow:
+                0 0 0 8px rgba(170,170,170,0.12),
+                0 0 0 16px rgba(170,170,170,0.06),
+                0 16px 40px rgba(0,0,0,0.45),
+                inset 0 -8px 20px rgba(0,0,0,0.45),
+                inset 0 8px 20px rgba(255,255,255,0.08);
+            animation: none;
+            cursor: not-allowed;
+        }
 
         .buzz-btn-text {
             font-family: 'Cinzel Decorative', serif;
@@ -867,9 +879,21 @@
 
         @media (max-width: 640px) {
             .lobby-grid { grid-template-columns: 1fr; }
-            .game-leaderboard { grid-template-columns: 1fr 1fr; }
+            .game-leaderboard { grid-template-columns: 1fr; }
             .role-cards { gap: 1rem; }
             .role-card { width: 100%; max-width: 300px; }
+            .house-row {
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+            .house-points {
+                font-size: 1.15rem;
+                min-width: 2.5rem;
+                text-align: right;
+            }
+            .join-card {
+                margin: 0 auto;
+            }
         }
     </style>
 </head>
@@ -889,12 +913,12 @@
     <div class="gold-divider"></div>
     <div class="role-cards">
         <div class="role-card" onclick="showScreen('hostSetupScreen')">
-            <div class="role-icon"><img src="witch_hat.png" style="width:3rem;height:3rem;object-fit:contain;"></div>
+            <div class="role-icon"><img src="witch_hat.png" style="width:5rem;height:5rem;object-fit:contain;"></div>
             <div class="role-title">Professor</div>
             <div class="role-desc">Host and manage the trivia challenge</div>
         </div>
         <div class="role-card" onclick="showScreen('playerJoinScreen')">
-            <div class="role-icon"><img src="wand.png" style="width:5rem;height:2rem;object-fit:contain;"></div>
+            <div class="role-icon"><img src="wand.png" style="width:8rem;height:4rem;object-fit:contain;"></div>
             <div class="role-title">Student</div>
             <div class="role-desc">Join a game and buzz in for your house</div>
         </div>
@@ -1106,7 +1130,7 @@
 <!-- ══════════════════════════════════
      PLAYER JOIN
 ══════════════════════════════════ -->
-<div id="playerJoinScreen" class="screen" style="display:none;">
+<div id="playerJoinScreen" class="screen flex-screen" style="display:none;">
     <div style="text-align:center; margin-bottom:2rem;">
         <div style="font-size:3rem; margin-bottom:0.5rem;">⚡</div>
         <div class="screen-title">Enter the Great Hall</div>
@@ -1147,7 +1171,7 @@
 <!-- ══════════════════════════════════
      PLAYER WAITING
 ══════════════════════════════════ -->
-<div id="playerWaitScreen" class="screen" style="display:none;">
+<div id="playerWaitScreen" class="screen flex-screen" style="display:none;">
     <div class="house-crest-big" id="playerCrestBig">⚡</div>
     <div class="player-house-name" id="playerHouseNameBig" style="color: var(--gold-bright);"></div>
     <div class="gold-divider"></div>
@@ -1159,7 +1183,7 @@
 <!-- ══════════════════════════════════
      PLAYER BUZZ SCREEN
 ══════════════════════════════════ -->
-<div id="playerBuzzScreen" class="screen" style="display:none;">
+<div id="playerBuzzScreen" class="screen flex-screen" style="display:none;">
     <div style="font-family:'Cinzel', serif; font-size:0.85rem; color: var(--gold); letter-spacing:0.1em; margin-bottom:0.5rem;" id="buzzQuestionNum">QUESTION 1</div>
 
     <div class="question-for-player" id="buzzQuestionText" style="display:none;"></div>
@@ -1205,7 +1229,7 @@
 <!-- Firebase SDK -->
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
     const firebaseConfig = {
         apiKey: "AIzaSyCd4pw51gYKtMYjFyGhTVQqfIp7A8sM8TM",
@@ -1229,6 +1253,7 @@
     window.hremove = remove;
     window.hpush = push;
     window.hserverTimestamp = serverTimestamp;
+    window.hrunTransaction = runTransaction;
 </script>
 
 <!-- QR Code lib -->
@@ -1287,10 +1312,78 @@
         });
         const el = document.getElementById(id);
         el.classList.add('active');
-        el.style.display = 'block';
+        el.style.display = el.classList.contains('flex-screen') ? 'flex' : 'block';
         window.scrollTo(0, 0);
     }
     window.showScreen = showScreen;
+
+    if (!window.history.state || !window.history.state.hogwartsGuard) {
+    window.history.replaceState({ hogwartsGuard: true }, '');
+    window.history.pushState({ hogwartsGuard: true, appScreen: 'landingScreen' }, '');
+}
+
+window.addEventListener('popstate', () => {
+    window.history.pushState(
+        { hogwartsGuard: true, appScreen: document.querySelector('.screen.active')?.id || 'landingScreen' },
+        ''
+    );
+});
+
+const PLAYER_SESSION_KEY = 'hogwartsPlayerSession';
+
+function savePlayerSession() {
+    if (!gamePin || !currentPlayer) return;
+    localStorage.setItem(PLAYER_SESSION_KEY, JSON.stringify({
+        pin: gamePin,
+        player: currentPlayer,
+        selectedHouse,
+    }));
+}
+
+function clearPlayerSession() {
+    localStorage.removeItem(PLAYER_SESSION_KEY);
+}
+
+function restorePlayerSession() {
+    try {
+        const raw = localStorage.getItem(PLAYER_SESSION_KEY);
+        if (!raw) return false;
+
+        const session = JSON.parse(raw);
+        if (!session?.pin || !session?.player?.id || !session?.player?.name || !session?.player?.house) {
+            clearPlayerSession();
+            return false;
+        }
+
+        gamePin = session.pin;
+        currentPlayer = session.player;
+        selectedHouse = session.selectedHouse || session.player.house;
+
+        const house = houseConfig[selectedHouse];
+        const crestEl = document.getElementById('playerCrestBig');
+
+        if (selectedHouse === 'ravenclaw') {
+            crestEl.innerHTML = '<img src="raven.png" style="width:8rem;height:8rem;object-fit:contain;">';
+        } else {
+            crestEl.textContent = house.emoji;
+        }
+
+        document.getElementById('playerHouseNameBig').textContent = house.name;
+        document.getElementById('playerHouseNameBig').style.color =
+            selectedHouse === 'hufflepuff' ? '#ecb939' :
+            selectedHouse === 'ravenclaw' ? '#8899cc' :
+            selectedHouse === 'slytherin' ? '#88cc99' : '#ffaaaa';
+
+        document.getElementById('playerNameDisplay').textContent = currentPlayer.name;
+
+        showScreen('playerWaitScreen');
+        listenToGameState();
+        return true;
+    } catch (e) {
+        clearPlayerSession();
+        return false;
+    }
+}
 
     // ── Game state ──
     let gamePin = '';
@@ -1303,6 +1396,9 @@
     let gameListener = null;
     let buzzListener = null;
     let playersListener = null;
+    let housePointsListener = null;
+    let playerStateListener = null;
+    let playerBuzzStateListener = null;
 
     const houseConfig = {
         gryffindor: { name: 'Gryffindor', emoji: '🦁', color: '#740001' },
@@ -1322,6 +1418,8 @@
 
     function setPoints(pts, el) {
         defaultPoints = pts;
+        const pointsSelect = document.getElementById('pointsSelect');
+        if (pointsSelect) pointsSelect.value = String(pts);
         document.querySelectorAll('.points-selector .mode-btn, #hostSetupScreen .mode-btn').forEach(b => {
             if (['10 pts','20 pts','50 pts','100 pts'].some(t => b.textContent.trim().startsWith(t.split(' ')[0]))) {
                 b.classList.remove('active');
@@ -1426,17 +1524,15 @@
 
     function listenToHousePoints(context) {
         const houseRef = window.href(window.hdb, `hogwarts/${gamePin}/houses`);
-        window.honValue(houseRef, snap => {
+        if (housePointsListener) housePointsListener();
+        housePointsListener = window.honValue(houseRef, snap => {
             const pts = snap.val() || {};
             ['gryffindor','hufflepuff','ravenclaw','slytherin'].forEach(h => {
                 const p = pts[h] || 0;
-                // Lobby leaderboard
                 const lbEl = document.getElementById(`pts-${h}`);
                 if (lbEl) lbEl.textContent = p;
-                // Game leaderboard
                 const gameEl = document.getElementById(`game-pts-${h}`);
                 if (gameEl) gameEl.textContent = p;
-                // Player screen scores
                 const pEl = document.getElementById(`p-pts-${h}`);
                 if (pEl) pEl.textContent = p;
             });
@@ -1457,6 +1553,7 @@
     function showHostGame(qIndex) {
         currentQuestionIndex = qIndex;
         showScreen('hostGameScreen');
+        document.getElementById('pointsSelect').value = String(defaultPoints);
         listenToHousePoints('game');
 
         const num = qIndex + 1;
@@ -1537,7 +1634,8 @@
     window.markAnswer = markAnswer;
 
     function nextQuestion() {
-        const next = currentQuestionIndex + 1;
+        const maxIndex = gameMode === 'display' && questions.length ? questions.length - 1 : currentQuestionIndex + 1;
+        const next = Math.min(currentQuestionIndex + 1, maxIndex);
         window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`), null);
         window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzLocked`), false);
         window.hupdate(window.href(window.hdb, `hogwarts/${gamePin}`), {
@@ -1585,6 +1683,7 @@
         `).join('');
 
         showScreen('resultsScreen');
+        clearPlayerSession();
     }
 
     // ── PLAYER JOIN ──
@@ -1615,7 +1714,7 @@
             if (gameData.status !== 'lobby') { errEl.textContent = 'This game has already started!'; return; }
 
             gamePin = pin;
-            currentPlayer = { id: Date.now().toString(), name, house: selectedHouse };
+            currentPlayer = { id: crypto.randomUUID(), name, house: selectedHouse };
 
             await window.hset(
                 window.href(window.hdb, `hogwarts/${gamePin}/players/${currentPlayer.id}`),
@@ -1635,6 +1734,7 @@
             document.getElementById('playerNameDisplay').textContent = name;
 
             showScreen('playerWaitScreen');
+            savePlayerSession();
             listenToGameState();
         } catch(e) {
             errEl.textContent = 'Error joining: ' + e.message;
@@ -1644,9 +1744,15 @@
 
     function listenToGameState() {
         const gameRef = window.href(window.hdb, `hogwarts/${gamePin}`);
-        window.honValue(gameRef, snap => {
+        if (playerStateListener) playerStateListener();
+        playerStateListener = window.honValue(gameRef, snap => {
             const data = snap.val();
-            if (!data) return;
+
+            if (!data) {
+                clearPlayerSession();
+                showScreen('playerJoinScreen');
+                return;
+            }
 
             if (data.status === 'playing') {
                 currentQuestionIndex = data.currentQuestion || 0;
@@ -1654,7 +1760,10 @@
                 gameMode = data.mode || 'buzzer';
                 showPlayerBuzz(data);
             } else if (data.status === 'finished') {
+                clearPlayerSession();
                 showPlayerResults(data);
+            } else {
+                showScreen('playerWaitScreen');
             }
         });
     }
@@ -1674,51 +1783,76 @@
             qEl.style.display = 'none';
         }
 
-        // Reset button
         const btn = document.getElementById('buzzBtn');
+        const statusEl = document.getElementById('buzzStatusText');
         btn.disabled = false;
-        document.getElementById('buzzStatusText').textContent = '';
+        btn.classList.remove('locked');
+        statusEl.textContent = '';
 
-        // Listen for buzz state
         const buzzRef = window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`);
-        window.honValue(buzzRef, snap => {
+        if (playerBuzzStateListener) playerBuzzStateListener();
+        playerBuzzStateListener = window.honValue(buzzRef, snap => {
             const buzzer = snap.val();
             if (buzzer && buzzer.name) {
                 if (buzzer.id === currentPlayer.id) {
-                    document.getElementById('buzzStatusText').textContent = '⚡ You buzzed in!';
+                    statusEl.textContent = '⚡ You buzzed in!';
                     btn.disabled = true;
+                    btn.classList.remove('locked');
                 } else {
-                    document.getElementById('buzzStatusText').textContent = `${houseConfig[buzzer.house]?.emoji} ${buzzer.name} buzzed in first!`;
+                    statusEl.textContent = `🔒 Locked — ${houseConfig[buzzer.house]?.emoji} ${buzzer.name} buzzed in first!`;
                     btn.disabled = true;
+                    btn.classList.add('locked');
                 }
             } else {
-                // Buzzers reopened
                 btn.disabled = false;
-                document.getElementById('buzzStatusText').textContent = '';
+                btn.classList.remove('locked');
+                statusEl.textContent = '';
             }
         });
     }
 
     async function buzzIn() {
         const btn = document.getElementById('buzzBtn');
+        const statusEl = document.getElementById('buzzStatusText');
         if (btn.disabled) return;
+
         btn.disabled = true;
+        btn.classList.remove('locked');
+        statusEl.textContent = '⚡ Casting your buzz...';
 
-        // Try to be first — use a transaction-like approach
         const buzzRef = window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`);
-        const snap = await window.hget(buzzRef);
 
-        if (!snap.val()) {
-            // Nobody buzzed yet — claim it!
-            await window.hset(buzzRef, {
-                id: currentPlayer.id,
-                name: currentPlayer.name,
-                house: currentPlayer.house,
-                timestamp: Date.now()
+        try {
+            const result = await window.hrunTransaction(buzzRef, currentValue => {
+                if (currentValue) return currentValue;
+                return {
+                    id: currentPlayer.id,
+                    name: currentPlayer.name,
+                    house: currentPlayer.house,
+                    timestamp: Date.now()
+                };
             });
-            document.getElementById('buzzStatusText').textContent = '⚡ You buzzed in!';
-        } else {
-            document.getElementById('buzzStatusText').textContent = `Too slow! ${snap.val().name} got there first.`;
+
+            const winner = result.snapshot?.val();
+            if (!result.committed || !winner) {
+                btn.disabled = false;
+                statusEl.textContent = 'Buzz failed. Try again!';
+                return;
+            }
+
+            if (winner.id === currentPlayer.id) {
+                statusEl.textContent = '⚡ You buzzed in!';
+                btn.disabled = true;
+                btn.classList.remove('locked');
+            } else {
+                statusEl.textContent = `🔒 Locked — ${houseConfig[winner.house]?.emoji} ${winner.name} got there first.`;
+                btn.disabled = true;
+                btn.classList.add('locked');
+            }
+        } catch (e) {
+            btn.disabled = false;
+            btn.classList.remove('locked');
+            statusEl.textContent = 'Connection hiccup. Try again!';
         }
     }
     window.buzzIn = buzzIn;
@@ -1739,16 +1873,17 @@
         `).join('');
 
         showScreen('resultsScreen');
+        clearPlayerSession();
     }
 
     // ── Auto-fill PIN from URL param — QR scan goes straight to join ──
     const urlParams = new URLSearchParams(window.location.search);
     const urlPin = urlParams.get('pin');
-    if (urlPin) {
+    const restoredSession = restorePlayerSession();
+
+    if (!restoredSession && urlPin) {
         showScreen('playerJoinScreen');
         document.getElementById('joinPin').value = urlPin;
-        // If they came via QR they're definitely a student — hide the PIN field label
-        // and mark it as read-only so they can't mess with it
         const pinInput = document.getElementById('joinPin');
         pinInput.readOnly = true;
         pinInput.style.opacity = '0.6';
