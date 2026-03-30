@@ -1377,6 +1377,78 @@
             #signupScreen p {
                 font-size: 1rem !important;
             }
+            
+            /* === PLAYER GAME SCREENS — Mobile Fix === */
+            
+            /* Coin display — tuck into card flow instead of overlapping */
+            .coin-display {
+                position: fixed !important;
+                top: 70px !important;
+                right: 10px !important;
+                padding: 0.5rem 1rem !important;
+                font-size: 1rem !important;
+                border-radius: 16px !important;
+                z-index: 1000 !important;
+            }
+            
+            .streak-display {
+                top: 110px !important;
+                right: 10px !important;
+                padding: 0.4rem 0.8rem !important;
+                font-size: 0.9rem !important;
+            }
+            
+            /* Question screen card — less padding on mobile */
+            #playerQuestionScreen .card,
+            #hostQuestionScreen .card {
+                padding: 1rem !important;
+                margin-top: 0 !important;
+            }
+            
+            /* Timer — smaller on mobile */
+            .timer {
+                font-size: 2rem !important;
+                margin: 0.5rem 0 !important;
+            }
+            
+            /* Question text — smaller padding and font on mobile */
+            .question-text {
+                font-size: 1.3rem !important;
+                padding: 1.2rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* Question container — less margin */
+            .question-container {
+                margin: 0.75rem 0 !important;
+            }
+            
+            /* Answer buttons — less padding so they fit on screen */
+            .answer-btn {
+                padding: 1.5rem 1rem !important;
+                font-size: 1.2rem !important;
+                border-radius: 14px !important;
+            }
+            
+            /* Answer grid — tighter gap */
+            .answer-grid {
+                gap: 0.75rem !important;
+                margin: 0.75rem 0 !important;
+            }
+            
+            /* Header bar — smaller on mobile during game */
+            .header-bar {
+                padding: 0.4rem 0 !important;
+            }
+            
+            .logo-img {
+                max-height: 35px !important;
+            }
+            
+            /* Inline wager widget — compact on mobile */
+            #inlineWagerWidget {
+                margin-top: 0.75rem !important;
+            }
         }
     </style>
 </head>
@@ -6305,9 +6377,11 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
             hasAnsweredCurrentQuestion = true;
             
-            // Disable submit button immediately
-            const submitBtn = document.querySelector('.submit-answer-btn');
-            if (submitBtn) { submitBtn.disabled = true; submitBtn.style.pointerEvents = 'none'; }
+            // Block all interaction immediately
+            const submitBtns = document.querySelectorAll('.submit-answer-btn');
+            submitBtns.forEach(btn => { btn.disabled = true; btn.style.pointerEvents = 'none'; });
+            const multiItems = document.querySelectorAll('.multi-select-item');
+            multiItems.forEach(item => { item.style.pointerEvents = 'none'; });
             
             const question = currentQuiz.questions[currentQuestionIndex];
             const correctSet = new Set(question.correctIndices);
@@ -6405,7 +6479,17 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
             hasAnsweredCurrentQuestion = true;
             
-            // Immediately disable all buttons to prevent spam
+            // Immediately block ALL further interaction with an overlay (catches queued taps on slow devices)
+            const answerGrid = document.getElementById('playerAnswerGrid');
+            const blocker = document.createElement('div');
+            blocker.id = 'answerBlocker';
+            blocker.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:100;background:transparent;';
+            if (answerGrid) {
+                answerGrid.style.position = 'relative';
+                answerGrid.appendChild(blocker);
+            }
+            
+            // Also disable all buttons
             const allBtns = document.querySelectorAll('#playerAnswerGrid .answer-btn');
             allBtns.forEach(btn => { btn.disabled = true; btn.style.pointerEvents = 'none'; });
             
