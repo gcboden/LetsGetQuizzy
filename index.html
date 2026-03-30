@@ -4111,6 +4111,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         let quizzes = [];
         let currentQuiz = null;
         let currentQuestionIndex = 0;
+        let renderedQuestionIndex = -1; // Tracks what's on screen — prevents re-render on Firebase noise
         let currentRound = 1;
         let questionsPerRound = 5;
         let roundsEnabled = false;
@@ -4200,6 +4201,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             currentPlayer = null;
             currentQuiz = null;
             gamePin = '';
+            renderedQuestionIndex = -1;
             
             // Reset coins/streaks/power-ups
             document.getElementById('coinDisplay').style.display = 'none';
@@ -5987,39 +5989,49 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     currentQuestionIndex = gameData.currentQuestion;
                     currentQuiz = gameData.quiz;
                     
-                    // Refresh game settings from Firebase
-                    bettingEnabled = gameData.bettingEnabled !== undefined ? gameData.bettingEnabled : true;
-                    teamsEnabled = gameData.teamsEnabled || false;
-                    timerEnabled = gameData.timerEnabled !== undefined ? gameData.timerEnabled : true;
-                    timerDuration = gameData.timerDuration || 20;
-                    console.log('🔄 Refreshed game settings:', {
-                        bettingEnabledFromFirebase: gameData.bettingEnabled,
-                        bettingEnabledLocal: bettingEnabled,
-                        teamsEnabled: teamsEnabled,
-                        timerEnabled: timerEnabled,
-                        timerDuration: timerDuration,
-                        willShowBetting: bettingEnabled
-                    });
-                    
-                    // Refresh player state before showing question (ensures CAO status is current)
-                    if (currentPlayer && currentPlayer.id) {
-                        const playerSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players/${currentPlayer.id}`));
-                        if (playerSnapshot.exists()) {
-                            const freshData = playerSnapshot.val();
-                            currentPlayer.isCAO = freshData.isCAO || false;
-                            currentPlayer.team = freshData.team || null;
-                            currentPlayer.caoForTeam = freshData.caoForTeam || null;
-                            console.log('Refreshed player state before question:', currentPlayer);
+                    // ONLY re-render if the question has actually changed!
+                    // This prevents Firebase noise (score updates, etc.) from resetting the player's screen
+                    if (renderedQuestionIndex !== currentQuestionIndex) {
+                        // Refresh game settings from Firebase
+                        bettingEnabled = gameData.bettingEnabled !== undefined ? gameData.bettingEnabled : true;
+                        teamsEnabled = gameData.teamsEnabled || false;
+                        timerEnabled = gameData.timerEnabled !== undefined ? gameData.timerEnabled : true;
+                        timerDuration = gameData.timerDuration || 20;
+                        console.log('🔄 Refreshed game settings:', {
+                            bettingEnabledFromFirebase: gameData.bettingEnabled,
+                            bettingEnabledLocal: bettingEnabled,
+                            teamsEnabled: teamsEnabled,
+                            timerEnabled: timerEnabled,
+                            timerDuration: timerDuration,
+                            willShowBetting: bettingEnabled
+                        });
+                        
+                        // Refresh player state before showing question (ensures CAO status is current)
+                        if (currentPlayer && currentPlayer.id) {
+                            const playerSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players/${currentPlayer.id}`));
+                            if (playerSnapshot.exists()) {
+                                const freshData = playerSnapshot.val();
+                                currentPlayer.isCAO = freshData.isCAO || false;
+                                currentPlayer.team = freshData.team || null;
+                                currentPlayer.caoForTeam = freshData.caoForTeam || null;
+                                console.log('Refreshed player state before question:', currentPlayer);
+                            }
                         }
+                        
+                        // Update tracker so we don't re-render until next question
+                        renderedQuestionIndex = currentQuestionIndex;
+                        
+                        // Go directly to question screen (inline wager widget will show if enabled)
+                        showPlayerQuestion();
                     }
-                    
-                    // Go directly to question screen (inline wager widget will show if enabled)
-                    showPlayerQuestion();
                 } else if (gameData.status === 'results') {
+                    renderedQuestionIndex = -1; // Reset so next question re-renders
                     showQuestionResultsForPlayer();
                 } else if (gameData.status === 'finished') {
+                    renderedQuestionIndex = -1;
                     showFinalResultsForPlayer();
                 } else if (gameData.status === 'round_transition') {
+                    renderedQuestionIndex = -1;
                     // Show round transition for players
                     if (document.getElementById('roundTransitionScreen')) {
                         showScreen('roundTransitionScreen');
@@ -6458,11 +6470,17 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         window.submitMultiSelectAnswer = submitMultiSelectAnswer;
 
+        // =====================================================
+        // ANSWER SUBMISSION
+        // =====================================================
+        // Spam prevention: hasAnsweredCurrentQuestion flag works now that
+        // the Firebase listener no longer re-calls showPlayerQuestion mid-question.
+        
         async function submitAnswer(answerIndex) {
             // HARD BLOCK: Non-CAO players cannot submit in team mode
             if (teamsEnabled && currentPlayer && currentPlayer.team && !currentPlayer.isCAO) {
                 showNotification('Only your Chief Answer Officer can submit answers!', 'error');
-                return; // STOP HERE - no further processing
+                return;
             }
             
             // If CAO mode is active and player is CAO, just store the selection
@@ -6489,31 +6507,22 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     }
                 });
                 
-                return; // Don't submit yet!
+                return; // Don't submit yet — CAO locks in separately
             }
             
-            // PREVENT DOUBLE ANSWERS — lock immediately
+            // PREVENT DOUBLE ANSWERS
             if (hasAnsweredCurrentQuestion) {
                 console.log('⛔ Already answered this question, ignoring click');
                 return;
             }
             hasAnsweredCurrentQuestion = true;
             
-            // Immediately block ALL further interaction with an overlay (catches queued taps on slow devices)
-            const answerGrid = document.getElementById('playerAnswerGrid');
-            const blocker = document.createElement('div');
-            blocker.id = 'answerBlocker';
-            blocker.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:100;background:transparent;';
-            if (answerGrid) {
-                answerGrid.style.position = 'relative';
-                answerGrid.appendChild(blocker);
-            }
+            // Disable all buttons immediately for visual feedback
+            document.querySelectorAll('#playerAnswerGrid .answer-btn').forEach(btn => {
+                btn.disabled = true;
+                btn.style.pointerEvents = 'none';
+            });
             
-            // Also disable all buttons
-            const allBtns = document.querySelectorAll('#playerAnswerGrid .answer-btn');
-            allBtns.forEach(btn => { btn.disabled = true; btn.style.pointerEvents = 'none'; });
-            
-            // Regular submission (non-team or non-CAO)
             const question = currentQuiz.questions[currentQuestionIndex];
             const isCorrect = answerIndex === question.correctIndex;
             
@@ -6612,6 +6621,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
             updateAnsweredCount();
         }
+        
         window.submitAnswer = submitAnswer;
 
         async function submitTextAnswer() {
