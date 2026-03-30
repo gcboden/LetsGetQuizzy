@@ -2487,6 +2487,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     <div class="pin-display" id="gamePinDisplay">000000</div>
                 </div>
 
+                <!-- QR Code -->
+                <div style="text-align: center; margin: 1.5rem 0;">
+                    <div id="lobbyQrCode" style="display: inline-flex; justify-content: center; background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"></div>
+                    <p id="lobbyJoinUrl" style="margin-top: 0.75rem; font-size: 0.95rem; color: #888; word-break: break-all;"></p>
+                    <p style="margin-top: 0.25rem; font-size: 0.85rem; color: #aaa;">Scan to join instantly</p>
+                </div>
+
                 <!-- Team Mode Toggle Button -->
                 <div style="text-align: center; margin: 2rem 0;">
                     <button id="teamModeBtn" onclick="toggleTeamMode()" style="
@@ -2679,6 +2686,24 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     <p style="font-size: 1.2rem; color: #666;">
                         <span id="answeredCount">0</span> / <span id="totalPlayers">0</span> players answered
                     </p>
+                    <button id="skipToResultsBtn" onclick="hostSkipToResults()" style="
+                        display: none;
+                        margin-top: 1rem;
+                        background: linear-gradient(90deg, var(--orange-gold), var(--orange-bright));
+                        color: white;
+                        font-size: 1.1rem;
+                        font-weight: 700;
+                        padding: 0.8rem 2rem;
+                        border: none;
+                        border-radius: 50px;
+                        cursor: pointer;
+                        box-shadow: 0 4px 0 rgba(0,0,0,0.15), 0 6px 15px rgba(0,0,0,0.2);
+                        transition: all 0.3s ease;
+                        font-family: 'SN Pro', sans-serif;
+                        animation: fadeInUp 0.4s ease;
+                    " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                        ⏩ Skip to Results
+                    </button>
                 </div>
             </div>
         </div>
@@ -2997,6 +3022,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
     <audio id="leaderboardMusic" preload="auto" loop>
         <source src="data:audio/wav;base64,UklGRvYBAABXQVZFZm10IBAAAAABAAAB">
     </audio>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <!-- Firebase SDK -->
     <script type="module">
@@ -4947,6 +4975,20 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 console.log('✅ Game created in Firebase with confidence wagers:', bettingEnabled);
 
                 document.getElementById('gamePinDisplay').textContent = gamePin;
+                
+                // Generate QR code for joining
+                const joinUrl = `${window.location.origin}${window.location.pathname}?pin=${gamePin}`;
+                const qrContainer = document.getElementById('lobbyQrCode');
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: joinUrl,
+                    width: 160,
+                    height: 160,
+                    colorDark: '#1A1A2E',
+                    colorLight: '#ffffff',
+                });
+                document.getElementById('lobbyJoinUrl').textContent = joinUrl;
+                
                 showScreen('lobbyScreen');
                 
                 // Auto-enable teams if flag is set
@@ -5822,7 +5864,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 // Read game settings
                 bettingEnabled = gameData.bettingEnabled !== undefined ? gameData.bettingEnabled : true;
                 teamsEnabled = gameData.teamsEnabled || false;
-                console.log('Game settings - Wagers:', bettingEnabled, 'Teams:', teamsEnabled);
+                timerEnabled = gameData.timerEnabled !== undefined ? gameData.timerEnabled : true;
+                timerDuration = gameData.timerDuration || 20;
+                console.log('Game settings - Wagers:', bettingEnabled, 'Teams:', teamsEnabled, 'Timer:', timerEnabled, 'Duration:', timerDuration);
 
                 // Check if teams are enabled
                 if (gameData.teamsEnabled) {
@@ -5967,6 +6011,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             // Use host timer settings: if timer enabled, use host duration; otherwise no timer
             const effectiveTimeLimit = timerEnabled ? timerDuration : 9999;
             timeLeft = effectiveTimeLimit;
+
+            // Reset skip button
+            const skipBtn = document.getElementById('skipToResultsBtn');
+            if (skipBtn) skipBtn.style.display = 'none';
 
             // Update round and question display (only if rounds are enabled)
             const roundIndicator = document.querySelector('#hostQuestionScreen .card > div');
@@ -6548,18 +6596,42 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
                 const totalElement = document.getElementById('totalPlayers');
                 const countElement = document.getElementById('answeredCount');
+                const skipBtn = document.getElementById('skipToResultsBtn');
                 
                 if (totalElement) totalElement.textContent = totalPlayers;
                 if (countElement) countElement.textContent = answeredCount;
 
                 if (answeredCount === totalPlayers && totalPlayers > 0 && isHost) {
-                    clearInterval(gameTimer);
-                    setTimeout(() => showQuestionResults(), 2000);
+                    // All players answered — show skip button prominently
+                    if (skipBtn) {
+                        skipBtn.style.display = 'inline-block';
+                        skipBtn.textContent = '✅ All Answered — Show Results';
+                    }
+                    // If timer is off, auto-advance after short delay (no waiting needed)
+                    if (!timerEnabled) {
+                        clearInterval(gameTimer);
+                        setTimeout(() => showQuestionResults(), 2000);
+                    }
+                } else if (answeredCount > 0 && isHost) {
+                    // Some players answered — show skip button so host can end early
+                    if (skipBtn) {
+                        skipBtn.style.display = 'inline-block';
+                        skipBtn.textContent = '⏩ Skip to Results';
+                    }
                 }
             } catch (error) {
                 console.error('Error updating count:', error);
             }
         }
+
+        function hostSkipToResults() {
+            clearInterval(gameTimer);
+            // Hide the button immediately
+            const skipBtn = document.getElementById('skipToResultsBtn');
+            if (skipBtn) skipBtn.style.display = 'none';
+            showQuestionResults();
+        }
+        window.hostSkipToResults = hostSkipToResults;
 
         async function showQuestionResults() {
             clearInterval(gameTimer);
@@ -7026,6 +7098,23 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // Initialize — quizzes load after auth via loadUserQuizzes()
         loadQuizzes();
+
+        // ── Auto-fill PIN from URL param (QR code scan) ──
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pinFromUrl = urlParams.get('pin');
+            if (pinFromUrl) {
+                // Wait a moment for screens to initialize, then show join screen with PIN pre-filled
+                setTimeout(() => {
+                    showScreen('joinScreen');
+                    document.getElementById('gamePinInput').value = pinFromUrl;
+                    document.getElementById('playerName').focus();
+                    showNotification('Game PIN auto-filled! Enter your name to join.', 'info');
+                    // Clean the URL so it doesn't keep re-triggering
+                    window.history.replaceState({}, '', window.location.pathname);
+                }, 500);
+            }
+        })();
     </script>
 </body>
 </html>
