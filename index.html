@@ -2542,6 +2542,29 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
                         💰 Players wager coins based on their confidence before each question
                     </p>
+
+                    <!-- Timer Settings -->
+                    <div style="padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); margin-top: 1rem;">
+                        <label style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; cursor: pointer;">
+                            <input type="checkbox" id="enableTimer" checked onchange="toggleTimerSetting()" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; font-size: 1.1rem;">Enable Question Timer</span>
+                        </label>
+                        <div id="timerDurationSetting" style="margin-top: 0.75rem; text-align: center;">
+                            <label style="font-size: 0.95rem; color: #555; font-weight: 600;">Timer Duration:</label>
+                            <select id="timerDurationSelect" onchange="updateTimerDuration()" style="margin-left: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 8px; border: 2px solid rgba(0,0,0,0.1); font-weight: 600; font-size: 1rem; cursor: pointer;">
+                                <option value="10">10 seconds</option>
+                                <option value="15">15 seconds</option>
+                                <option value="20" selected>20 seconds</option>
+                                <option value="30">30 seconds</option>
+                                <option value="45">45 seconds</option>
+                                <option value="60">60 seconds</option>
+                                <option value="90">90 seconds</option>
+                            </select>
+                        </div>
+                        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                            ⏱️ <span id="timerSettingHint">Overrides per-question time limits</span>
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Team Setup -->
@@ -2597,7 +2620,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 </div>
                 <div class="input-group">
                     <label>Your Name</label>
-                    <input type="text" id="playerName" placeholder="Enter your name...">
+                    <input type="text" id="playerName" placeholder="Enter your name..." maxlength="20">
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-primary" onclick="joinGame()">Join</button>
@@ -3603,6 +3626,27 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         window.updateBettingSetting = updateBettingSetting;
 
+        function toggleTimerSetting() {
+            timerEnabled = document.getElementById('enableTimer').checked;
+            const durationDiv = document.getElementById('timerDurationSetting');
+            const hint = document.getElementById('timerSettingHint');
+            if (timerEnabled) {
+                durationDiv.style.display = 'block';
+                hint.textContent = 'Overrides per-question time limits';
+            } else {
+                durationDiv.style.display = 'none';
+                hint.textContent = 'No timer — players answer at their own pace';
+            }
+            console.log('Timer setting changed to:', timerEnabled);
+        }
+        window.toggleTimerSetting = toggleTimerSetting;
+
+        function updateTimerDuration() {
+            timerDuration = parseInt(document.getElementById('timerDurationSelect').value);
+            console.log('Timer duration changed to:', timerDuration);
+        }
+        window.updateTimerDuration = updateTimerDuration;
+
         // CAO Notification - Fun message when assigned
         function showCAONotification() {
             playSound('correctSound'); // Celebration sound!
@@ -3978,6 +4022,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         let selectedCAOAnswer = null; // Track CAO's selected answer before lock-in
         let gameTimer = null;
         let timeLeft = 20;
+        let hasAnsweredCurrentQuestion = false; // Prevent double-answer exploit
+        let timerEnabled = true;    // Host can toggle timer on/off
+        let timerDuration = 20;     // Host-selected timer duration (seconds)
         let playersListener = null;
         let gameStateListener = null;
 
@@ -4891,6 +4938,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     hostId: Date.now().toString(),
                     createdAt: Date.now(),
                     bettingEnabled: bettingEnabled, // Save betting setting
+                    timerEnabled: timerEnabled,     // Save timer on/off
+                    timerDuration: timerEnabled ? timerDuration : null, // Save timer duration
                     teamsEnabled: false,            // Initialize teams as disabled
                     teams: null                     // Initialize teams object as null
                 });
@@ -5345,6 +5394,12 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             // Get betting setting
             bettingEnabled = document.getElementById('enableBetting').checked;
             
+            // Get timer settings
+            timerEnabled = document.getElementById('enableTimer').checked;
+            if (timerEnabled) {
+                timerDuration = parseInt(document.getElementById('timerDurationSelect').value);
+            }
+            
             await startHostingQuiz();
         }
         window.startHosting = startHosting;
@@ -5528,7 +5583,18 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return;
             }
             
+            // PREVENT DOUBLE LOCK-IN
+            if (hasAnsweredCurrentQuestion) {
+                console.log('⛔ Already locked in for this question');
+                return;
+            }
+            hasAnsweredCurrentQuestion = true;
+            
             if (!currentPlayer || !currentPlayer.team) return;
+            
+            // Disable lock-in button immediately
+            const lockInBtn = document.getElementById('lockInBtn');
+            if (lockInBtn) { lockInBtn.disabled = true; lockInBtn.style.pointerEvents = 'none'; }
             
             // Get all team members
             const playersSnapshot = await window.dbGet(window.dbRef(window.db, `games/${gamePin}/players`));
@@ -5542,9 +5608,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             // Submit answer for ALL team members
             const question = currentQuiz.questions[currentQuestionIndex];
             const isCorrect = selectedCAOAnswer === question.correctIndex;
+            const effectiveLimit = timerEnabled ? timerDuration : 20;
             
             for (const member of teamMembers) {
-                const basePoints = Math.floor((timeLeft / question.timeLimit) * 1000);
+                const basePoints = timerEnabled ? Math.floor((timeLeft / effectiveLimit) * 1000) : 1000;
                 const pointsEarned = isCorrect ? basePoints : 0;
                 
                 // Submit answer for this team member
@@ -5569,10 +5636,11 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
             
             // Update team score
+            const teamBasePoints = timerEnabled ? Math.floor((timeLeft / effectiveLimit) * 1000) : 1000;
             await window.dbUpdate(
                 window.dbRef(window.db, `games/${gamePin}/teams/${currentPlayer.team}`),
                 {
-                    score: (currentTeams[currentPlayer.team]?.score || 0) + (isCorrect ? teamMembers.length * Math.floor((timeLeft / question.timeLimit) * 1000) : 0)
+                    score: (currentTeams[currentPlayer.team]?.score || 0) + (isCorrect ? teamMembers.length * teamBasePoints : 0)
                 }
             );
             
@@ -5691,10 +5759,16 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         async function joinGame() {
             playSound('joinSound');
             const pin = document.getElementById('gamePinInput').value;
-            const name = document.getElementById('playerName').value;
+            const rawName = document.getElementById('playerName').value;
+            const name = rawName.trim().substring(0, 20); // Enforce 20 char limit
 
             if (!pin || !name) {
                 alert('Please enter both game PIN and your name!');
+                return;
+            }
+            
+            if (name.length < 1) {
+                alert('Please enter a valid name!');
                 return;
             }
 
@@ -5800,10 +5874,14 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     // Refresh game settings from Firebase
                     bettingEnabled = gameData.bettingEnabled !== undefined ? gameData.bettingEnabled : true;
                     teamsEnabled = gameData.teamsEnabled || false;
+                    timerEnabled = gameData.timerEnabled !== undefined ? gameData.timerEnabled : true;
+                    timerDuration = gameData.timerDuration || 20;
                     console.log('🔄 Refreshed game settings:', {
                         bettingEnabledFromFirebase: gameData.bettingEnabled,
                         bettingEnabledLocal: bettingEnabled,
                         teamsEnabled: teamsEnabled,
+                        timerEnabled: timerEnabled,
+                        timerDuration: timerDuration,
                         willShowBetting: bettingEnabled
                     });
                     
@@ -5885,7 +5963,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         function showHostQuestion() {
             const question = currentQuiz.questions[currentQuestionIndex];
-            timeLeft = question.timeLimit;
+            
+            // Use host timer settings: if timer enabled, use host duration; otherwise no timer
+            const effectiveTimeLimit = timerEnabled ? timerDuration : 9999;
+            timeLeft = effectiveTimeLimit;
 
             // Update round and question display (only if rounds are enabled)
             const roundIndicator = document.querySelector('#hostQuestionScreen .card > div');
@@ -5903,9 +5984,22 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             const hostGrid = document.getElementById('hostAnswerGrid');
             hostGrid.innerHTML = renderHostAnswerView(question);
             
+            // Show/hide timer based on setting
+            const hostTimerEl = document.getElementById('hostTimer');
+            if (timerEnabled) {
+                hostTimerEl.style.display = '';
+                hostTimerEl.textContent = effectiveTimeLimit;
+            } else {
+                hostTimerEl.style.display = 'none';
+            }
+            
             showScreen('hostQuestionScreen');
             updateAnsweredCount();
-            startTimer('hostTimer');
+            if (timerEnabled) {
+                startTimer('hostTimer');
+            } else {
+                clearInterval(gameTimer);
+            }
             listenToAnswers();
         }
 
@@ -5914,11 +6008,17 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             console.log('Current player:', currentPlayer);
             console.log('Teams enabled:', teamsEnabled);
             
+            // Reset answer guard for new question
+            hasAnsweredCurrentQuestion = false;
+            
             const question = currentQuiz.questions[currentQuestionIndex];
-            timeLeft = question.timeLimit;
+            
+            // Use host timer settings (read from Firebase via game state listener)
+            const effectiveTimeLimit = timerEnabled ? timerDuration : 9999;
+            timeLeft = effectiveTimeLimit;
             
             // Apply Time Freeze power-up
-            if (activePowerUps.timeFreeze) {
+            if (activePowerUps.timeFreeze && timerEnabled) {
                 timeLeft += 10;
                 activePowerUps.timeFreeze = false;
                 showStreakBonus('⏱️ +10 SECONDS!');
@@ -6031,8 +6131,21 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             // Update player info display in header
             updatePlayerInfoDisplay();
             
+            // Show/hide timer based on host setting
+            const playerTimerEl = document.getElementById('playerTimer');
+            if (timerEnabled) {
+                playerTimerEl.style.display = '';
+                playerTimerEl.textContent = timeLeft;
+            } else {
+                playerTimerEl.style.display = 'none';
+            }
+            
             showScreen('playerQuestionScreen');
-            startTimer('playerTimer');
+            if (timerEnabled) {
+                startTimer('playerTimer');
+            } else {
+                clearInterval(gameTimer);
+            }
         }
 
         function renderHostAnswerView(question) {
@@ -6137,6 +6250,17 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return;
             }
             
+            // PREVENT DOUBLE ANSWERS
+            if (hasAnsweredCurrentQuestion) {
+                console.log('⛔ Already answered this question, ignoring click');
+                return;
+            }
+            hasAnsweredCurrentQuestion = true;
+            
+            // Disable submit button immediately
+            const submitBtn = document.querySelector('.submit-answer-btn');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.style.pointerEvents = 'none'; }
+            
             const question = currentQuiz.questions[currentQuestionIndex];
             const correctSet = new Set(question.correctIndices);
             const selectedSet = new Set(selectedIndices);
@@ -6144,7 +6268,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             const isCorrect = correctSet.size === selectedSet.size && 
                 [...correctSet].every(i => selectedSet.has(i));
             
-            const pointsEarned = isCorrect ? Math.floor((timeLeft / question.timeLimit) * 1000) : 0;
+            const effectiveLimit = timerEnabled ? timerDuration : 20;
+            const pointsEarned = isCorrect ? (timerEnabled ? Math.floor((timeLeft / effectiveLimit) * 1000) : 1000) : 0;
 
             playSound(isCorrect ? 'correctSound' : 'wrongSound');
 
@@ -6225,12 +6350,24 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return; // Don't submit yet!
             }
             
+            // PREVENT DOUBLE ANSWERS — lock immediately
+            if (hasAnsweredCurrentQuestion) {
+                console.log('⛔ Already answered this question, ignoring click');
+                return;
+            }
+            hasAnsweredCurrentQuestion = true;
+            
+            // Immediately disable all buttons to prevent spam
+            const allBtns = document.querySelectorAll('#playerAnswerGrid .answer-btn');
+            allBtns.forEach(btn => { btn.disabled = true; btn.style.pointerEvents = 'none'; });
+            
             // Regular submission (non-team or non-CAO)
             const question = currentQuiz.questions[currentQuestionIndex];
             const isCorrect = answerIndex === question.correctIndex;
             
             // Track stats
-            const responseTime = question.timeLimit - timeLeft;
+            const effectiveLimit = timerEnabled ? timerDuration : 20;
+            const responseTime = timerEnabled ? (effectiveLimit - timeLeft) : 0;
             gameStats.responseTimes.push(responseTime);
             gameStats.totalAnswers++;
             if (isCorrect) gameStats.correctAnswers++;
@@ -6243,7 +6380,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 showStreakBonus('⚡ DOUBLE POINTS!');
             }
             
-            const basePoints = Math.floor((timeLeft / question.timeLimit) * 1000);
+            // Calculate points: speed-based if timer on, flat 1000 if timer off
+            let basePoints;
+            if (timerEnabled) {
+                basePoints = Math.floor((timeLeft / effectiveLimit) * 1000);
+            } else {
+                basePoints = 1000; // Flat points when no timer
+            }
             const pointsEarned = isCorrect ? basePoints * pointsMultiplier : 0;
 
             // CONFIDENCE WAGER SYSTEM - Handle wager win/loss
@@ -6263,7 +6406,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
             // Award coins and handle streaks
             if (isCorrect) {
-                const speedBonus = Math.floor(timeLeft / 2);
+                const speedBonus = timerEnabled ? Math.floor(timeLeft / 2) : 5;
                 const coinsEarned = 10 + speedBonus;
                 awardCoins(currentPlayer.name, coinsEarned);
                 showCoinAnimation(coinsEarned);
@@ -6326,6 +6469,12 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return;
             }
             
+            // PREVENT DOUBLE ANSWERS
+            if (hasAnsweredCurrentQuestion) {
+                console.log('⛔ Already answered this question, ignoring click');
+                return;
+            }
+            
             const question = currentQuiz.questions[currentQuestionIndex];
             const userAnswer = document.getElementById('textInputAnswer')?.value.toLowerCase().trim();
             
@@ -6334,8 +6483,12 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return;
             }
 
+            // Lock after validation passes
+            hasAnsweredCurrentQuestion = true;
+
             const isCorrect = question.correctAnswers.includes(userAnswer);
-            const pointsEarned = isCorrect ? Math.floor((timeLeft / question.timeLimit) * 1000) : 0;
+            const effectiveLimit = timerEnabled ? timerDuration : 20;
+            const pointsEarned = isCorrect ? (timerEnabled ? Math.floor((timeLeft / effectiveLimit) * 1000) : 1000) : 0;
 
             playSound(isCorrect ? 'correctSound' : 'wrongSound');
 
@@ -6346,6 +6499,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             input.disabled = true;
             input.style.borderColor = isCorrect ? '#06D6A0' : '#EF476F';
             input.style.background = isCorrect ? 'rgba(6, 214, 160, 0.1)' : 'rgba(239, 71, 111, 0.1)';
+            // Disable submit button
+            const submitBtns = document.querySelectorAll('.submit-answer-btn');
+            submitBtns.forEach(btn => { btn.disabled = true; btn.style.pointerEvents = 'none'; });
 
             try {
                 await window.dbSet(
@@ -6444,7 +6600,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     // Show TEAM scores
                     const teamScores = {};
                     
-                    // Calculate points for each team
+                    // Calculate points for each team (this question + total)
                     Object.entries(players).forEach(([playerId, playerData]) => {
                         const teamId = playerData.team;
                         if (teamId && currentTeams[teamId]) {
@@ -6452,17 +6608,19 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                                 teamScores[teamId] = {
                                     name: currentTeams[teamId].name,
                                     points: 0,
+                                    totalScore: 0,
                                     color: currentTeams[teamId].bg
                                 };
                             }
                             teamScores[teamId].points += (answers[playerId]?.points || 0);
+                            teamScores[teamId].totalScore += (playerData.score || 0);
                         }
                     });
                     
-                    // Sort teams by points
+                    // Sort teams by total score
                     const sortedTeams = Object.entries(teamScores)
                         .map(([id, data]) => ({ id, ...data }))
-                        .sort((a, b) => b.points - a.points);
+                        .sort((a, b) => b.totalScore - a.totalScore);
                     
                     leaderboard.innerHTML = sortedTeams.map((team, idx) => {
                         const rankClass = idx === 0 ? 'first' : idx === 1 ? 'second' : idx === 2 ? 'third' : '';
@@ -6472,7 +6630,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                                     <span class="rank ${rankClass}">${idx + 1}</span>
                                     <span style="font-weight: 700;">${team.name}</span>
                                 </div>
-                                <span class="score">+${team.points}</span>
+                                <div style="text-align: right;">
+                                    <span class="score">${team.totalScore} pts</span>
+                                    <div style="font-size: 0.8rem; color: #06D6A0; font-weight: 600;">+${team.points}</div>
+                                </div>
                             </div>
                         `;
                     }).join('');
@@ -6482,9 +6643,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                         .map(([id, data]) => ({
                             id,
                             name: data.name,
-                            points: answers[id]?.points || 0
+                            points: answers[id]?.points || 0,
+                            totalScore: data.score || 0
                         }))
-                        .sort((a, b) => b.points - a.points);
+                        .sort((a, b) => b.totalScore - a.totalScore);
 
                     leaderboard.innerHTML = sortedPlayers.map((player, idx) => {
                         const rankClass = idx === 0 ? 'first' : idx === 1 ? 'second' : idx === 2 ? 'third' : '';
@@ -6494,7 +6656,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                                     <span class="rank ${rankClass}">${idx + 1}</span>
                                     <span>${player.name}</span>
                                 </div>
-                                <span class="score">+${player.points}</span>
+                                <div style="text-align: right;">
+                                    <span class="score">${player.totalScore} pts</span>
+                                    <div style="font-size: 0.8rem; color: #06D6A0; font-weight: 600;">+${player.points}</div>
+                                </div>
                             </div>
                         `;
                     }).join('');
