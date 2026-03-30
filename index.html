@@ -6164,6 +6164,26 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             const playerGrid = document.getElementById('playerAnswerGrid');
             playerGrid.innerHTML = renderPlayerAnswerView(question);
             
+            // DELEGATED CLICK HANDLER — single listener for answer buttons
+            // For regular players: removes itself after first click (prevents spam)
+            // For CAO: stays active so they can change selection before lock-in
+            playerGrid._answerHandler && playerGrid.removeEventListener('click', playerGrid._answerHandler);
+            playerGrid._answerHandler = function(e) {
+                const btn = e.target.closest('.answer-btn[data-answer-index]');
+                if (!btn || btn.disabled) return;
+                
+                const isCAOMode = teamsEnabled && currentPlayer && currentPlayer.isCAO;
+                
+                // For NON-CAO: remove listener IMMEDIATELY — no second click can ever fire
+                if (!isCAOMode) {
+                    playerGrid.removeEventListener('click', playerGrid._answerHandler);
+                }
+                
+                const idx = parseInt(btn.getAttribute('data-answer-index'));
+                submitAnswer(idx);
+            };
+            playerGrid.addEventListener('click', playerGrid._answerHandler);
+            
             if (teamsEnabled && currentPlayer && currentPlayer.team) {
                 console.log('Team mode active, checking CAO status...');
                 if (isCAO) {
@@ -6313,7 +6333,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 `;
             } else {
                 return question.answers.map((answer, idx) => `
-                    <button class="answer-btn option-${idx}" ${allowClicks ? `onclick="submitAnswer(${idx})"` : ''} ${!allowClicks ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>${answer}</button>
+                    <button class="answer-btn option-${idx}" data-answer-index="${idx}" ${!allowClicks ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>${answer}</button>
                 `).join('');
             }
         }
