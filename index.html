@@ -2377,6 +2377,21 @@
                         <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Join a Game</h3>
                         <p style="opacity: 0.9; font-size: 0.95rem;">Enter a PIN to play</p>
                     </div>
+                    
+                    <!-- Buzz-In Mode -->
+                    <div onclick="goToBuzzInSetup()" style="
+                        background: linear-gradient(135deg, #e63946, #ff6b6b);
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 16px;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                        box-shadow: 0 4px 15px rgba(230,57,70,0.2);
+                    " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔔</div>
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Buzz-In Mode</h3>
+                        <p style="opacity: 0.9; font-size: 0.95rem;">Host a live buzz-in trivia game</p>
+                    </div>
                 </div>
                 
                 <!-- Your Quizzes Section -->
@@ -3020,6 +3035,219 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             </div>
         </div>
 
+        <!-- ══════════════════════════════════
+             BUZZ-IN MODE SCREENS
+        ══════════════════════════════════ -->
+
+        <!-- Buzz-In Setup Screen (Host) -->
+        <div id="buzzInSetupScreen" class="screen">
+            <div class="card">
+                <h2>🔔 Buzz-In Mode Setup</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                    Host a live buzz-in trivia game. Read questions aloud or display them on screen.
+                </p>
+
+                <!-- Mode Selection -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                    <div id="buzzModeBuzzer" onclick="setBuzzMode('buzzer')" style="
+                        background: linear-gradient(135deg, #e63946, #ff6b6b);
+                        color: white;
+                        padding: 1.5rem;
+                        border-radius: 16px;
+                        cursor: pointer;
+                        text-align: center;
+                        transition: all 0.2s;
+                        border: 3px solid transparent;
+                        box-shadow: 0 4px 15px rgba(230,57,70,0.3);
+                    ">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎤</div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Pure Buzzer</h3>
+                        <p style="font-size: 0.85rem; opacity: 0.9;">Read questions aloud</p>
+                    </div>
+                    <div id="buzzmodeDisplay" onclick="setBuzzMode('display')" style="
+                        background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
+                        color: white;
+                        padding: 1.5rem;
+                        border-radius: 16px;
+                        cursor: pointer;
+                        text-align: center;
+                        transition: all 0.2s;
+                        border: 3px solid transparent;
+                    ">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📺</div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Display Questions</h3>
+                        <p style="font-size: 0.85rem; opacity: 0.9;">Show questions on screen</p>
+                    </div>
+                </div>
+
+                <!-- Questions Input (shown in display mode) -->
+                <div id="buzzQuestionsInput" style="display: none; margin-bottom: 2rem;">
+                    <h3 style="color: var(--blue-electric); margin-bottom: 1rem;">Enter Your Questions</h3>
+                    <div id="buzzQuestionsContainer"></div>
+                    <button onclick="addBuzzQuestion()" style="
+                        background: var(--blue-sky);
+                        color: white;
+                        border: none;
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-top: 0.5rem;
+                        font-family: 'SN Pro', sans-serif;
+                    ">+ Add Question</button>
+                </div>
+
+                <!-- Points Setting -->
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <label style="font-weight: 600; font-size: 1.1rem; color: #555;">Default Points per Question:</label>
+                    <select id="buzzDefaultPoints" style="margin-left: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; border: 2px solid rgba(0,0,0,0.1); font-size: 1rem; font-weight: 600; cursor: pointer;">
+                        <option value="10">10 points</option>
+                        <option value="20">20 points</option>
+                        <option value="50" selected>50 points</option>
+                        <option value="100">100 points</option>
+                    </select>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="createBuzzInGame()" style="font-size: 1.2rem; padding: 1rem 3rem;">🔔 Create Buzz-In Game</button>
+                    <button class="btn btn-secondary" onclick="goHome()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buzz-In Lobby Screen (Host) -->
+        <div id="buzzInLobbyScreen" class="screen">
+            <div class="card">
+                <h2>🔔 Buzz-In Lobby</h2>
+                <div class="game-pin">
+                    <p style="font-size: 1.5rem; color: #666;">Game PIN:</p>
+                    <div class="pin-display" id="buzzPinDisplay">000000</div>
+                </div>
+
+                <!-- QR Code -->
+                <div style="text-align: center; margin: 1.5rem 0;">
+                    <div id="buzzLobbyQrCode" style="display: inline-flex; justify-content: center; background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"></div>
+                    <p id="buzzLobbyJoinUrl" style="margin-top: 0.75rem; font-size: 0.95rem; color: #888; word-break: break-all;"></p>
+                    <p style="margin-top: 0.25rem; font-size: 0.85rem; color: #aaa;">Scan to join instantly</p>
+                </div>
+
+                <div class="players-waiting">
+                    <h3 style="color: white; text-align: center; margin-bottom: 1rem;">Players Joined</h3>
+                    <div class="player-grid" id="buzzPlayersGrid"></div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="startBuzzInGame()">🔔 Start Game</button>
+                    <button class="btn btn-secondary" onclick="cancelBuzzInGame()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buzz-In Host Game Screen -->
+        <div id="buzzInHostScreen" class="screen">
+            <div class="card" style="max-width: 900px; margin: 0 auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="margin: 0;">🔔 Buzz-In</h2>
+                    <button class="btn btn-secondary" onclick="endBuzzInGame()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">End Game</button>
+                </div>
+
+                <!-- Question Display -->
+                <div style="background: linear-gradient(135deg, #FFD23F 0%, #FFA94D 100%); padding: 1.5rem; border-radius: 16px; text-align: center; margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.9rem; color: rgba(0,0,0,0.5); font-weight: 700; margin-bottom: 0.5rem;" id="buzzHostQuestionNum">Question 1</p>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: var(--dark);" id="buzzHostQuestionText">Read the question aloud...</p>
+                </div>
+
+                <!-- Buzz Status -->
+                <div id="buzzHostStatus" style="text-align: center; padding: 2rem; background: rgba(0,0,0,0.03); border-radius: 16px; margin-bottom: 1.5rem;">
+                    <p style="font-size: 1.3rem; color: #999;">⚡ Waiting for someone to buzz in...</p>
+                </div>
+
+                <!-- Points Selector -->
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <label style="font-weight: 600; color: #555;">Points: </label>
+                    <select id="buzzHostPointsSelect" style="padding: 0.4rem 0.8rem; border-radius: 8px; border: 2px solid rgba(0,0,0,0.1); font-weight: 600; font-size: 1rem; cursor: pointer;">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+
+                <!-- Host Controls (shown when someone buzzes) -->
+                <div id="buzzHostControls" style="display: none; text-align: center; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
+                    <button onclick="buzzMarkAnswer(true)" style="
+                        background: #06D6A0; color: white; border: none; padding: 1rem 2rem;
+                        border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer;
+                        font-family: 'SN Pro', sans-serif; margin: 0.5rem;
+                    ">✅ Correct!</button>
+                    <button onclick="buzzMarkAnswer(false)" style="
+                        background: #EF476F; color: white; border: none; padding: 1rem 2rem;
+                        border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer;
+                        font-family: 'SN Pro', sans-serif; margin: 0.5rem;
+                    ">❌ Wrong — Reopen</button>
+                </div>
+
+                <!-- Navigation -->
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="buzzPrevQuestion()">← Prev</button>
+                    <button class="btn btn-primary" onclick="buzzNextQuestion()">Next Question →</button>
+                    <button class="btn" onclick="endBuzzInGame()" style="background: linear-gradient(135deg, #e63946, #ff6b6b); color: white;">🏆 Show Results</button>
+                </div>
+
+                <!-- Live Leaderboard -->
+                <div style="background: rgba(0,0,0,0.03); padding: 1.5rem; border-radius: 16px;">
+                    <h3 style="text-align: center; color: var(--blue-electric); margin-bottom: 1rem;">🏆 Leaderboard</h3>
+                    <div id="buzzHostLeaderboard" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buzz-In Player Screen (big buzz button) -->
+        <div id="buzzInPlayerScreen" class="screen">
+            <div class="card" style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p style="font-size: 0.9rem; color: var(--blue-electric); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 0.5rem;" id="buzzPlayerQuestionNum">QUESTION 1</p>
+                <p style="font-size: 1.3rem; color: var(--dark); margin-bottom: 1.5rem; display: none;" id="buzzPlayerQuestionText"></p>
+
+                <!-- Big Buzz Button -->
+                <div style="margin: 2rem 0;">
+                    <button id="buzzPlayerBtn" onclick="playerBuzzIn()" style="
+                        width: 200px;
+                        height: 200px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, #e63946, #cc0000);
+                        color: white;
+                        font-size: 2.5rem;
+                        font-weight: 900;
+                        border: 6px solid #aa0000;
+                        cursor: pointer;
+                        box-shadow: 0 8px 30px rgba(230,57,70,0.4), inset 0 -4px 10px rgba(0,0,0,0.2);
+                        transition: all 0.15s ease;
+                        font-family: 'SN Pro', sans-serif;
+                        letter-spacing: 0.05em;
+                        line-height: 1.2;
+                    " onmousedown="this.style.transform='scale(0.95)'; this.style.boxShadow='0 4px 15px rgba(230,57,70,0.3), inset 0 2px 6px rgba(0,0,0,0.3)'" onmouseup="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 30px rgba(230,57,70,0.4), inset 0 -4px 10px rgba(0,0,0,0.2)'" ontouchstart="this.style.transform='scale(0.95)'" ontouchend="this.style.transform='scale(1)'">
+                        BUZZ<br>IN
+                    </button>
+                </div>
+
+                <p style="font-size: 1.2rem; font-weight: 600; min-height: 2rem;" id="buzzPlayerStatus"></p>
+
+                <!-- Player-side live scores -->
+                <div id="buzzPlayerScores" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem;"></div>
+            </div>
+        </div>
+
+        <!-- Buzz-In Results Screen -->
+        <div id="buzzInResultsScreen" class="screen">
+            <div class="card" style="max-width: 700px; margin: 0 auto; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                <h1 style="font-size: 2.5rem; color: var(--blue-electric); margin-bottom: 2rem;">Final Results</h1>
+                <div id="buzzFinalLeaderboard" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+                <div class="btn-group" style="margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="goHome()">Home</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Power-Up Shop Screen -->
         <div id="powerUpShop" class="screen">
             <div class="card">
@@ -3101,7 +3329,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, get, onValue, update, remove, push, child } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getDatabase, ref, set, get, onValue, update, remove, push, child, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         // TODO: Replace with your Firebase config
@@ -3132,6 +3360,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.dbRemove = remove;
         window.dbPush = push;
         window.dbChild = child;
+        window.dbRunTransaction = runTransaction;
         
         // Make Auth functions globally available
         window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
@@ -5889,6 +6118,18 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
 
             try {
+                // First check if it's a buzz-in game
+                const buzzSnapshot = await window.dbGet(window.dbRef(window.db, `buzzin/${pin}`));
+                if (buzzSnapshot.exists()) {
+                    const buzzData = buzzSnapshot.val();
+                    if (buzzData.status === 'lobby' || buzzData.status === 'playing') {
+                        // It's a buzz-in game — route to buzz-in join
+                        await joinBuzzInGame(pin, name);
+                        return;
+                    }
+                }
+                
+                // Otherwise check normal games
                 const gameSnapshot = await window.dbGet(window.dbRef(window.db, `games/${pin}`));
                 
                 if (!gameSnapshot.exists()) {
@@ -7210,6 +7451,500 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
         }
 
+        // ============================================
+        // BUZZ-IN MODE
+        // ============================================
+        let buzzMode = 'buzzer'; // 'buzzer' or 'display'
+        let buzzQuestions = [];
+        let buzzQuestionCount = 0;
+        let buzzDefaultPoints = 50;
+        let buzzGamePin = '';
+        let buzzIsHost = false;
+        let buzzCurrentQuestionIndex = 0;
+        let buzzPlayersListener = null;
+        let buzzStateListener = null;
+        let buzzBuzzerListener = null;
+        let buzzScoresListener = null;
+
+        function goToBuzzInSetup() {
+            playSound('joinSound');
+            buzzMode = 'buzzer';
+            buzzQuestionCount = 0;
+            document.getElementById('buzzQuestionsContainer').innerHTML = '';
+            document.getElementById('buzzQuestionsInput').style.display = 'none';
+            // Highlight default mode
+            document.getElementById('buzzModeBuzzer').style.border = '3px solid white';
+            document.getElementById('buzzmodeDisplay').style.border = '3px solid transparent';
+            showScreen('buzzInSetupScreen');
+        }
+        window.goToBuzzInSetup = goToBuzzInSetup;
+
+        function setBuzzMode(mode) {
+            buzzMode = mode;
+            playSound('tickSound');
+            const buzzerCard = document.getElementById('buzzModeBuzzer');
+            const displayCard = document.getElementById('buzzmodeDisplay');
+            const questionsInput = document.getElementById('buzzQuestionsInput');
+
+            if (mode === 'buzzer') {
+                buzzerCard.style.border = '3px solid white';
+                displayCard.style.border = '3px solid transparent';
+                questionsInput.style.display = 'none';
+            } else {
+                buzzerCard.style.border = '3px solid transparent';
+                displayCard.style.border = '3px solid white';
+                questionsInput.style.display = 'block';
+                if (buzzQuestionCount === 0) addBuzzQuestion();
+            }
+        }
+        window.setBuzzMode = setBuzzMode;
+
+        function addBuzzQuestion() {
+            buzzQuestionCount++;
+            const container = document.getElementById('buzzQuestionsContainer');
+            const div = document.createElement('div');
+            div.style.cssText = 'margin-bottom: 0.75rem; display: flex; gap: 0.5rem; align-items: center;';
+            div.innerHTML = `
+                <span style="font-weight: 700; color: var(--blue-electric); min-width: 25px;">${buzzQuestionCount}.</span>
+                <input type="text" class="buzz-question-input" placeholder="Enter question ${buzzQuestionCount}..." style="
+                    flex: 1; padding: 0.75rem 1rem; border: 2px solid rgba(0,0,0,0.1);
+                    border-radius: 10px; font-size: 1rem; font-family: 'SN Pro', sans-serif;
+                ">
+            `;
+            container.appendChild(div);
+        }
+        window.addBuzzQuestion = addBuzzQuestion;
+
+        async function createBuzzInGame() {
+            playSound('joinSound');
+            buzzGamePin = Math.floor(100000 + Math.random() * 900000).toString();
+            buzzIsHost = true;
+            buzzCurrentQuestionIndex = 0;
+            buzzDefaultPoints = parseInt(document.getElementById('buzzDefaultPoints').value);
+
+            // Collect questions if display mode
+            buzzQuestions = [];
+            if (buzzMode === 'display') {
+                document.querySelectorAll('.buzz-question-input').forEach(input => {
+                    const q = input.value.trim();
+                    if (q) buzzQuestions.push(q);
+                });
+                if (buzzQuestions.length === 0) {
+                    alert('Please enter at least one question!');
+                    return;
+                }
+            }
+
+            try {
+                await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
+                    status: 'lobby',
+                    mode: buzzMode,
+                    questions: buzzQuestions.length > 0 ? buzzQuestions : null,
+                    defaultPoints: buzzDefaultPoints,
+                    currentQuestion: 0,
+                    buzzedBy: null,
+                    createdAt: Date.now(),
+                    gameType: 'buzzin'
+                });
+
+                document.getElementById('buzzPinDisplay').textContent = buzzGamePin;
+
+                // Generate QR code
+                const joinUrl = `${window.location.origin}${window.location.pathname}?buzzpin=${buzzGamePin}`;
+                const qrContainer = document.getElementById('buzzLobbyQrCode');
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, { text: joinUrl, width: 160, height: 160, colorDark: '#e63946', colorLight: '#ffffff' });
+                document.getElementById('buzzLobbyJoinUrl').textContent = joinUrl;
+
+                showScreen('buzzInLobbyScreen');
+                listenToBuzzPlayers();
+            } catch (error) {
+                alert('Error creating buzz-in game.');
+                console.error(error);
+            }
+        }
+        window.createBuzzInGame = createBuzzInGame;
+
+        function listenToBuzzPlayers() {
+            const playersRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/players`);
+            if (buzzPlayersListener) buzzPlayersListener();
+            buzzPlayersListener = window.dbOnValue(playersRef, (snapshot) => {
+                const data = snapshot.val();
+                const grid = document.getElementById('buzzPlayersGrid');
+                if (data) {
+                    const players = Object.entries(data).map(([id, d]) => ({ id, ...d }));
+                    grid.innerHTML = players.map(p => `
+                        <div class="player-card">${p.name}</div>
+                    `).join('');
+                } else {
+                    grid.innerHTML = '<p style="color: white; text-align: center;">Waiting for players...</p>';
+                }
+            });
+        }
+
+        async function startBuzzInGame() {
+            playSound('correctSound');
+            const playersSnapshot = await window.dbGet(window.dbRef(window.db, `buzzin/${buzzGamePin}/players`));
+            if (!playersSnapshot.exists()) {
+                alert('Waiting for players to join!');
+                return;
+            }
+
+            await window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
+                status: 'playing',
+                currentQuestion: 0,
+                buzzedBy: null
+            });
+
+            showBuzzHostGame(0);
+        }
+        window.startBuzzInGame = startBuzzInGame;
+
+        function showBuzzHostGame(qIndex) {
+            buzzCurrentQuestionIndex = qIndex;
+            const num = qIndex + 1;
+            document.getElementById('buzzHostQuestionNum').textContent = `Question ${num}`;
+            document.getElementById('buzzHostPointsSelect').value = String(buzzDefaultPoints);
+
+            if (buzzMode === 'display' && buzzQuestions[qIndex]) {
+                document.getElementById('buzzHostQuestionText').textContent = buzzQuestions[qIndex];
+            } else {
+                document.getElementById('buzzHostQuestionText').textContent = `Question ${num} — read it aloud!`;
+            }
+
+            // Reset buzz UI
+            document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #999;">⚡ Waiting for someone to buzz in...</p>';
+            document.getElementById('buzzHostControls').style.display = 'none';
+
+            showScreen('buzzInHostScreen');
+            listenForBuzzIn();
+            listenToBuzzScores('host');
+        }
+
+        function listenForBuzzIn() {
+            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`);
+            if (buzzBuzzerListener) buzzBuzzerListener();
+            buzzBuzzerListener = window.dbOnValue(buzzRef, (snap) => {
+                const buzzer = snap.val();
+                if (buzzer && buzzer.name) {
+                    document.getElementById('buzzHostStatus').innerHTML = `
+                        <div style="
+                            background: linear-gradient(135deg, #e63946, #ff6b6b);
+                            color: white;
+                            padding: 1.5rem;
+                            border-radius: 16px;
+                            text-align: center;
+                            animation: fadeInUp 0.3s ease;
+                        ">
+                            <p style="font-size: 2rem; font-weight: 700;">⚡ ${buzzer.name}</p>
+                            <p style="font-size: 1rem; opacity: 0.9;">buzzed in!</p>
+                        </div>
+                    `;
+                    document.getElementById('buzzHostControls').style.display = 'flex';
+                }
+            });
+        }
+
+        function listenToBuzzScores(context) {
+            const scoresRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/scores`);
+            if (buzzScoresListener) buzzScoresListener();
+            buzzScoresListener = window.dbOnValue(scoresRef, (snap) => {
+                const scores = snap.val() || {};
+                const sorted = Object.entries(scores)
+                    .map(([id, data]) => ({ id, name: data.name, score: data.score || 0 }))
+                    .sort((a, b) => b.score - a.score);
+
+                if (context === 'host') {
+                    const lb = document.getElementById('buzzHostLeaderboard');
+                    if (lb) {
+                        lb.innerHTML = sorted.map((p, idx) => {
+                            const medals = ['🥇', '🥈', '🥉'];
+                            const medal = idx < 3 ? medals[idx] : `${idx + 1}.`;
+                            return `
+                                <div style="display:flex; align-items:center; padding:0.75rem 1rem; background:${idx === 0 ? 'linear-gradient(90deg, var(--orange-gold), var(--orange-bright))' : 'rgba(0,0,0,0.03)'}; color:${idx === 0 ? 'white' : 'var(--dark)'}; border-radius:10px; font-weight:600;">
+                                    <span style="margin-right:0.75rem; font-size:1.2rem;">${medal}</span>
+                                    <span style="flex:1;">${p.name}</span>
+                                    <span style="font-size:1.1rem;">${p.score} pts</span>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                } else if (context === 'player') {
+                    const container = document.getElementById('buzzPlayerScores');
+                    if (container) {
+                        container.innerHTML = sorted.slice(0, 5).map(p => `
+                            <div style="background:rgba(0,0,0,0.05); padding:0.4rem 0.8rem; border-radius:8px; font-size:0.85rem; font-weight:600;">
+                                ${p.name}: ${p.score}
+                            </div>
+                        `).join('');
+                    }
+                }
+            });
+        }
+
+        async function buzzMarkAnswer(correct) {
+            const buzzSnap = await window.dbGet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`));
+            const buzzer = buzzSnap.val();
+            if (!buzzer) return;
+
+            if (correct) {
+                const pts = parseInt(document.getElementById('buzzHostPointsSelect').value) || 50;
+                // Update player's score
+                const scoreSnap = await window.dbGet(window.dbRef(window.db, `buzzin/${buzzGamePin}/scores/${buzzer.id}`));
+                const current = scoreSnap.exists() ? scoreSnap.val().score || 0 : 0;
+                await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/scores/${buzzer.id}`), {
+                    name: buzzer.name,
+                    score: current + pts
+                });
+
+                playSound('correctSound');
+                document.getElementById('buzzHostStatus').innerHTML += `
+                    <p style="color: #06D6A0; font-size: 1.2rem; font-weight: 700; margin-top: 0.5rem; animation: fadeInUp 0.3s ease;">
+                        ✅ +${pts} points to ${buzzer.name}!
+                    </p>
+                `;
+
+                setTimeout(async () => {
+                    await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
+                    document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #999;">⚡ Waiting for someone to buzz in...</p>';
+                    document.getElementById('buzzHostControls').style.display = 'none';
+                }, 1500);
+            } else {
+                playSound('wrongSound');
+                await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
+                document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #EF476F;">❌ Wrong! Buzzers reopened...</p>';
+                document.getElementById('buzzHostControls').style.display = 'none';
+            }
+        }
+        window.buzzMarkAnswer = buzzMarkAnswer;
+
+        function buzzNextQuestion() {
+            playSound('tickSound');
+            const maxIndex = buzzMode === 'display' && buzzQuestions.length ? buzzQuestions.length - 1 : buzzCurrentQuestionIndex + 1;
+            const next = Math.min(buzzCurrentQuestionIndex + 1, maxIndex);
+            window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
+            window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
+                currentQuestion: next,
+                buzzedBy: null
+            });
+            showBuzzHostGame(next);
+        }
+        window.buzzNextQuestion = buzzNextQuestion;
+
+        function buzzPrevQuestion() {
+            if (buzzCurrentQuestionIndex <= 0) return;
+            playSound('tickSound');
+            const prev = buzzCurrentQuestionIndex - 1;
+            window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
+            window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
+                currentQuestion: prev,
+                buzzedBy: null
+            });
+            showBuzzHostGame(prev);
+        }
+        window.buzzPrevQuestion = buzzPrevQuestion;
+
+        async function endBuzzInGame() {
+            if (buzzBuzzerListener) buzzBuzzerListener();
+            if (buzzScoresListener) buzzScoresListener();
+            await window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), { status: 'finished' });
+            showBuzzResults();
+        }
+        window.endBuzzInGame = endBuzzInGame;
+
+        async function showBuzzResults() {
+            const scoresSnap = await window.dbGet(window.dbRef(window.db, `buzzin/${buzzGamePin}/scores`));
+            const scores = scoresSnap.val() || {};
+            const sorted = Object.entries(scores)
+                .map(([id, data]) => ({ name: data.name, score: data.score || 0 }))
+                .sort((a, b) => b.score - a.score);
+
+            const lb = document.getElementById('buzzFinalLeaderboard');
+            lb.innerHTML = sorted.map((p, idx) => {
+                const rankEmoji = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
+                return `
+                    <div class="leaderboard-item" style="animation-delay: ${idx * 0.1}s">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="rank" style="font-size: 2rem;">${rankEmoji}</span>
+                            <span style="font-size: 1.3rem; font-weight: 700;">${p.name}</span>
+                        </div>
+                        <span class="score" style="font-size: 1.5rem;">${p.score} pts</span>
+                    </div>
+                `;
+            }).join('');
+
+            showScreen('buzzInResultsScreen');
+            createConfetti();
+        }
+
+        function cancelBuzzInGame() {
+            if (buzzPlayersListener) buzzPlayersListener();
+            window.dbRemove(window.dbRef(window.db, `buzzin/${buzzGamePin}`));
+            buzzGamePin = '';
+            goHome();
+        }
+        window.cancelBuzzInGame = cancelBuzzInGame;
+
+        // ── BUZZ-IN: Player Side ──
+
+        async function joinBuzzInGame(pin, name) {
+            buzzGamePin = pin;
+            buzzIsHost = false;
+
+            currentPlayer = {
+                id: Date.now().toString(),
+                name: name,
+                score: 0
+            };
+
+            await window.dbSet(
+                window.dbRef(window.db, `buzzin/${buzzGamePin}/players/${currentPlayer.id}`),
+                { name: currentPlayer.name }
+            );
+
+            // Initialize score
+            await window.dbSet(
+                window.dbRef(window.db, `buzzin/${buzzGamePin}/scores/${currentPlayer.id}`),
+                { name: currentPlayer.name, score: 0 }
+            );
+
+            listenToBuzzGameState();
+        }
+
+        let buzzRenderedQuestion = -1;
+
+        function listenToBuzzGameState() {
+            const gameRef = window.dbRef(window.db, `buzzin/${buzzGamePin}`);
+            if (buzzStateListener) buzzStateListener();
+            buzzStateListener = window.dbOnValue(gameRef, (snap) => {
+                const data = snap.val();
+                if (!data) {
+                    alert('Game has been cancelled.');
+                    goHome();
+                    return;
+                }
+
+                if (data.status === 'playing') {
+                    buzzCurrentQuestionIndex = data.currentQuestion || 0;
+                    buzzMode = data.mode || 'buzzer';
+                    buzzQuestions = data.questions || [];
+
+                    // Only re-render if question changed
+                    if (buzzRenderedQuestion !== buzzCurrentQuestionIndex) {
+                        buzzRenderedQuestion = buzzCurrentQuestionIndex;
+                        showPlayerBuzzScreen(data);
+                    }
+                } else if (data.status === 'finished') {
+                    buzzRenderedQuestion = -1;
+                    showBuzzResults();
+                } else {
+                    // Lobby — show waiting
+                    showScreen('playerWaitingScreen');
+                }
+            });
+        }
+
+        function showPlayerBuzzScreen(data) {
+            showScreen('buzzInPlayerScreen');
+            const num = (data.currentQuestion || 0) + 1;
+            document.getElementById('buzzPlayerQuestionNum').textContent = `QUESTION ${num}`;
+
+            const qEl = document.getElementById('buzzPlayerQuestionText');
+            if (data.mode === 'display' && data.questions && data.questions[data.currentQuestion]) {
+                qEl.textContent = data.questions[data.currentQuestion];
+                qEl.style.display = 'block';
+            } else {
+                qEl.style.display = 'none';
+            }
+
+            // Reset buzz button
+            const btn = document.getElementById('buzzPlayerBtn');
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.background = 'linear-gradient(135deg, #e63946, #cc0000)';
+            document.getElementById('buzzPlayerStatus').textContent = '';
+
+            // Listen for buzz state
+            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`);
+            // Clean up old listener
+            if (window._buzzPlayerBuzzListener) window._buzzPlayerBuzzListener();
+            window._buzzPlayerBuzzListener = window.dbOnValue(buzzRef, (snap) => {
+                const buzzer = snap.val();
+                const btn = document.getElementById('buzzPlayerBtn');
+                const status = document.getElementById('buzzPlayerStatus');
+                if (buzzer && buzzer.name) {
+                    if (buzzer.id === currentPlayer.id) {
+                        status.textContent = '⚡ You buzzed in!';
+                        status.style.color = '#06D6A0';
+                        btn.disabled = true;
+                    } else {
+                        status.textContent = `🔒 ${buzzer.name} buzzed in first!`;
+                        status.style.color = '#EF476F';
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.style.background = '#999';
+                    }
+                } else {
+                    // Buzzers reopened
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.background = 'linear-gradient(135deg, #e63946, #cc0000)';
+                    status.textContent = '';
+                }
+            });
+
+            listenToBuzzScores('player');
+        }
+
+        async function playerBuzzIn() {
+            const btn = document.getElementById('buzzPlayerBtn');
+            const status = document.getElementById('buzzPlayerStatus');
+            if (btn.disabled) return;
+
+            btn.disabled = true;
+            status.textContent = '⚡ Buzzing...';
+            status.style.color = 'var(--orange-gold)';
+
+            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`);
+
+            try {
+                const result = await window.dbRunTransaction(buzzRef, (currentValue) => {
+                    if (currentValue) return currentValue; // Someone already buzzed
+                    return {
+                        id: currentPlayer.id,
+                        name: currentPlayer.name,
+                        timestamp: Date.now()
+                    };
+                });
+
+                const winner = result.snapshot?.val();
+                if (!result.committed || !winner) {
+                    btn.disabled = false;
+                    status.textContent = 'Try again!';
+                    return;
+                }
+
+                if (winner.id === currentPlayer.id) {
+                    status.textContent = '⚡ You buzzed in!';
+                    status.style.color = '#06D6A0';
+                    playSound('correctSound');
+                } else {
+                    status.textContent = `🔒 ${winner.name} got there first!`;
+                    status.style.color = '#EF476F';
+                    btn.style.opacity = '0.5';
+                    btn.style.background = '#999';
+                }
+            } catch (e) {
+                btn.disabled = false;
+                status.textContent = 'Connection hiccup. Try again!';
+                console.error('Buzz error:', e);
+            }
+        }
+        window.playerBuzzIn = playerBuzzIn;
+
+        // ── BUZZ-IN: Join routing ──
+        // When a player joins, we need to detect if it's a buzz-in game
+
         // Initialize — quizzes load after auth via loadUserQuizzes()
         loadQuizzes();
 
@@ -7217,14 +7952,23 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
             const pinFromUrl = urlParams.get('pin');
-            if (pinFromUrl) {
-                // Wait a moment for screens to initialize, then show join screen with PIN pre-filled
+            const buzzPinFromUrl = urlParams.get('buzzpin');
+            
+            if (buzzPinFromUrl) {
+                // Buzz-in game QR scan — show join screen with PIN pre-filled
+                setTimeout(() => {
+                    showScreen('joinScreen');
+                    document.getElementById('gamePinInput').value = buzzPinFromUrl;
+                    document.getElementById('playerName').focus();
+                    showNotification('Buzz-In game found! Enter your name to join.', 'info');
+                    window.history.replaceState({}, '', window.location.pathname);
+                }, 500);
+            } else if (pinFromUrl) {
                 setTimeout(() => {
                     showScreen('joinScreen');
                     document.getElementById('gamePinInput').value = pinFromUrl;
                     document.getElementById('playerName').focus();
                     showNotification('Game PIN auto-filled! Enter your name to join.', 'info');
-                    // Clean the URL so it doesn't keep re-triggering
                     window.history.replaceState({}, '', window.location.pathname);
                 }, 500);
             }
