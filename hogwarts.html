@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hogwarts School of Software & Sorcery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #c9a84c;
+            --gold-bright: #f0c040;
+            --gold-dark: #8b6914;
+            --parchment: #f4e9c9;
+            --dark: #0d0d0d;
+            --dark-mid: #1a1208;
+            --dark-surface: #1e1a0e;
+            --dark-card: #251f0f;
+            --gryffindor: #740001;
+            --gryffindor-gold: #d3a625;
+            --hufflepuff: #ecb939;
+            --hufflepuff-black: #372e29;
+            --ravenclaw: #0e1a40;
+            --ravenclaw-bronze: #946b2d;
+            --slytherin: #1a472a;
+            --slytherin-silver: #aaaaaa;
+            --red-buzz: #cc0000;
+            --red-buzz-glow: #ff2222;
+        }
+
+        body {
+            font-family: 'EB Garamond', serif;
+            background: var(--dark);
+            background-image: url('cloudy_backdrop.png');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--parchment);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Subtle gold overlay on top of backdrop ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(116,0,1,0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--dur, 3s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.3); }
+        }
+
+        /* ── Screens ── */
+        .screen { display: none; position: relative; z-index: 1; }
+        .screen.active { display: block; }
+        .screen.flex-screen.active { display: flex; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ── Gold divider ── */
+        .gold-divider {
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1rem auto;
+        }
+
+        /* ── Crest / House badge ── */
+        .house-badge {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* ══════════════════════════════════
+           LANDING / ROLE SELECT
+        ══════════════════════════════════ */
+        #landingScreen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .crest-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(201,168,76,0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .title-main {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--gold-bright);
+            text-shadow: 0 0 30px rgba(240,192,64,0.4), 0 2px 4px rgba(0,0,0,0.8);
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .title-sub {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .title-event {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            color: rgba(244,233,201,0.6);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .role-cards {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .role-card {
+            background: var(--dark-card);
+            border: 2px solid var(--gold-dark);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            width: 240px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(201,168,76,0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .role-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(201,168,76,0.2);
+        }
+
+        .role-card:hover::before { opacity: 1; }
+
+        .role-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .role-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold-bright);
+            margin-bottom: 0.5rem;
+        }
+
+        .role-desc {
+            font-size: 0.9rem;
+            color: rgba(244,233,201,0.6);
+            line-height: 1.5;
+        }
+
+        /* ══════════════════════════════════
+           HOST SETUP
+        ══════════════════════════════════ */
+        #hostSetupScreen {
+            min-height: 100vh;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .screen-header {
+            text-align: center;
+            padding: 2rem 0 1.5rem;
+        }
+
+        .screen-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            color: var(--gold-bright);
+            text-shadow: 0 0 20px rgba(240,192,64,0.3);
+        }
+
+        .magic-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .magic-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .card-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: var(--gold);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .magic-input {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            margin-bottom: 0.75rem;
+        }
+
+        .magic-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+        }
+
+        .magic-input::placeholder { color: rgba(244,233,201,0.3); }
+
+        .mode-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 0.9rem;
+            background: rgba(0,0,0,0.4);
+            border: 2px solid rgba(201,168,76,0.2);
+            border-radius: 10px;
+            color: rgba(244,233,201,0.6);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .mode-btn.active {
+            border-color: var(--gold);
+            color: var(--gold-bright);
+            background: rgba(201,168,76,0.1);
+        }
+
+        #questionsContainer .q-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        #questionsContainer .q-num {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 0.9rem;
+            min-width: 24px;
+        }
+
+        .spell-btn {
+            font-family: 'Cinzel', serif;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spell-btn-gold {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            color: var(--dark);
+            box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+        }
+
+        .spell-btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201,168,76,0.5);
+        }
+
+        .spell-btn-outline {
+            background: transparent;
+            border: 2px solid rgba(201,168,76,0.4);
+            color: var(--gold);
+        }
+
+        .spell-btn-outline:hover {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.1);
+        }
+
+        /* ══════════════════════════════════
+           HOST LOBBY — QR + PIN
+        ══════════════════════════════════ */
+        #hostLobbyScreen {
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .lobby-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .pin-display {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--gold-bright);
+            text-shadow: 0 0 40px rgba(240,192,64,0.5);
+            letter-spacing: 0.2em;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .join-url {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: rgba(244,233,201,0.5);
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        #qrcode canvas, #qrcode img {
+            border: 6px solid var(--gold-dark);
+            border-radius: 12px;
+            background: white;
+            padding: 8px;
+        }
+
+        .house-leaderboard {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .house-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .house-row.gryffindor { background: linear-gradient(135deg, rgba(116,0,1,0.6), rgba(116,0,1,0.3)); border: 1px solid rgba(211,166,37,0.4); }
+        .house-row.hufflepuff { background: linear-gradient(135deg, rgba(236,185,57,0.3), rgba(55,46,41,0.6)); border: 1px solid rgba(236,185,57,0.4); }
+        .house-row.ravenclaw { background: linear-gradient(135deg, rgba(14,26,64,0.8), rgba(14,26,64,0.4)); border: 1px solid rgba(148,107,45,0.4); }
+        .house-row.slytherin { background: linear-gradient(135deg, rgba(26,71,42,0.6), rgba(26,71,42,0.3)); border: 1px solid rgba(170,170,170,0.3); }
+
+        .house-name { color: var(--parchment); }
+        .house-points {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            text-shadow: 0 0 10px rgba(240,192,64,0.4);
+        }
+        .house-members { font-size: 0.75rem; color: rgba(244,233,201,0.5); font-family: 'EB Garamond', serif; }
+
+        .players-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .player-chip {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'EB Garamond', serif;
+            background: rgba(201,168,76,0.15);
+            border: 1px solid rgba(201,168,76,0.3);
+            color: var(--parchment);
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ══════════════════════════════════
+           HOST GAME SCREEN
+        ══════════════════════════════════ */
+        #hostGameScreen {
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .game-layout {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .question-display {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .question-number {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            color: var(--parchment);
+            line-height: 1.4;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            min-height: 3rem;
+        }
+
+        .buzzer-status {
+            margin: 2rem 0;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .buzz-waiting {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: rgba(244,233,201,0.4);
+            letter-spacing: 0.1em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        .buzz-winner {
+            padding: 1.5rem 3rem;
+            border-radius: 16px;
+            text-align: center;
+            animation: buzzWin 0.4s cubic-bezier(0.68,-0.55,0.265,1.55);
+        }
+
+        @keyframes buzzWin {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .buzz-winner-name {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .buzz-winner-house {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+        }
+
+        .host-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .correct-btn {
+            background: linear-gradient(135deg, #1a472a, #2d7a47);
+            color: white;
+            border: 2px solid #4caf50;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(76,175,80,0.3);
+        }
+
+        .correct-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(76,175,80,0.5); }
+
+        .wrong-btn {
+            background: linear-gradient(135deg, #4a0000, #8b0000);
+            color: white;
+            border: 2px solid #cc0000;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(204,0,0,0.3);
+        }
+
+        .wrong-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(204,0,0,0.5); }
+
+        .points-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .points-selector label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--gold);
+        }
+
+        .points-selector select {
+            background: var(--dark-card);
+            border: 1px solid var(--gold-dark);
+            color: var(--gold-bright);
+            font-family: 'Cinzel', serif;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .game-leaderboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        /* ══════════════════════════════════
+           PLAYER JOIN SCREEN
+        ══════════════════════════════════ */
+        #playerJoinScreen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .join-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+        }
+
+        .join-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .house-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .house-option {
+            padding: 1rem 0.5rem;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+        }
+
+        .house-option .house-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.3rem; }
+
+        .house-option.gryffindor { background: rgba(116,0,1,0.3); color: #ff9999; }
+        .house-option.gryffindor.selected, .house-option.gryffindor:hover { border-color: var(--gryffindor); background: rgba(116,0,1,0.6); box-shadow: 0 0 20px rgba(116,0,1,0.4); }
+
+        .house-option.hufflepuff { background: rgba(236,185,57,0.15); color: var(--hufflepuff); }
+        .house-option.hufflepuff.selected, .house-option.hufflepuff:hover { border-color: var(--hufflepuff); background: rgba(236,185,57,0.25); box-shadow: 0 0 20px rgba(236,185,57,0.3); }
+
+        .house-option.ravenclaw { background: rgba(14,26,64,0.6); color: #8899cc; }
+        .house-option.ravenclaw.selected, .house-option.ravenclaw:hover { border-color: #3355aa; background: rgba(14,26,64,0.9); box-shadow: 0 0 20px rgba(14,26,64,0.6); }
+
+        .house-option.slytherin { background: rgba(26,71,42,0.4); color: #88cc99; }
+        .house-option.slytherin.selected, .house-option.slytherin:hover { border-color: var(--slytherin); background: rgba(26,71,42,0.7); box-shadow: 0 0 20px rgba(26,71,42,0.5); }
+
+        /* ══════════════════════════════════
+           PLAYER WAITING
+        ══════════════════════════════════ */
+        #playerWaitScreen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .house-crest-big {
+            font-size: 8rem;
+            margin-bottom: 1rem;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(201,168,76,0.4));
+        }
+
+        .player-house-name {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .waiting-text {
+            font-style: italic;
+            color: rgba(244,233,201,0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* ══════════════════════════════════
+           BUZZ IN SCREEN (PLAYER)
+        ══════════════════════════════════ */
+        #playerBuzzScreen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .question-for-player {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: var(--parchment);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.5;
+            min-height: 2rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(201,168,76,0.2);
+        }
+
+        .buzz-btn-container {
+            position: relative;
+        }
+
+        .buzz-btn {
+            width: min(280px, 70vw);
+            height: min(280px, 70vw);
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ff4444, #cc0000, #8b0000);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.1s ease;
+            box-shadow:
+                0 0 0 8px rgba(204,0,0,0.2),
+                0 0 0 16px rgba(204,0,0,0.1),
+                0 20px 60px rgba(204,0,0,0.5),
+                inset 0 -8px 20px rgba(0,0,0,0.4),
+                inset 0 8px 20px rgba(255,100,100,0.2);
+            animation: buzzPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes buzzPulse {
+            0%, 100% { box-shadow: 0 0 0 8px rgba(204,0,0,0.2), 0 0 0 16px rgba(204,0,0,0.1), 0 20px 60px rgba(204,0,0,0.5), inset 0 -8px 20px rgba(0,0,0,0.4), inset 0 8px 20px rgba(255,100,100,0.2); }
+            50% { box-shadow: 0 0 0 12px rgba(204,0,0,0.3), 0 0 0 24px rgba(204,0,0,0.15), 0 20px 80px rgba(204,0,0,0.7), inset 0 -8px 20px rgba(0,0,0,0.4), inset 0 8px 20px rgba(255,100,100,0.2); }
+        }
+
+        .buzz-btn:active:not(:disabled) {
+            transform: scale(0.93);
+            box-shadow: 0 0 0 4px rgba(204,0,0,0.3), 0 10px 30px rgba(204,0,0,0.4), inset 0 -4px 10px rgba(0,0,0,0.5);
+        }
+
+        .buzz-btn:disabled {
+            background: radial-gradient(circle at 35% 35%, #555, #333, #222);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            cursor: not-allowed;
+            animation: none;
+        }
+        .buzz-btn.locked {
+            background: radial-gradient(circle at 35% 35%, #666, #444, #222);
+            box-shadow:
+                0 0 0 8px rgba(170,170,170,0.12),
+                0 0 0 16px rgba(170,170,170,0.06),
+                0 16px 40px rgba(0,0,0,0.45),
+                inset 0 -8px 20px rgba(0,0,0,0.45),
+                inset 0 8px 20px rgba(255,255,255,0.08);
+            animation: none;
+            cursor: not-allowed;
+        }
+
+        .buzz-btn-text {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            pointer-events: none;
+            font-weight: 700;
+        }
+
+        .buzz-status-text {
+            margin-top: 2rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: rgba(244,233,201,0.6);
+            min-height: 1.5rem;
+        }
+
+        /* ══════════════════════════════════
+           RESULTS SCREEN
+        ══════════════════════════════════ */
+        #resultsScreen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .trophy { font-size: 6rem; animation: float 3s ease-in-out infinite; margin-bottom: 1rem; }
+
+        .final-leaderboard {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .final-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            animation: slideIn 0.5s ease both;
+            font-family: 'Cinzel', serif;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .rank-medal { font-size: 1.8rem; margin-right: 1rem; }
+        .final-house-name { font-size: 1.2rem; flex: 1; text-align: left; }
+        .final-points { font-size: 1.8rem; font-weight: 700; color: var(--gold-bright); }
+
+        /* ══════════════════════════════════
+           UTILITIES
+        ══════════════════════════════════ */
+        .text-gold { color: var(--gold-bright); }
+        .text-center { text-align: center; }
+        .mt1 { margin-top: 1rem; }
+        .mt2 { margin-top: 2rem; }
+
+        /* Floating candles — hover in place, gently bobbing */
+        .candles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .candle {
+            position: absolute;
+            font-size: var(--size, 1.5rem);
+            animation: candleBob var(--dur, 4s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: var(--opacity, 0.5);
+            filter: drop-shadow(0 0 6px rgba(255,200,50,0.4));
+        }
+
+        @keyframes candleBob {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            25% { transform: translateY(-12px) rotate(1deg); }
+            50% { transform: translateY(-6px) rotate(-1deg); }
+            75% { transform: translateY(-14px) rotate(2deg); }
+        }
+
+        @media (max-width: 640px) {
+            .lobby-grid { grid-template-columns: 1fr; }
+            .game-leaderboard { grid-template-columns: 1fr; }
+            .role-cards { gap: 1rem; }
+            .role-card { width: 100%; max-width: 300px; }
+            .house-row {
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+            .house-points {
+                font-size: 1.15rem;
+                min-width: 2.5rem;
+                text-align: right;
+            }
+            .join-card {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div class="candles" id="candles"></div>
+
+<!-- ══════════════════════════════════
+     LANDING — PICK YOUR ROLE
+══════════════════════════════════ -->
+<div id="landingScreen" class="screen active" style="display:block;">
+    <div class="crest-icon">⚡</div>
+    <div class="title-main">Hogwarts School of<br>Software & Sorcery</div>
+    <div class="title-sub">Trivia Challenge</div>
+    <div class="title-event">BYU Library · The Great Hall of Knowledge</div>
+    <div class="gold-divider"></div>
+    <div class="role-cards">
+        <div class="role-card" onclick="showScreen('hostSetupScreen')">
+            <div class="role-icon"><img src="witch_hat.png" style="width:5rem;height:5rem;object-fit:contain;"></div>
+            <div class="role-title">Professor</div>
+            <div class="role-desc">Host and manage the trivia challenge</div>
+        </div>
+        <div class="role-card" onclick="showScreen('playerJoinScreen')">
+            <div class="role-icon"><img src="wand.png" style="width:8rem;height:4rem;object-fit:contain;"></div>
+            <div class="role-title">Student</div>
+            <div class="role-desc">Join a game and buzz in for your house</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     HOST SETUP
+══════════════════════════════════ -->
+<div id="hostSetupScreen" class="screen" style="display:none;">
+    <div class="screen-header">
+        <div class="screen-title">⚗️ Prepare Your Lesson</div>
+        <div class="gold-divider"></div>
+    </div>
+
+    <div style="max-width: 700px; margin: 0 auto; padding: 0 1.5rem 3rem;">
+
+        <!-- Mode -->
+        <div class="magic-card">
+            <div class="card-label">📜 Question Mode</div>
+            <div class="mode-toggle">
+                <div class="mode-btn active" id="modeBtnDisplay" onclick="setMode('display')">
+                    🖥️ Display Questions<br><small style="opacity:0.7;font-family:EB Garamond">Screen shows each question</small>
+                </div>
+                <div class="mode-btn" id="modeBtnBuzzer" onclick="setMode('buzzer')">
+                    🎙️ Pure Buzzer<br><small style="opacity:0.7;font-family:EB Garamond">You read questions aloud</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions (only in display mode) -->
+        <div class="magic-card" id="questionsCard">
+            <div class="card-label">❓ Your Questions</div>
+            <div id="questionsContainer">
+                <div class="q-row">
+                    <span class="q-num">1.</span>
+                    <input class="magic-input" style="margin:0; flex:1;" placeholder="Enter question 1..." type="text">
+                </div>
+                <div class="q-row">
+                    <span class="q-num">2.</span>
+                    <input class="magic-input" style="margin:0; flex:1;" placeholder="Enter question 2..." type="text">
+                </div>
+                <div class="q-row">
+                    <span class="q-num">3.</span>
+                    <input class="magic-input" style="margin:0; flex:1;" placeholder="Enter question 3..." type="text">
+                </div>
+                <div class="q-row">
+                    <span class="q-num">4.</span>
+                    <input class="magic-input" style="margin:0; flex:1;" placeholder="Enter question 4..." type="text">
+                </div>
+                <div class="q-row">
+                    <span class="q-num">5.</span>
+                    <input class="magic-input" style="margin:0; flex:1;" placeholder="Enter question 5..." type="text">
+                </div>
+            </div>
+            <button class="spell-btn spell-btn-outline mt1" onclick="addQuestion()" style="width:100%; margin-top:0.75rem;">+ Add Another Question</button>
+        </div>
+
+        <!-- Points per correct -->
+        <div class="magic-card">
+            <div class="card-label">🏆 Points Per Correct Answer</div>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                <div class="mode-btn active" onclick="setPoints(10, this)" style="flex:0 0 auto; padding: 0.6rem 1.2rem;">10 pts</div>
+                <div class="mode-btn" onclick="setPoints(20, this)" style="flex:0 0 auto; padding: 0.6rem 1.2rem;">20 pts</div>
+                <div class="mode-btn" onclick="setPoints(50, this)" style="flex:0 0 auto; padding: 0.6rem 1.2rem;">50 pts</div>
+                <div class="mode-btn" onclick="setPoints(100, this)" style="flex:0 0 auto; padding: 0.6rem 1.2rem;">100 pts</div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:1rem; margin-top:1rem;">
+            <button class="spell-btn spell-btn-outline" onclick="showScreen('landingScreen')" style="flex:0 0 auto;">← Back</button>
+            <button class="spell-btn spell-btn-gold" onclick="createGame()" style="flex:1;"><img src="wand.png" style="width: 1.5em;height:1.5em;vertical-align:middle;object-fit:contain;">Open the Great Hall
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     HOST LOBBY
+══════════════════════════════════ -->
+<div id="hostLobbyScreen" class="screen" style="display:none;">
+    <div class="screen-header">
+        <div class="screen-title">⚡ The Great Hall Awaits</div>
+        <div class="gold-divider"></div>
+    </div>
+
+    <div class="lobby-grid" style="padding: 0 1.5rem 3rem;">
+        <!-- Left: PIN + QR -->
+        <div>
+            <div class="magic-card" style="text-align:center;">
+                <div class="card-label" style="text-align:center;">🔮 Students — Join at</div>
+                <div class="join-url" id="joinUrl" style="font-size:1rem; color: var(--gold); margin-bottom:0.5rem;"></div>
+                <div class="card-label" style="text-align:center; margin-top:0.5rem;">Game PIN</div>
+                <div class="pin-display" id="lobbyPin">—</div>
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="magic-card mt1">
+                <div class="card-label">👥 Students Sorted</div>
+                <div id="lobbyPlayerList" class="players-list">
+                    <span style="font-style:italic; color:rgba(244,233,201,0.3); font-size:0.9rem;">Waiting for students to arrive...</span>
+                </div>
+            </div>
+
+            <button class="spell-btn spell-btn-gold mt1" onclick="startGame()" style="width:100%; font-size:1.1rem; padding:1.2rem;">
+                ⚡ Begin the Trivia Challenge
+            </button>
+        </div>
+
+        <!-- Right: House Points -->
+        <div>
+            <div class="magic-card">
+                <div class="card-label">🏆 House Cup Standings</div>
+                <div class="house-leaderboard">
+                    <div class="house-row gryffindor" id="lb-gryffindor">
+                        <div>
+                            <div class="house-name">🦁 Gryffindor</div>
+                            <div class="house-members" id="members-gryffindor">No students yet</div>
+                        </div>
+                        <div class="house-points" id="pts-gryffindor">0</div>
+                    </div>
+                    <div class="house-row hufflepuff" id="lb-hufflepuff">
+                        <div>
+                            <div class="house-name">🦡 Hufflepuff</div>
+                            <div class="house-members" id="members-hufflepuff">No students yet</div>
+                        </div>
+                        <div class="house-points" id="pts-hufflepuff">0</div>
+                    </div>
+                    <div class="house-row ravenclaw" id="lb-ravenclaw">
+                        <div>
+                            <div class="house-name"><img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;"> Ravenclaw</div>
+                            <div class="house-members" id="members-ravenclaw">No students yet</div>
+                        </div>
+                        <div class="house-points" id="pts-ravenclaw">0</div>
+                    </div>
+                    <div class="house-row slytherin" id="lb-slytherin">
+                        <div>
+                            <div class="house-name">🐍 Slytherin</div>
+                            <div class="house-members" id="members-slytherin">No students yet</div>
+                        </div>
+                        <div class="house-points" id="pts-slytherin">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     HOST GAME
+══════════════════════════════════ -->
+<div id="hostGameScreen" class="screen" style="display:none;">
+    <div class="game-layout" style="padding: 1.5rem;">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <div class="screen-title" style="font-size:1.2rem;">⚡ Hogwarts Trivia</div>
+            <button class="spell-btn spell-btn-outline" onclick="endGame()" style="padding:0.5rem 1rem; font-size:0.85rem;">End Game</button>
+        </div>
+
+        <!-- Question display -->
+        <div class="magic-card question-display">
+            <div class="question-number" id="hostQuestionNum">Question 1</div>
+            <div class="question-text" id="hostQuestionText">Ready when you are, Professor...</div>
+        </div>
+
+        <!-- Buzz status -->
+        <div class="buzzer-status" id="buzzerStatus">
+            <div class="buzz-waiting">⚡ Waiting for a student to buzz in...</div>
+        </div>
+
+        <!-- Points selector -->
+        <div class="points-selector">
+            <label>Points for correct:</label>
+            <select id="pointsSelect" style="font-size:1rem;">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+
+        <!-- Host controls -->
+        <div class="host-controls" id="hostControls" style="display:none;">
+            <button class="correct-btn" onclick="markAnswer(true)">✅ Correct! Award Points</button>
+            <button class="wrong-btn" onclick="markAnswer(false)">❌ Wrong — Reopen Buzzers</button>
+        </div>
+
+        <!-- Next question -->
+        <div class="host-controls">
+            <button class="spell-btn spell-btn-outline" id="prevQBtn" onclick="prevQuestion()" style="padding:0.7rem 1.5rem;">← Prev</button>
+            <button class="spell-btn spell-btn-gold" id="nextQBtn" onclick="nextQuestion()" style="padding:0.7rem 2rem;">Next Question →</button>
+            <button class="spell-btn" onclick="endGame()" style="background: linear-gradient(135deg, #4a0030, #800050); color:white; border:none; padding:0.7rem 1.5rem;">🏆 Show Results</button>
+        </div>
+
+        <!-- Live leaderboard -->
+        <div class="magic-card mt2">
+            <div class="card-label">🏆 House Cup — Live</div>
+            <div class="game-leaderboard">
+                <div class="house-row gryffindor"><span>🦁 Gryffindor</span><span class="house-points" id="game-pts-gryffindor">0</span></div>
+                <div class="house-row hufflepuff"><span>🦡 Hufflepuff</span><span class="house-points" id="game-pts-hufflepuff">0</span></div>
+                <div class="house-row ravenclaw"><span><img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;"> Ravenclaw</span><span class="house-points" id="game-pts-ravenclaw">0</span></div>
+                <div class="house-row slytherin"><span>🐍 Slytherin</span><span class="house-points" id="game-pts-slytherin">0</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PLAYER JOIN
+══════════════════════════════════ -->
+<div id="playerJoinScreen" class="screen flex-screen" style="display:none;">
+    <div style="text-align:center; margin-bottom:2rem;">
+        <div style="font-size:3rem; margin-bottom:0.5rem;">⚡</div>
+        <div class="screen-title">Enter the Great Hall</div>
+        <div class="gold-divider"></div>
+    </div>
+
+    <div class="join-card">
+        <div class="card-label">🔮 Game PIN</div>
+        <input class="magic-input" id="joinPin" placeholder="Enter 6-digit PIN..." maxlength="6" type="text" inputmode="numeric">
+
+        <div class="card-label mt1"><img src="wand.png" style="width: 1.5em;height:1.5em;vertical-align:middle;object-fit:contain;">Your Name</div>
+        <input class="magic-input" id="joinName" placeholder="Your name...">
+
+        <div class="card-label mt1">🏰 Choose Your House</div>
+        <div class="house-selector">
+            <div class="house-option gryffindor" onclick="selectHouse('gryffindor', this)">
+                <span class="house-emoji">🦁</span>Gryffindor
+            </div>
+            <div class="house-option hufflepuff" onclick="selectHouse('hufflepuff', this)">
+                <span class="house-emoji">🦡</span>Hufflepuff
+            </div>
+            <div class="house-option ravenclaw" onclick="selectHouse('ravenclaw', this)">
+                <span class="house-emoji"><img src="raven.png" style="width:1.8rem;height:1.8rem;vertical-align:middle;object-fit:contain;"></span>Ravenclaw
+            </div>
+            <div class="house-option slytherin" onclick="selectHouse('slytherin', this)">
+                <span class="house-emoji">🐍</span>Slytherin
+            </div>
+        </div>
+
+        <button class="spell-btn spell-btn-gold" onclick="joinGame()" style="width:100%; margin-top:0.5rem; font-size:1.1rem; padding:1.1rem;">
+            🚪 Enter the Hall
+        </button>
+
+        <div id="joinError" style="color:#ff6666; text-align:center; margin-top:0.75rem; font-size:0.9rem; min-height:1.2rem;"></div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PLAYER WAITING
+══════════════════════════════════ -->
+<div id="playerWaitScreen" class="screen flex-screen" style="display:none;">
+    <div class="house-crest-big" id="playerCrestBig">⚡</div>
+    <div class="player-house-name" id="playerHouseNameBig" style="color: var(--gold-bright);"></div>
+    <div class="gold-divider"></div>
+    <div style="font-family:'Cinzel', serif; font-size:1rem; color: var(--gold); margin-bottom:0.5rem;" id="playerNameDisplay"></div>
+    <div class="waiting-text">The Professor is preparing the challenge...</div>
+    <div style="margin-top:2rem; font-size:2rem; animation: float 3s ease-in-out infinite;">🕯️</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PLAYER BUZZ SCREEN
+══════════════════════════════════ -->
+<div id="playerBuzzScreen" class="screen flex-screen" style="display:none;">
+    <div style="font-family:'Cinzel', serif; font-size:0.85rem; color: var(--gold); letter-spacing:0.1em; margin-bottom:0.5rem;" id="buzzQuestionNum">QUESTION 1</div>
+
+    <div class="question-for-player" id="buzzQuestionText" style="display:none;"></div>
+
+    <div class="buzz-btn-container">
+        <button class="buzz-btn" id="buzzBtn" onclick="buzzIn()">
+            <div class="buzz-btn-text">BUZZ<br>IN</div>
+        </button>
+    </div>
+
+    <div class="buzz-status-text" id="buzzStatusText"></div>
+
+    <!-- Live house scores on player screen -->
+    <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-top:2rem;">
+        <div style="font-family:'Cinzel', serif; font-size:0.8rem; text-align:center;">
+            <div>🦁 <span id="p-pts-gryffindor">0</span></div>
+        </div>
+        <div style="font-family:'Cinzel', serif; font-size:0.8rem; text-align:center;">
+            <div>🦡 <span id="p-pts-hufflepuff">0</span></div>
+        </div>
+        <div style="font-family:'Cinzel', serif; font-size:0.8rem; text-align:center;">
+            <div><img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;"> <span id="p-pts-ravenclaw">0</span></div>
+        </div>
+        <div style="font-family:'Cinzel', serif; font-size:0.8rem; text-align:center;">
+            <div>🐍 <span id="p-pts-slytherin">0</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     RESULTS
+══════════════════════════════════ -->
+<div id="resultsScreen" class="screen" style="display:none;">
+    <div class="trophy">🏆</div>
+    <div class="title-main" style="font-size:clamp(1.5rem,4vw,2.5rem);">The House Cup</div>
+    <div class="gold-divider"></div>
+    <div class="final-leaderboard" id="finalLeaderboard"></div>
+    <button class="spell-btn spell-btn-gold mt2" onclick="showScreen('landingScreen')" style="padding:1rem 2.5rem;"><img src="wand.png" style="width: 1.8em;height:1.8em;vertical-align:middle;object-fit:contain;">Play Again
+    </button>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCd4pw51gYKtMYjFyGhTVQqfIp7A8sM8TM",
+        authDomain: "quizcraft-e3e3c.firebaseapp.com",
+        databaseURL: "https://quizcraft-e3e3c-default-rtdb.firebaseio.com",
+        projectId: "quizcraft-e3e3c",
+        storageBucket: "quizcraft-e3e3c.firebasestorage.app",
+        messagingSenderId: "35069708047",
+        appId: "1:35069708047:web:960f19442093a567f4a07a"
+    };
+
+    const app = initializeApp(firebaseConfig, 'hogwarts');
+    const db = getDatabase(app);
+
+    window.hdb = db;
+    window.href = ref;
+    window.hset = set;
+    window.hget = get;
+    window.honValue = onValue;
+    window.hupdate = update;
+    window.hremove = remove;
+    window.hpush = push;
+    window.hserverTimestamp = serverTimestamp;
+    window.hrunTransaction = runTransaction;
+</script>
+
+<!-- QR Code lib -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    // ── Stars & candles ──
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random() * 2 + 0.5;
+        s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*4}s;`;
+        starsEl.appendChild(s);
+    }
+
+    // Hovering candles — random positions flanking the page, varying sizes
+    const candlesEl = document.getElementById('candles');
+    const candlePositions = [
+        // Left side flanking
+        { left: '2%',  top: '8%'  },
+        { left: '5%',  top: '28%' },
+        { left: '1%',  top: '48%' },
+        { left: '6%',  top: '68%' },
+        { left: '3%',  top: '85%' },
+        // Right side flanking
+        { left: '92%', top: '12%' },
+        { left: '95%', top: '32%' },
+        { left: '91%', top: '52%' },
+        { left: '94%', top: '72%' },
+        { left: '92%', top: '88%' },
+        // A few scattered in background at low opacity
+        { left: '15%', top: '15%' },
+        { left: '80%', top: '25%' },
+        { left: '20%', top: '75%' },
+        { left: '75%', top: '80%' },
+    ];
+
+    candlePositions.forEach((pos, i) => {
+        const c = document.createElement('div');
+        c.className = 'candle';
+        c.textContent = '🕯️';
+        const size = 1.2 + Math.random() * 1.6; // 1.2rem to 2.8rem
+        const opacity = 0.3 + Math.random() * 0.35;
+        const dur = 3 + Math.random() * 4;
+        const delay = Math.random() * 5;
+        c.style.cssText = `left:${pos.left};top:${pos.top};--size:${size.toFixed(1)}rem;--opacity:${opacity.toFixed(2)};--dur:${dur.toFixed(1)}s;--delay:${delay.toFixed(1)}s;`;
+        candlesEl.appendChild(c);
+    });
+
+    // ── Screen management ──
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active');
+            s.style.display = 'none';
+        });
+        const el = document.getElementById(id);
+        el.classList.add('active');
+        el.style.display = el.classList.contains('flex-screen') ? 'flex' : 'block';
+        window.scrollTo(0, 0);
+    }
+    window.showScreen = showScreen;
+
+    if (!window.history.state || !window.history.state.hogwartsGuard) {
+    window.history.replaceState({ hogwartsGuard: true }, '');
+    window.history.pushState({ hogwartsGuard: true, appScreen: 'landingScreen' }, '');
+}
+
+window.addEventListener('popstate', () => {
+    window.history.pushState(
+        { hogwartsGuard: true, appScreen: document.querySelector('.screen.active')?.id || 'landingScreen' },
+        ''
+    );
+});
+
+const PLAYER_SESSION_KEY = 'hogwartsPlayerSession';
+
+function savePlayerSession() {
+    if (!gamePin || !currentPlayer) return;
+    localStorage.setItem(PLAYER_SESSION_KEY, JSON.stringify({
+        pin: gamePin,
+        player: currentPlayer,
+        selectedHouse,
+    }));
+}
+
+function clearPlayerSession() {
+    localStorage.removeItem(PLAYER_SESSION_KEY);
+}
+
+function restorePlayerSession() {
+    try {
+        const raw = localStorage.getItem(PLAYER_SESSION_KEY);
+        if (!raw) return false;
+
+        const session = JSON.parse(raw);
+        if (!session?.pin || !session?.player?.id || !session?.player?.name || !session?.player?.house) {
+            clearPlayerSession();
+            return false;
+        }
+
+        gamePin = session.pin;
+        currentPlayer = session.player;
+        selectedHouse = session.selectedHouse || session.player.house;
+
+        const house = houseConfig[selectedHouse];
+        const crestEl = document.getElementById('playerCrestBig');
+
+        if (selectedHouse === 'ravenclaw') {
+            crestEl.innerHTML = '<img src="raven.png" style="width:8rem;height:8rem;object-fit:contain;">';
+        } else {
+            crestEl.textContent = house.emoji;
+        }
+
+        document.getElementById('playerHouseNameBig').textContent = house.name;
+        document.getElementById('playerHouseNameBig').style.color =
+            selectedHouse === 'hufflepuff' ? '#ecb939' :
+            selectedHouse === 'ravenclaw' ? '#8899cc' :
+            selectedHouse === 'slytherin' ? '#88cc99' : '#ffaaaa';
+
+        document.getElementById('playerNameDisplay').textContent = currentPlayer.name;
+
+        showScreen('playerWaitScreen');
+        listenToGameState();
+        return true;
+    } catch (e) {
+        clearPlayerSession();
+        return false;
+    }
+}
+
+    // ── Game state ──
+    let gamePin = '';
+    let isHost = false;
+    let currentPlayer = null;
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let gameMode = 'display';
+    let defaultPoints = 10;
+    let gameListener = null;
+    let buzzListener = null;
+    let playersListener = null;
+    let housePointsListener = null;
+    let playerStateListener = null;
+    let playerBuzzStateListener = null;
+
+    const houseConfig = {
+        gryffindor: { name: 'Gryffindor', emoji: '🦁', color: '#740001' },
+        hufflepuff:  { name: 'Hufflepuff',  emoji: '🦡', color: '#ecb939' },
+        ravenclaw:   { name: 'Ravenclaw',   emoji: '<img src="raven.png" style="width:1.2em;height:1.2em;vertical-align:middle;object-fit:contain;">', color: '#0e1a40' },
+        slytherin:   { name: 'Slytherin',   emoji: '🐍', color: '#1a472a' },
+    };
+
+    // ── Mode toggle ──
+    function setMode(mode) {
+        gameMode = mode;
+        document.getElementById('modeBtnDisplay').classList.toggle('active', mode === 'display');
+        document.getElementById('modeBtnBuzzer').classList.toggle('active', mode === 'buzzer');
+        document.getElementById('questionsCard').style.display = mode === 'display' ? 'block' : 'none';
+    }
+    window.setMode = setMode;
+
+    function setPoints(pts, el) {
+        defaultPoints = pts;
+        const pointsSelect = document.getElementById('pointsSelect');
+        if (pointsSelect) pointsSelect.value = String(pts);
+        document.querySelectorAll('.points-selector .mode-btn, #hostSetupScreen .mode-btn').forEach(b => {
+            if (['10 pts','20 pts','50 pts','100 pts'].some(t => b.textContent.trim().startsWith(t.split(' ')[0]))) {
+                b.classList.remove('active');
+            }
+        });
+        el.classList.add('active');
+    }
+    window.setPoints = setPoints;
+
+    let questionCount = 5;
+    function addQuestion() {
+        questionCount++;
+        const container = document.getElementById('questionsContainer');
+        const row = document.createElement('div');
+        row.className = 'q-row';
+        row.innerHTML = `<span class="q-num">${questionCount}.</span><input class="magic-input" style="margin:0;flex:1;" placeholder="Enter question ${questionCount}..." type="text">`;
+        container.appendChild(row);
+    }
+    window.addQuestion = addQuestion;
+
+    // ── Create game (host) ──
+    async function createGame() {
+        gamePin = Math.floor(100000 + Math.random() * 900000).toString();
+        isHost = true;
+
+        // Gather questions
+        if (gameMode === 'display') {
+            const inputs = document.querySelectorAll('#questionsContainer input');
+            questions = Array.from(inputs).map(i => i.value.trim()).filter(q => q.length > 0);
+            if (questions.length === 0) {
+                alert('Please enter at least one question, Professor!');
+                return;
+            }
+        } else {
+            questions = [];
+        }
+
+        const gameData = {
+            mode: gameMode,
+            questions: questions,
+            status: 'lobby',
+            currentQuestion: 0,
+            buzzedBy: null,
+            houses: { gryffindor: 0, hufflepuff: 0, ravenclaw: 0, slytherin: 0 },
+            createdAt: Date.now()
+        };
+
+        try {
+            await window.hset(window.href(window.hdb, `hogwarts/${gamePin}`), gameData);
+            showLobby();
+        } catch(e) {
+            alert('Error creating game: ' + e.message);
+        }
+    }
+    window.createGame = createGame;
+
+    function showLobby() {
+        document.getElementById('lobbyPin').textContent = gamePin;
+        const url = window.location.href.split('?')[0];
+        document.getElementById('joinUrl').textContent = url;
+
+        // QR Code
+        document.getElementById('qrcode').innerHTML = '';
+        const joinUrl = `${url}?pin=${gamePin}`;
+        new QRCode(document.getElementById('qrcode'), {
+            text: joinUrl,
+            width: 180,
+            height: 180,
+            colorDark: '#1e1a0e',
+            colorLight: '#ffffff',
+        });
+
+        showScreen('hostLobbyScreen');
+        listenToPlayers();
+        listenToHousePoints('lobby');
+    }
+
+    function listenToPlayers() {
+        const playersRef = window.href(window.hdb, `hogwarts/${gamePin}/players`);
+        if (playersListener) playersListener();
+        playersListener = window.honValue(playersRef, snap => {
+            const players = snap.val() || {};
+            const list = Object.values(players);
+
+            // Update lobby player list
+            const container = document.getElementById('lobbyPlayerList');
+            if (list.length === 0) {
+                container.innerHTML = '<span style="font-style:italic;color:rgba(244,233,201,0.3);font-size:0.9rem;">Waiting for students to arrive...</span>';
+            } else {
+                container.innerHTML = list.map(p => `<div class="player-chip">${houseConfig[p.house]?.emoji || '⚡'} ${p.name}</div>`).join('');
+            }
+
+            // Update house member counts
+            const houseCounts = { gryffindor: [], hufflepuff: [], ravenclaw: [], slytherin: [] };
+            list.forEach(p => { if (houseCounts[p.house]) houseCounts[p.house].push(p.name); });
+            Object.entries(houseCounts).forEach(([house, members]) => {
+                const el = document.getElementById(`members-${house}`);
+                if (el) el.textContent = members.length > 0 ? members.join(', ') : 'No students yet';
+            });
+        });
+    }
+
+    function listenToHousePoints(context) {
+        const houseRef = window.href(window.hdb, `hogwarts/${gamePin}/houses`);
+        if (housePointsListener) housePointsListener();
+        housePointsListener = window.honValue(houseRef, snap => {
+            const pts = snap.val() || {};
+            ['gryffindor','hufflepuff','ravenclaw','slytherin'].forEach(h => {
+                const p = pts[h] || 0;
+                const lbEl = document.getElementById(`pts-${h}`);
+                if (lbEl) lbEl.textContent = p;
+                const gameEl = document.getElementById(`game-pts-${h}`);
+                if (gameEl) gameEl.textContent = p;
+                const pEl = document.getElementById(`p-pts-${h}`);
+                if (pEl) pEl.textContent = p;
+            });
+        });
+    }
+
+    // ── Start game ──
+    async function startGame() {
+        await window.hupdate(window.href(window.hdb, `hogwarts/${gamePin}`), {
+            status: 'playing',
+            currentQuestion: 0,
+            buzzedBy: null
+        });
+        showHostGame(0);
+    }
+    window.startGame = startGame;
+
+    function showHostGame(qIndex) {
+        currentQuestionIndex = qIndex;
+        showScreen('hostGameScreen');
+        document.getElementById('pointsSelect').value = String(defaultPoints);
+        listenToHousePoints('game');
+
+        const num = qIndex + 1;
+        document.getElementById('hostQuestionNum').textContent = `Question ${num}`;
+
+        if (gameMode === 'display' && questions[qIndex]) {
+            document.getElementById('hostQuestionText').textContent = questions[qIndex];
+        } else {
+            document.getElementById('hostQuestionText').textContent = `Question ${num} — read it aloud, Professor!`;
+        }
+
+        // Reset buzz UI
+        resetBuzzUI();
+        listenForBuzz();
+    }
+
+    function resetBuzzUI() {
+        document.getElementById('buzzerStatus').innerHTML = '<div class="buzz-waiting">⚡ Waiting for a student to buzz in...</div>';
+        document.getElementById('hostControls').style.display = 'none';
+    }
+
+    function listenForBuzz() {
+        const buzzRef = window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`);
+        if (buzzListener) buzzListener();
+        buzzListener = window.honValue(buzzRef, snap => {
+            const buzzer = snap.val();
+            if (buzzer && buzzer.name) {
+                const house = houseConfig[buzzer.house];
+                const houseColors = {
+                    gryffindor: { bg: 'rgba(116,0,1,0.6)', border: '#740001', text: '#ffaaaa' },
+                    hufflepuff:  { bg: 'rgba(236,185,57,0.25)', border: '#ecb939', text: '#ecb939' },
+                    ravenclaw:   { bg: 'rgba(14,26,64,0.8)', border: '#3355aa', text: '#8899cc' },
+                    slytherin:   { bg: 'rgba(26,71,42,0.6)', border: '#1a472a', text: '#88cc99' },
+                };
+                const colors = houseColors[buzzer.house] || { bg: 'rgba(201,168,76,0.2)', border: 'var(--gold)', text: 'var(--gold-bright)' };
+
+                document.getElementById('buzzerStatus').innerHTML = `
+                    <div class="buzz-winner" style="background:${colors.bg}; border: 3px solid ${colors.border}; box-shadow: 0 0 40px ${colors.border}88;">
+                        <div class="buzz-winner-name" style="color:${colors.text};">${house?.emoji || '⚡'} ${buzzer.name}</div>
+                        <div class="buzz-winner-house" style="color:${colors.text}; opacity:0.8;">${house?.name || ''}</div>
+                    </div>
+                `;
+                document.getElementById('hostControls').style.display = 'flex';
+            }
+        });
+    }
+
+    async function markAnswer(correct) {
+        const buzzSnap = await window.hget(window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`));
+        const buzzer = buzzSnap.val();
+        if (!buzzer) return;
+
+        if (correct) {
+            const pts = parseInt(document.getElementById('pointsSelect').value) || 50;
+            const houseRef = window.href(window.hdb, `hogwarts/${gamePin}/houses/${buzzer.house}`);
+            const currentSnap = await window.hget(houseRef);
+            const current = currentSnap.val() || 0;
+            await window.hset(houseRef, current + pts);
+
+            // Flash winner
+            const statusEl = document.getElementById('buzzerStatus');
+            statusEl.innerHTML += `<div style="font-family:'Cinzel',serif; color:#4caf50; font-size:1.2rem; margin-top:1rem; animation:fadeIn 0.3s ease;">✅ +${pts} points to ${houseConfig[buzzer.house]?.name}!</div>`;
+
+            // Clear buzzer after a moment
+            setTimeout(async () => {
+                await window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`), null);
+                resetBuzzUI();
+            }, 1500);
+        } else {
+            // Wrong — clear buzzer, reopen for others
+            await window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`), null);
+            await window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzLocked`), false);
+            resetBuzzUI();
+            document.getElementById('buzzerStatus').innerHTML = '<div class="buzz-waiting" style="color:#ff8888;">❌ Wrong! Buzzers reopened...</div>';
+        }
+        document.getElementById('hostControls').style.display = 'none';
+    }
+    window.markAnswer = markAnswer;
+
+    function nextQuestion() {
+        const maxIndex = gameMode === 'display' && questions.length ? questions.length - 1 : currentQuestionIndex + 1;
+        const next = Math.min(currentQuestionIndex + 1, maxIndex);
+        window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`), null);
+        window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzLocked`), false);
+        window.hupdate(window.href(window.hdb, `hogwarts/${gamePin}`), {
+            currentQuestion: next,
+            buzzedBy: null,
+            buzzLocked: false
+        });
+        showHostGame(next);
+    }
+    window.nextQuestion = nextQuestion;
+
+    function prevQuestion() {
+        if (currentQuestionIndex <= 0) return;
+        const prev = currentQuestionIndex - 1;
+        window.hset(window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`), null);
+        window.hupdate(window.href(window.hdb, `hogwarts/${gamePin}`), {
+            currentQuestion: prev,
+            buzzedBy: null,
+            buzzLocked: false
+        });
+        showHostGame(prev);
+    }
+    window.prevQuestion = prevQuestion;
+
+    async function endGame() {
+        if (buzzListener) buzzListener();
+        await window.hupdate(window.href(window.hdb, `hogwarts/${gamePin}`), { status: 'finished' });
+        showResults();
+    }
+    window.endGame = endGame;
+
+    async function showResults() {
+        const snap = await window.hget(window.href(window.hdb, `hogwarts/${gamePin}/houses`));
+        const pts = snap.val() || {};
+        const sorted = Object.entries(pts).sort((a,b) => b[1]-a[1]);
+        const medals = ['🥇','🥈','🥉','4️⃣'];
+        const houseColors = { gryffindor:'rgba(116,0,1,0.5)', hufflepuff:'rgba(236,185,57,0.2)', ravenclaw:'rgba(14,26,64,0.7)', slytherin:'rgba(26,71,42,0.5)' };
+
+        document.getElementById('finalLeaderboard').innerHTML = sorted.map(([house, points], i) => `
+            <div class="final-row ${house}" style="background:${houseColors[house]}; border:1px solid rgba(201,168,76,0.3); animation-delay:${i*0.15}s;">
+                <span class="rank-medal">${medals[i]}</span>
+                <span class="final-house-name">${houseConfig[house].emoji} ${houseConfig[house].name}</span>
+                <span class="final-points">${points} pts</span>
+            </div>
+        `).join('');
+
+        showScreen('resultsScreen');
+        clearPlayerSession();
+    }
+
+    // ── PLAYER JOIN ──
+    let selectedHouse = '';
+
+    function selectHouse(house, el) {
+        selectedHouse = house;
+        document.querySelectorAll('.house-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+    window.selectHouse = selectHouse;
+
+    async function joinGame() {
+        const pin = document.getElementById('joinPin').value.trim();
+        const name = document.getElementById('joinName').value.trim();
+        const errEl = document.getElementById('joinError');
+        errEl.textContent = '';
+
+        if (!pin) { errEl.textContent = 'Please enter the game PIN.'; return; }
+        if (!name) { errEl.textContent = 'Please enter your name.'; return; }
+        if (!selectedHouse) { errEl.textContent = 'Please choose your house.'; return; }
+
+        try {
+            const snap = await window.hget(window.href(window.hdb, `hogwarts/${pin}`));
+            if (!snap.exists()) { errEl.textContent = 'Game not found. Check your PIN!'; return; }
+
+            const gameData = snap.val();
+            if (gameData.status !== 'lobby') { errEl.textContent = 'This game has already started!'; return; }
+
+            gamePin = pin;
+            currentPlayer = { id: crypto.randomUUID(), name, house: selectedHouse };
+
+            await window.hset(
+                window.href(window.hdb, `hogwarts/${gamePin}/players/${currentPlayer.id}`),
+                { name, house: selectedHouse, joinedAt: Date.now() }
+            );
+
+            // Show wait screen
+            const house = houseConfig[selectedHouse];
+            const crestEl = document.getElementById('playerCrestBig');
+            if (selectedHouse === 'ravenclaw') {
+                crestEl.innerHTML = '<img src="raven.png" style="width:8rem;height:8rem;object-fit:contain;">';
+            } else {
+                crestEl.textContent = house.emoji;
+            }
+            document.getElementById('playerHouseNameBig').textContent = house.name;
+            document.getElementById('playerHouseNameBig').style.color = selectedHouse === 'hufflepuff' ? '#ecb939' : selectedHouse === 'ravenclaw' ? '#8899cc' : selectedHouse === 'slytherin' ? '#88cc99' : '#ffaaaa';
+            document.getElementById('playerNameDisplay').textContent = name;
+
+            showScreen('playerWaitScreen');
+            savePlayerSession();
+            listenToGameState();
+        } catch(e) {
+            errEl.textContent = 'Error joining: ' + e.message;
+        }
+    }
+    window.joinGame = joinGame;
+
+    function listenToGameState() {
+        const gameRef = window.href(window.hdb, `hogwarts/${gamePin}`);
+        if (playerStateListener) playerStateListener();
+        playerStateListener = window.honValue(gameRef, snap => {
+            const data = snap.val();
+
+            if (!data) {
+                clearPlayerSession();
+                showScreen('playerJoinScreen');
+                return;
+            }
+
+            if (data.status === 'playing') {
+                currentQuestionIndex = data.currentQuestion || 0;
+                questions = data.questions || [];
+                gameMode = data.mode || 'buzzer';
+                showPlayerBuzz(data);
+            } else if (data.status === 'finished') {
+                clearPlayerSession();
+                showPlayerResults(data);
+            } else {
+                showScreen('playerWaitScreen');
+            }
+        });
+    }
+
+    function showPlayerBuzz(data) {
+        showScreen('playerBuzzScreen');
+        listenToHousePoints('player');
+
+        const num = (data.currentQuestion || 0) + 1;
+        document.getElementById('buzzQuestionNum').textContent = `QUESTION ${num}`;
+
+        const qEl = document.getElementById('buzzQuestionText');
+        if (data.mode === 'display' && data.questions && data.questions[data.currentQuestion]) {
+            qEl.textContent = data.questions[data.currentQuestion];
+            qEl.style.display = 'block';
+        } else {
+            qEl.style.display = 'none';
+        }
+
+        const btn = document.getElementById('buzzBtn');
+        const statusEl = document.getElementById('buzzStatusText');
+        btn.disabled = false;
+        btn.classList.remove('locked');
+        statusEl.textContent = '';
+
+        const buzzRef = window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`);
+        if (playerBuzzStateListener) playerBuzzStateListener();
+        playerBuzzStateListener = window.honValue(buzzRef, snap => {
+            const buzzer = snap.val();
+            if (buzzer && buzzer.name) {
+                if (buzzer.id === currentPlayer.id) {
+                    statusEl.textContent = '⚡ You buzzed in!';
+                    btn.disabled = true;
+                    btn.classList.remove('locked');
+                } else {
+                    statusEl.textContent = `🔒 Locked — ${houseConfig[buzzer.house]?.emoji} ${buzzer.name} buzzed in first!`;
+                    btn.disabled = true;
+                    btn.classList.add('locked');
+                }
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('locked');
+                statusEl.textContent = '';
+            }
+        });
+    }
+
+    async function buzzIn() {
+        const btn = document.getElementById('buzzBtn');
+        const statusEl = document.getElementById('buzzStatusText');
+        if (btn.disabled) return;
+
+        btn.disabled = true;
+        btn.classList.remove('locked');
+        statusEl.textContent = '⚡ Casting your buzz...';
+
+        const buzzRef = window.href(window.hdb, `hogwarts/${gamePin}/buzzedBy`);
+
+        try {
+            const result = await window.hrunTransaction(buzzRef, currentValue => {
+                if (currentValue) return currentValue;
+                return {
+                    id: currentPlayer.id,
+                    name: currentPlayer.name,
+                    house: currentPlayer.house,
+                    timestamp: Date.now()
+                };
+            });
+
+            const winner = result.snapshot?.val();
+            if (!result.committed || !winner) {
+                btn.disabled = false;
+                statusEl.textContent = 'Buzz failed. Try again!';
+                return;
+            }
+
+            if (winner.id === currentPlayer.id) {
+                statusEl.textContent = '⚡ You buzzed in!';
+                btn.disabled = true;
+                btn.classList.remove('locked');
+            } else {
+                statusEl.textContent = `🔒 Locked — ${houseConfig[winner.house]?.emoji} ${winner.name} got there first.`;
+                btn.disabled = true;
+                btn.classList.add('locked');
+            }
+        } catch (e) {
+            btn.disabled = false;
+            btn.classList.remove('locked');
+            statusEl.textContent = 'Connection hiccup. Try again!';
+        }
+    }
+    window.buzzIn = buzzIn;
+
+    async function showPlayerResults(data) {
+        const snap = await window.hget(window.href(window.hdb, `hogwarts/${gamePin}/houses`));
+        const pts = snap.val() || {};
+        const sorted = Object.entries(pts).sort((a,b) => b[1]-a[1]);
+        const medals = ['🥇','🥈','🥉','4️⃣'];
+        const houseColors = { gryffindor:'rgba(116,0,1,0.5)', hufflepuff:'rgba(236,185,57,0.2)', ravenclaw:'rgba(14,26,64,0.7)', slytherin:'rgba(26,71,42,0.5)' };
+
+        document.getElementById('finalLeaderboard').innerHTML = sorted.map(([house, points], i) => `
+            <div class="final-row ${house}" style="background:${houseColors[house]}; border:1px solid rgba(201,168,76,0.3); animation-delay:${i*0.15}s;">
+                <span class="rank-medal">${medals[i]}</span>
+                <span class="final-house-name">${houseConfig[house].emoji} ${houseConfig[house].name}</span>
+                <span class="final-points">${points} pts</span>
+            </div>
+        `).join('');
+
+        showScreen('resultsScreen');
+        clearPlayerSession();
+    }
+
+    // ── Auto-fill PIN from URL param — QR scan goes straight to join ──
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPin = urlParams.get('pin');
+    const restoredSession = restorePlayerSession();
+
+    if (!restoredSession && urlPin) {
+        showScreen('playerJoinScreen');
+        document.getElementById('joinPin').value = urlPin;
+        const pinInput = document.getElementById('joinPin');
+        pinInput.readOnly = true;
+        pinInput.style.opacity = '0.6';
+        pinInput.style.cursor = 'default';
+    }
+</script>
+</body>
+</html>
