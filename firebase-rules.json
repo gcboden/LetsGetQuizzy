@@ -1,0 +1,33 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "quizzes": {
+      "$quizId": {
+        ".read": true,
+        ".write": "auth != null"
+      }
+    },
+    "games": {
+      "$gamePin": {
+        ".read": true,
+        ".write": "auth != null || data.exists()",
+        "players": {
+          "$playerId": {
+            ".write": true
+          }
+        },
+        "answers": {
+          ".write": true
+        },
+        "teams": {
+          ".write": "auth != null"
+        }
+      }
+    }
+  }
+}
