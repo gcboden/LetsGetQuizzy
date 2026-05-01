@@ -1768,6 +1768,8 @@
             if (gameData.status !== 'lobby') { errEl.textContent = 'This game has already started!'; return; }
 
             gameType = gameData.gameType || 'team';
+            const wrapper = document.getElementById('teamPickerWrapper');
+            if (wrapper) wrapper.style.display = gameType === 'team' ? '' : 'none';
 
             if (gameType === 'team' && !selectedTeam) {
                 errEl.textContent = 'Please pick a team.';
@@ -1979,6 +1981,18 @@
             }
         } catch(e) { /* ignore */ }
     }
+
+    // Auto-hide team picker when a 6-digit PIN is typed manually
+    document.getElementById('joinPin').addEventListener('input', function() {
+        const val = this.value.trim();
+        if (val.length === 6) {
+            prefetchGameType(val);
+        } else {
+            gameType = 'team';
+            const wrapper = document.getElementById('teamPickerWrapper');
+            if (wrapper) wrapper.style.display = '';
+        }
+    });
 
     const urlParams = new URLSearchParams(window.location.search);
     const urlPin = urlParams.get('pin');
