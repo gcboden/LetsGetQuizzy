@@ -873,7 +873,7 @@
      LANDING — PICK YOUR ROLE
 ══════════════════════════════════ -->
 <div id="landingScreen" class="screen active" style="display:block;">
-    <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: min(225px, 55vw); margin-bottom: 0.5rem; animation: logoPulse 3s ease-in-out infinite; filter: drop-shadow(0 0 20px var(--accent-glow));">
+    <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: min(280px, 68vw); margin-bottom: 0.5rem; animation: logoPulse 3s ease-in-out infinite; filter: drop-shadow(0 0 20px var(--accent-glow));">
     <div class="title-sub">Real-time team trivia</div>
     <div class="divider"></div>
     <div class="role-cards">
@@ -896,7 +896,7 @@
 ══════════════════════════════════ -->
 <div id="hostSetupScreen" class="screen" style="display:none;">
     <div class="screen-header">
-        <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 100px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
+        <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
         <div class="screen-title">⚙️ <span>Game Setup</span></div>
         <div class="divider"></div>
     </div>
@@ -965,12 +965,13 @@
 ══════════════════════════════════ -->
 <div id="hostLobbyScreen" class="screen" style="display:none;">
     <div class="screen-header">
-        <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 100px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
+        <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
         <div class="screen-title">⚡ <span>Waiting for Players</span></div>
         <div class="divider"></div>
     </div>
 
-    <div class="lobby-grid" style="padding: 0 1.5rem 3rem;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem;">
+    <div class="lobby-grid">
         <!-- Left: PIN + QR -->
         <div>
             <div class="card" style="text-align:center;">
@@ -980,8 +981,11 @@
                 <div class="pin-display" id="lobbyPin">—</div>
                 <div id="qrcode"></div>
             </div>
+        </div>
 
-            <div class="card mt1">
+        <!-- Right: Players Joined + Begin Game + Team Standings -->
+        <div>
+            <div class="card">
                 <div class="card-label">Players Joined</div>
                 <div id="lobbyPlayerList" class="players-list">
                     <span style="color:var(--text-muted); font-size:0.85rem;">Waiting for players...</span>
@@ -991,10 +995,8 @@
             <button class="btn btn-primary mt1" onclick="startGame()" style="width:100%; font-size:1.05rem; padding:1.1rem;">
                 ⚡ Begin Game
             </button>
-        </div>
 
-        <!-- Right: Team Standings -->
-        <div id="teamStandingsPanel">
+        <div id="teamStandingsPanel" class="mt1">
             <div class="card">
                 <div class="card-label">Team Standings</div>
                 <div class="team-leaderboard">
@@ -1029,6 +1031,9 @@
                 </div>
             </div>
         </div>
+
+        </div>
+    </div>
     </div>
 </div>
 
@@ -1039,7 +1044,7 @@
     <div class="game-layout" style="padding: 1.5rem;">
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-            <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 80px; filter: drop-shadow(0 0 8px var(--accent-glow));">
+            <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 160px; filter: drop-shadow(0 0 8px var(--accent-glow));">
             <button class="btn btn-outline" onclick="endGame()" style="padding:0.5rem 1rem; font-size:0.8rem;">End Game</button>
         </div>
 
@@ -1102,7 +1107,7 @@
 ══════════════════════════════════ -->
 <div id="playerJoinScreen" class="screen flex-screen" style="display:none;">
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 100px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
+        <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
         <div class="screen-title">Join <span>Game</span></div>
         <div class="divider"></div>
     </div>
@@ -1145,7 +1150,7 @@
      PLAYER WAITING
 ══════════════════════════════════ -->
 <div id="playerWaitScreen" class="screen flex-screen" style="display:none;">
-    <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 90px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
+    <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 180px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
     <div class="team-crest-big" id="playerCrestBig">⚡</div>
     <div class="player-team-name" id="playerTeamNameBig" style="color: var(--accent);"></div>
     <div class="divider"></div>
@@ -1194,7 +1199,7 @@
      RESULTS
 ══════════════════════════════════ -->
 <div id="resultsScreen" class="screen" style="display:none;">
-    <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 100px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
+    <img src="BuzzIn_logo.png" alt="Buzz In!" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
     <div class="trophy">🏆</div>
     <div class="title-main" style="font-size:clamp(1.5rem,4vw,2.5rem);">Final <span>Results</span></div>
     <div class="divider"></div>
