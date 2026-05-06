@@ -1250,6 +1250,7 @@
     window.bpush = push;
     window.bserverTimestamp = serverTimestamp;
     window.brunTransaction = runTransaction;
+    window.firebaseReady = true;
 </script>
 
 <!-- QR Code lib -->
@@ -2006,7 +2007,12 @@
         pinInput.readOnly = true;
         pinInput.style.opacity = '0.6';
         pinInput.style.cursor = 'default';
-        prefetchGameType(urlPin);
+        const waitForFirebase = setInterval(() => {
+            if (window.bget) {
+                clearInterval(waitForFirebase);
+                prefetchGameType(urlPin);
+            }
+        }, 50);
     }
 </script>
 </body>
