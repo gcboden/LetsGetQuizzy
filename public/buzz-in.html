@@ -879,6 +879,14 @@
             .team-points { font-size: 1.1rem; min-width: 2.5rem; text-align: right; }
             .join-card { margin: 0 auto; }
         }
+
+        .lucide { display: inline-block; vertical-align: middle; }
+        .icon-sm { width: 16px; height: 16px; }
+        .icon-md { width: 20px; height: 20px; }
+        .icon-lg { width: 28px; height: 28px; }
+        .icon-xl { width: 48px; height: 48px; }
+        .role-icon .lucide { width: 40px; height: 40px; }
+        .team-emoji .lucide { width: 20px; height: 20px; }
     </style>
 </head>
 <body>
@@ -893,12 +901,12 @@
     <div class="divider"></div>
     <div class="role-cards">
         <div class="role-card" onclick="showScreen('hostSetupScreen')">
-            <div class="role-icon">🎙️</div>
+            <div class="role-icon"><i data-lucide="radio" class="icon-lg"></i></div>
             <div class="role-title">Host</div>
             <div class="role-desc">Set up and run the game</div>
         </div>
         <div class="role-card" onclick="showScreen('playerJoinScreen')">
-            <div class="role-icon">🏆</div>
+            <div class="role-icon"><i data-lucide="trophy" class="icon-lg"></i></div>
             <div class="role-title">Player</div>
             <div class="role-desc">Join a game and buzz in</div>
         </div>
@@ -912,7 +920,7 @@
 <div id="hostSetupScreen" class="screen" style="display:none;">
     <div class="screen-header">
         <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
-        <div class="screen-title">⚙️ <span>Game Setup</span></div>
+        <div class="screen-title"><i data-lucide="settings" class="icon-md"></i> <span>Game Setup</span></div>
         <div class="divider"></div>
     </div>
 
@@ -923,10 +931,10 @@
             <div class="card-label">Game Type</div>
             <div class="mode-toggle">
                 <div class="mode-btn active" id="gameTypeBtnTeam" onclick="setGameType('team')">
-                    👥 Team Mode<br><small style="opacity:0.5;">Compete in teams</small>
+                    <i data-lucide="users" class="icon-md"></i> Team Mode<br><small style="opacity:0.5;">Compete in teams</small>
                 </div>
                 <div class="mode-btn" id="gameTypeBtnIndividual" onclick="setGameType('individual')">
-                    🎯 Single Player<br><small style="opacity:0.5;">Every player for themselves</small>
+                    <i data-lucide="user" class="icon-md"></i> Single Player<br><small style="opacity:0.5;">Every player for themselves</small>
                 </div>
             </div>
         </div>
@@ -936,10 +944,10 @@
             <div class="card-label">Question Mode</div>
             <div class="mode-toggle">
                 <div class="mode-btn active" id="modeBtnDisplay" onclick="setMode('display')">
-                    🖥️ Display Questions<br><small style="opacity:0.5;">Shown on screen</small>
+                    <i data-lucide="monitor" class="icon-md"></i> Display Questions<br><small style="opacity:0.5;">Shown on screen</small>
                 </div>
                 <div class="mode-btn" id="modeBtnBuzzer" onclick="setMode('buzzer')">
-                    🎙️ Pure Buzzer<br><small style="opacity:0.5;">Read aloud</small>
+                    <i data-lucide="mic" class="icon-md"></i> Pure Buzzer<br><small style="opacity:0.5;">Read aloud</small>
                 </div>
             </div>
         </div>
@@ -970,7 +978,7 @@
 
         <div style="display:flex; gap:0.75rem; margin-top:1rem;">
             <button class="btn btn-outline" onclick="showScreen('landingScreen')" style="flex:0 0 auto;">← Back</button>
-            <button class="btn btn-primary" onclick="createGame()" style="flex:1;">⚡ Start Game</button>
+            <button class="btn btn-primary" onclick="createGame()" style="flex:1;"><i data-lucide="zap" class="icon-sm"></i> Start Game</button>
         </div>
     </div>
 </div>
@@ -981,7 +989,7 @@
 <div id="hostLobbyScreen" class="screen" style="display:none;">
     <div class="screen-header">
         <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
-        <div class="screen-title">⚡ <span>Waiting for Players</span></div>
+        <div class="screen-title"><i data-lucide="zap" class="icon-md"></i> <span>Waiting for Players</span></div>
         <div class="divider"></div>
     </div>
 
@@ -1008,7 +1016,7 @@
             </div>
 
             <button class="btn btn-primary mt1" onclick="startGame()" style="width:100%; font-size:1.05rem; padding:1.1rem;">
-                ⚡ Begin Game
+                <i data-lucide="zap" class="icon-sm"></i> Begin Game
             </button>
 
         <div id="teamStandingsPanel" class="mt1">
@@ -1017,28 +1025,28 @@
                 <div class="team-leaderboard">
                     <div class="team-row red" id="lb-red">
                         <div>
-                            <div class="team-name">🔴 Red Thunder</div>
+                            <div class="team-name"><i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i> Red Thunder</div>
                             <div class="team-members" id="members-red">No players yet</div>
                         </div>
                         <div class="team-points" id="pts-red">0</div>
                     </div>
                     <div class="team-row blue" id="lb-blue">
                         <div>
-                            <div class="team-name">🔵 Blue Wave</div>
+                            <div class="team-name"><i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i> Blue Wave</div>
                             <div class="team-members" id="members-blue">No players yet</div>
                         </div>
                         <div class="team-points" id="pts-blue">0</div>
                     </div>
                     <div class="team-row green" id="lb-green">
                         <div>
-                            <div class="team-name">🟢 Green Storm</div>
+                            <div class="team-name"><i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i> Green Storm</div>
                             <div class="team-members" id="members-green">No players yet</div>
                         </div>
                         <div class="team-points" id="pts-green">0</div>
                     </div>
                     <div class="team-row gold" id="lb-gold">
                         <div>
-                            <div class="team-name">🟡 Gold Flash</div>
+                            <div class="team-name"><i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i> Gold Flash</div>
                             <div class="team-members" id="members-gold">No players yet</div>
                         </div>
                         <div class="team-points" id="pts-gold">0</div>
@@ -1071,7 +1079,7 @@
 
         <!-- Buzz status -->
         <div class="buzzer-status" id="buzzerStatus">
-            <div class="buzz-waiting">⚡ Waiting for someone to buzz in...</div>
+            <div class="buzz-waiting"><i data-lucide="zap" class="icon-sm"></i> Waiting for someone to buzz in...</div>
         </div>
 
         <!-- Points selector -->
@@ -1087,25 +1095,25 @@
 
         <!-- Host controls -->
         <div class="host-controls" id="hostControls" style="display:none;">
-            <button class="correct-btn" onclick="markAnswer(true)">✅ Correct! Award Points</button>
-            <button class="wrong-btn" onclick="markAnswer(false)">❌ Wrong — Reopen Buzzers</button>
+            <button class="correct-btn" onclick="markAnswer(true)"><i data-lucide="check-circle" class="icon-sm"></i> Correct! Award Points</button>
+            <button class="wrong-btn" onclick="markAnswer(false)"><i data-lucide="x-circle" class="icon-sm"></i> Wrong — Reopen Buzzers</button>
         </div>
 
         <!-- Navigation -->
         <div class="host-controls">
             <button class="btn btn-outline" id="prevQBtn" onclick="prevQuestion()" style="padding:0.6rem 1.2rem;">← Prev</button>
             <button class="btn btn-primary" id="nextQBtn" onclick="nextQuestion()" style="padding:0.6rem 1.5rem;">Next Question →</button>
-            <button class="btn" onclick="endGame()" style="background: linear-gradient(135deg, #6b21a8, #a855f7); color:white; border:none; padding:0.6rem 1.2rem;">🏆 Results</button>
+            <button class="btn" onclick="endGame()" style="background: linear-gradient(135deg, #6b21a8, #a855f7); color:white; border:none; padding:0.6rem 1.2rem;"><i data-lucide="trophy" class="icon-sm"></i> Results</button>
         </div>
 
         <!-- Live leaderboard — Team -->
         <div class="card mt2" id="teamScoresCard">
             <div class="card-label">Live Scores</div>
             <div class="game-leaderboard">
-                <div class="team-row red"><span>🔴 Red Thunder</span><span class="team-points" id="game-pts-red">0</span></div>
-                <div class="team-row blue"><span>🔵 Blue Wave</span><span class="team-points" id="game-pts-blue">0</span></div>
-                <div class="team-row green"><span>🟢 Green Storm</span><span class="team-points" id="game-pts-green">0</span></div>
-                <div class="team-row gold"><span>🟡 Gold Flash</span><span class="team-points" id="game-pts-gold">0</span></div>
+                <div class="team-row red"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i> Red Thunder</span><span class="team-points" id="game-pts-red">0</span></div>
+                <div class="team-row blue"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i> Blue Wave</span><span class="team-points" id="game-pts-blue">0</span></div>
+                <div class="team-row green"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i> Green Storm</span><span class="team-points" id="game-pts-green">0</span></div>
+                <div class="team-row gold"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i> Gold Flash</span><span class="team-points" id="game-pts-gold">0</span></div>
             </div>
         </div>
 
@@ -1138,23 +1146,23 @@
         <div class="card-label mt1">Pick Your Team</div>
         <div class="team-selector">
             <div class="team-option red" onclick="selectTeam('red', this)">
-                <span class="team-emoji">🔴</span>Red Thunder
+                <span class="team-emoji"><i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i></span>Red Thunder
             </div>
             <div class="team-option blue" onclick="selectTeam('blue', this)">
-                <span class="team-emoji">🔵</span>Blue Wave
+                <span class="team-emoji"><i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i></span>Blue Wave
             </div>
             <div class="team-option green" onclick="selectTeam('green', this)">
-                <span class="team-emoji">🟢</span>Green Storm
+                <span class="team-emoji"><i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i></span>Green Storm
             </div>
             <div class="team-option gold" onclick="selectTeam('gold', this)">
-                <span class="team-emoji">🟡</span>Gold Flash
+                <span class="team-emoji"><i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i></span>Gold Flash
             </div>
         </div>
         </div>
 
         <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
             <button class="btn btn-outline" onclick="showScreen('landingScreen')" style="flex:0 0 auto;">← Back</button>
-            <button class="btn btn-primary" onclick="joinGame()" style="flex:1; font-size:1.05rem; padding:1rem;">⚡ Join Game</button>
+            <button class="btn btn-primary" onclick="joinGame()" style="flex:1; font-size:1.05rem; padding:1rem;"><i data-lucide="zap" class="icon-sm"></i> Join Game</button>
         </div>
 
         <div id="joinError" style="color:var(--wrong-red); text-align:center; margin-top:0.75rem; font-size:0.85rem; min-height:1.2rem;"></div>
@@ -1166,7 +1174,7 @@
 ══════════════════════════════════ -->
 <div id="playerWaitScreen" class="screen flex-screen" style="display:none;">
     <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 180px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
-    <div class="team-crest-big" id="playerCrestBig">⚡</div>
+    <div class="team-crest-big" id="playerCrestBig"><i data-lucide="zap" class="icon-xl" style="color:var(--accent)"></i></div>
     <div class="player-team-name" id="playerTeamNameBig" style="color: var(--accent);"></div>
     <div class="divider"></div>
     <div style="font-size:1rem; color: var(--text-secondary); margin-bottom:0.5rem;" id="playerNameDisplay"></div>
@@ -1193,16 +1201,16 @@
     <!-- Live team scores on player screen -->
     <div id="playerTeamScores" style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-top:2rem;">
         <div style="font-family:'Space Mono',monospace; font-size:0.75rem; text-align:center; color:var(--team-red);">
-            🔴 <span id="p-pts-red">0</span>
+            <i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i> <span id="p-pts-red">0</span>
         </div>
         <div style="font-family:'Space Mono',monospace; font-size:0.75rem; text-align:center; color:var(--team-blue);">
-            🔵 <span id="p-pts-blue">0</span>
+            <i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i> <span id="p-pts-blue">0</span>
         </div>
         <div style="font-family:'Space Mono',monospace; font-size:0.75rem; text-align:center; color:var(--team-green);">
-            🟢 <span id="p-pts-green">0</span>
+            <i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i> <span id="p-pts-green">0</span>
         </div>
         <div style="font-family:'Space Mono',monospace; font-size:0.75rem; text-align:center; color:var(--team-gold);">
-            🟡 <span id="p-pts-gold">0</span>
+            <i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i> <span id="p-pts-gold">0</span>
         </div>
     </div>
 
@@ -1215,11 +1223,11 @@
 ══════════════════════════════════ -->
 <div id="resultsScreen" class="screen" style="display:none;">
     <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
-    <div class="trophy">🏆</div>
+    <div class="trophy"><i data-lucide="trophy" class="icon-xl" style="color:var(--accent)"></i></div>
     <div class="title-main" style="font-size:clamp(1.5rem,4vw,2.5rem);">Final <span>Results</span></div>
     <div class="divider"></div>
     <div class="final-leaderboard" id="finalLeaderboard"></div>
-    <button class="btn btn-primary mt2" onclick="showScreen('landingScreen')" style="padding:1rem 2.5rem;">⚡ Play Again</button>
+    <button class="btn btn-primary mt2" onclick="showScreen('landingScreen')" style="padding:1rem 2.5rem;"><i data-lucide="zap" class="icon-sm"></i> Play Again</button>
 </div>
 
 <!-- Firebase SDK -->
@@ -1252,6 +1260,9 @@
     window.brunTransaction = runTransaction;
     window.firebaseReady = true;
 </script>
+
+<!-- Lucide icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <!-- QR Code lib -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1337,14 +1348,15 @@
 
             if (gameType === 'team' && selectedTeam && teamConfig[selectedTeam]) {
                 const team = teamConfig[selectedTeam];
-                document.getElementById('playerCrestBig').textContent = team.emoji;
+                document.getElementById('playerCrestBig').innerHTML = team.emoji;
                 document.getElementById('playerTeamNameBig').textContent = team.name;
                 document.getElementById('playerTeamNameBig').style.color = team.textColor;
             } else {
-                document.getElementById('playerCrestBig').textContent = '⚡';
+                document.getElementById('playerCrestBig').innerHTML = '<i data-lucide="zap" class="icon-xl" style="color:var(--accent)"></i>';
                 document.getElementById('playerTeamNameBig').textContent = currentPlayer.name;
                 document.getElementById('playerTeamNameBig').style.color = 'var(--accent)';
             }
+            setTimeout(() => lucide.createIcons(), 0);
             document.getElementById('playerNameDisplay').textContent = currentPlayer.name;
 
             showScreen('playerWaitScreen');
@@ -1373,10 +1385,10 @@
     let playerBuzzStateListener = null;
 
     const teamConfig = {
-        red:   { name: 'Red Thunder',  emoji: '🔴', color: 'var(--team-red)',   textColor: 'var(--team-red)' },
-        blue:  { name: 'Blue Wave',    emoji: '🔵', color: 'var(--team-blue)',  textColor: 'var(--team-blue)' },
-        green: { name: 'Green Storm',  emoji: '🟢', color: 'var(--team-green)', textColor: 'var(--team-green)' },
-        gold:  { name: 'Gold Flash',   emoji: '🟡', color: 'var(--team-gold)',  textColor: 'var(--team-gold)' },
+        red:   { name: 'Red Thunder',  emoji: '<i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i>',   color: 'var(--team-red)',   textColor: 'var(--team-red)' },
+        blue:  { name: 'Blue Wave',    emoji: '<i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i>',   color: 'var(--team-blue)',  textColor: 'var(--team-blue)' },
+        green: { name: 'Green Storm',  emoji: '<i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i>', color: 'var(--team-green)', textColor: 'var(--team-green)' },
+        gold:  { name: 'Gold Flash',   emoji: '<i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i>',   color: 'var(--team-gold)',  textColor: 'var(--team-gold)' },
     };
 
     const teamBgColors = {
@@ -1496,7 +1508,8 @@
             if (list.length === 0) {
                 container.innerHTML = '<span style="color:var(--text-muted); font-size:0.85rem;">Waiting for players...</span>';
             } else {
-                container.innerHTML = list.map(p => `<div class="player-chip">${teamConfig[p.team]?.emoji || '⚡'} ${p.name}</div>`).join('');
+                container.innerHTML = list.map(p => `<div class="player-chip">${teamConfig[p.team]?.emoji || '<i data-lucide="zap" class="icon-sm"></i>'} ${p.name}</div>`).join('');
+            setTimeout(() => lucide.createIcons(), 0);
             }
 
             const teamCounts = { red: [], blue: [], green: [], gold: [] };
@@ -1599,8 +1612,9 @@
     }
 
     function resetBuzzUI() {
-        document.getElementById('buzzerStatus').innerHTML = '<div class="buzz-waiting">⚡ Waiting for someone to buzz in...</div>';
+        document.getElementById('buzzerStatus').innerHTML = '<div class="buzz-waiting"><i data-lucide="zap" class="icon-sm"></i> Waiting for someone to buzz in...</div>';
         document.getElementById('hostControls').style.display = 'none';
+        setTimeout(() => lucide.createIcons(), 0);
     }
 
     function listenForBuzz() {
@@ -1623,7 +1637,7 @@
                     subtitle = teamConfig[buzzer.team].name;
                 } else {
                     bg = 'var(--accent-dim)'; border = 'var(--accent)'; textColor = 'var(--accent)';
-                    emoji = '⚡';
+                    emoji = '<i data-lucide="zap" class="icon-sm"></i>';
                     subtitle = 'Buzzed in!';
                 }
 
@@ -1634,6 +1648,7 @@
                     </div>
                 `;
                 document.getElementById('hostControls').style.display = 'flex';
+                setTimeout(() => lucide.createIcons(), 0);
             }
         });
     }
@@ -1662,7 +1677,8 @@
             }
 
             const statusEl = document.getElementById('buzzerStatus');
-            statusEl.innerHTML += `<div style="color:var(--correct-green); font-size:1.1rem; font-weight:600; margin-top:1rem; animation:fadeIn 0.3s ease;">✅ +${pts} points to ${recipientName}!</div>`;
+            statusEl.innerHTML += `<div style="color:var(--correct-green); font-size:1.1rem; font-weight:600; margin-top:1rem; animation:fadeIn 0.3s ease;"><i data-lucide="check-circle" class="icon-sm"></i> +${pts} points to ${recipientName}!</div>`;
+            setTimeout(() => lucide.createIcons(), 0);
 
             setTimeout(async () => {
                 await window.bset(window.bref(window.bdb, `buzzin/${gamePin}/buzzedBy`), null);
@@ -1672,7 +1688,8 @@
             await window.bset(window.bref(window.bdb, `buzzin/${gamePin}/buzzedBy`), null);
             await window.bset(window.bref(window.bdb, `buzzin/${gamePin}/buzzLocked`), false);
             resetBuzzUI();
-            document.getElementById('buzzerStatus').innerHTML = '<div class="buzz-waiting" style="color:var(--wrong-red);">❌ Wrong! Buzzers reopened...</div>';
+            document.getElementById('buzzerStatus').innerHTML = '<div class="buzz-waiting" style="color:var(--wrong-red);"><i data-lucide="x-circle" class="icon-sm"></i> Wrong! Buzzers reopened...</div>';
+        setTimeout(() => lucide.createIcons(), 0);
         }
         document.getElementById('hostControls').style.display = 'none';
     }
@@ -1713,7 +1730,12 @@
     window.endGame = endGame;
 
     async function showResults() {
-        const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣'];
+        const medals = [
+            '<i data-lucide="medal" class="icon-md" style="color:#FFD700"></i>',
+            '<i data-lucide="medal" class="icon-md" style="color:#C0C0C0"></i>',
+            '<i data-lucide="medal" class="icon-md" style="color:#CD7F32"></i>',
+            '4.','5.','6.','7.','8.'
+        ];
 
         if (gameType === 'individual') {
             const snap = await window.bget(window.bref(window.bdb, `buzzin/${gamePin}/playerScores`));
@@ -1722,7 +1744,7 @@
             document.getElementById('finalLeaderboard').innerHTML = sorted.map((p, i) => `
                 <div class="final-row" style="background:var(--bg-card); border:1px solid var(--border); animation-delay:${i*0.15}s;">
                     <span class="rank-medal">${medals[i] || `${i+1}.`}</span>
-                    <span class="final-team-name">⚡ ${p.name}</span>
+                    <span class="final-team-name"><i data-lucide="zap" class="icon-sm"></i> ${p.name}</span>
                     <span class="final-points">${p.score || 0} pts</span>
                 </div>
             `).join('');
@@ -1741,6 +1763,7 @@
 
         showScreen('resultsScreen');
         clearPlayerSession();
+        setTimeout(() => lucide.createIcons(), 0);
     }
 
     // ── PLAYER JOIN ──
@@ -1791,15 +1814,16 @@
                     window.bref(window.bdb, `buzzin/${gamePin}/playerScores/${currentPlayer.id}`),
                     { name, score: 0 }
                 );
-                document.getElementById('playerCrestBig').textContent = '⚡';
+                document.getElementById('playerCrestBig').innerHTML = '<i data-lucide="zap" class="icon-xl" style="color:var(--accent)"></i>';
                 document.getElementById('playerTeamNameBig').textContent = name;
                 document.getElementById('playerTeamNameBig').style.color = 'var(--accent)';
             } else {
                 const team = teamConfig[selectedTeam];
-                document.getElementById('playerCrestBig').textContent = team.emoji;
+                document.getElementById('playerCrestBig').innerHTML = team.emoji;
                 document.getElementById('playerTeamNameBig').textContent = team.name;
                 document.getElementById('playerTeamNameBig').style.color = team.textColor;
             }
+            setTimeout(() => lucide.createIcons(), 0);
             document.getElementById('playerNameDisplay').textContent = name;
 
             showScreen('playerWaitScreen');
@@ -1877,14 +1901,15 @@
             const buzzer = snap.val();
             if (buzzer && buzzer.name) {
                 if (buzzer.id === currentPlayer.id) {
-                    statusEl.textContent = '⚡ You buzzed in!';
+                    statusEl.innerHTML = '<i data-lucide="zap" class="icon-sm"></i> You buzzed in!';
                     btn.disabled = true;
                     btn.classList.remove('locked');
                 } else {
-                    statusEl.textContent = `🔒 Locked — ${teamConfig[buzzer.team]?.emoji} ${buzzer.name} buzzed first!`;
+                    statusEl.innerHTML = `🔒 Locked — ${teamConfig[buzzer.team]?.emoji || ''} ${buzzer.name} buzzed first!`;
                     btn.disabled = true;
                     btn.classList.add('locked');
                 }
+                setTimeout(() => lucide.createIcons(), 0);
             } else {
                 btn.disabled = false;
                 btn.classList.remove('locked');
@@ -1900,7 +1925,8 @@
 
         btn.disabled = true;
         btn.classList.remove('locked');
-        statusEl.textContent = '⚡ Buzzing...';
+        statusEl.innerHTML = '<i data-lucide="zap" class="icon-sm"></i> Buzzing...';
+        setTimeout(() => lucide.createIcons(), 0);
 
         const buzzRef = window.bref(window.bdb, `buzzin/${gamePin}/buzzedBy`);
 
@@ -1923,14 +1949,15 @@
             }
 
             if (winner.id === currentPlayer.id) {
-                statusEl.textContent = '⚡ You buzzed in!';
+                statusEl.innerHTML = '<i data-lucide="zap" class="icon-sm"></i> You buzzed in!';
                 btn.disabled = true;
                 btn.classList.remove('locked');
             } else {
-                statusEl.textContent = `🔒 Locked — ${teamConfig[winner.team]?.emoji} ${winner.name} got there first.`;
+                statusEl.innerHTML = `🔒 Locked — ${teamConfig[winner.team]?.emoji || ''} ${winner.name} got there first.`;
                 btn.disabled = true;
                 btn.classList.add('locked');
             }
+            setTimeout(() => lucide.createIcons(), 0);
         } catch (e) {
             btn.disabled = false;
             btn.classList.remove('locked');
@@ -1940,7 +1967,12 @@
     window.buzzIn = buzzIn;
 
     async function showPlayerResults(data) {
-        const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣'];
+        const medals = [
+            '<i data-lucide="medal" class="icon-md" style="color:#FFD700"></i>',
+            '<i data-lucide="medal" class="icon-md" style="color:#C0C0C0"></i>',
+            '<i data-lucide="medal" class="icon-md" style="color:#CD7F32"></i>',
+            '4.','5.','6.','7.','8.'
+        ];
         const gt = gameType || data?.gameType || 'team';
 
         if (gt === 'individual') {
@@ -1950,7 +1982,7 @@
             document.getElementById('finalLeaderboard').innerHTML = sorted.map((p, i) => `
                 <div class="final-row" style="background:var(--bg-card); border:1px solid var(--border); animation-delay:${i*0.15}s;">
                     <span class="rank-medal">${medals[i] || `${i+1}.`}</span>
-                    <span class="final-team-name">⚡ ${p.name}</span>
+                    <span class="final-team-name"><i data-lucide="zap" class="icon-sm"></i> ${p.name}</span>
                     <span class="final-points">${p.score || 0} pts</span>
                 </div>
             `).join('');
@@ -1969,6 +2001,7 @@
 
         showScreen('resultsScreen');
         clearPlayerSession();
+        setTimeout(() => lucide.createIcons(), 0);
     }
 
     // ── Auto-fill PIN from URL param ──
@@ -1995,6 +2028,8 @@
             if (wrapper) wrapper.style.display = 'none';
         }
     });
+
+    lucide.createIcons();
 
     const urlParams = new URLSearchParams(window.location.search);
     const urlPin = urlParams.get('pin');
