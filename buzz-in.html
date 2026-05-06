@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buzz In! — LetsGetQuizzy</title>
+    <title>Tappy McBuzzBuzz — LetsGetQuizzy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -123,6 +123,20 @@
         @keyframes logoPulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--accent-glow)); }
             50% { transform: scale(1.05); filter: drop-shadow(0 0 40px var(--accent-glow)); }
+        }
+
+        @keyframes logoJitter {
+            0%, 78%, 100% { transform: translate(0, 0) rotate(0deg); }
+            80% { transform: translate(-2px,  1px) rotate(-0.4deg); }
+            82% { transform: translate( 2px, -1px) rotate( 0.4deg); }
+            84% { transform: translate(-1px,  2px) rotate(-0.3deg); }
+            86% { transform: translate( 2px, -2px) rotate( 0.4deg); }
+            88% { transform: translate(-2px,  1px) rotate(-0.4deg); }
+            90% { transform: translate( 1px, -1px) rotate( 0.3deg); }
+            92% { transform: translate(-1px,  2px) rotate(-0.3deg); }
+            94% { transform: translate( 2px,  0px) rotate( 0.4deg); }
+            96% { transform: translate(-1px, -1px) rotate(-0.2deg); }
+            98% { transform: translate( 1px,  1px) rotate( 0.2deg); }
         }
 
         .title-main {
@@ -751,28 +765,28 @@
             width: min(260px, 65vw);
             height: min(260px, 65vw);
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #ff5566, #ff2244, #cc0022);
+            background: radial-gradient(circle at 35% 35%, #66f0ff, #00e5ff, #00b3cc);
             border: none;
             cursor: pointer;
             position: relative;
             transition: all 0.1s ease;
             box-shadow:
-                0 0 0 6px rgba(255,34,68,0.2),
-                0 0 0 12px rgba(255,34,68,0.1),
-                0 16px 50px rgba(255,34,68,0.5),
+                0 0 0 6px rgba(0,229,255,0.2),
+                0 0 0 12px rgba(0,229,255,0.1),
+                0 16px 50px rgba(0,229,255,0.5),
                 inset 0 -6px 16px rgba(0,0,0,0.4),
-                inset 0 6px 16px rgba(255,120,130,0.2);
+                inset 0 6px 16px rgba(150,255,255,0.25);
             animation: buzzPulse 2s ease-in-out infinite;
         }
 
         @keyframes buzzPulse {
-            0%, 100% { box-shadow: 0 0 0 6px rgba(255,34,68,0.2), 0 0 0 12px rgba(255,34,68,0.1), 0 16px 50px rgba(255,34,68,0.5), inset 0 -6px 16px rgba(0,0,0,0.4), inset 0 6px 16px rgba(255,120,130,0.2); }
-            50% { box-shadow: 0 0 0 10px rgba(255,34,68,0.3), 0 0 0 20px rgba(255,34,68,0.15), 0 16px 70px rgba(255,34,68,0.6), inset 0 -6px 16px rgba(0,0,0,0.4), inset 0 6px 16px rgba(255,120,130,0.2); }
+            0%, 100% { box-shadow: 0 0 0 6px rgba(0,229,255,0.2), 0 0 0 12px rgba(0,229,255,0.1), 0 16px 50px rgba(0,229,255,0.5), inset 0 -6px 16px rgba(0,0,0,0.4), inset 0 6px 16px rgba(150,255,255,0.25); }
+            50% { box-shadow: 0 0 0 10px rgba(0,229,255,0.3), 0 0 0 20px rgba(0,229,255,0.15), 0 16px 70px rgba(0,229,255,0.65), inset 0 -6px 16px rgba(0,0,0,0.4), inset 0 6px 16px rgba(150,255,255,0.25); }
         }
 
         .buzz-btn:active:not(:disabled) {
             transform: scale(0.93);
-            box-shadow: 0 0 0 4px rgba(255,34,68,0.3), 0 8px 25px rgba(255,34,68,0.4), inset 0 -4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 0 0 4px rgba(0,229,255,0.35), 0 8px 25px rgba(0,229,255,0.5), inset 0 -4px 10px rgba(0,0,0,0.5);
         }
 
         .buzz-btn:disabled {
@@ -873,8 +887,9 @@
      LANDING — PICK YOUR ROLE
 ══════════════════════════════════ -->
 <div id="landingScreen" class="screen active" style="display:block;">
-    <img src="BuzzIn_logo.jpg" alt="Buzz In!" style="max-width: min(340px, 80vw); margin-bottom: 1rem; animation: logoPulse 3s ease-in-out infinite; filter: drop-shadow(0 0 30px var(--accent-glow));">
-    <div class="title-sub">Real-time team trivia</div>
+    <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: min(280px, 68vw); margin-bottom: 0.5rem; animation: logoJitter 2.5s ease-in-out infinite; filter: drop-shadow(0 0 20px var(--accent-glow));">
+    <div style="font-family:'Space Mono',monospace; font-size:clamp(0.6rem,1.5vw,0.75rem); color:#00e5ff; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:2rem;">The buzzer game that has absolutely no business looking this good.</div>
+
     <div class="divider"></div>
     <div class="role-cards">
         <div class="role-card" onclick="showScreen('hostSetupScreen')">
@@ -896,6 +911,7 @@
 ══════════════════════════════════ -->
 <div id="hostSetupScreen" class="screen" style="display:none;">
     <div class="screen-header">
+        <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
         <div class="screen-title">⚙️ <span>Game Setup</span></div>
         <div class="divider"></div>
     </div>
@@ -910,7 +926,7 @@
                     👥 Team Mode<br><small style="opacity:0.5;">Compete in teams</small>
                 </div>
                 <div class="mode-btn" id="gameTypeBtnIndividual" onclick="setGameType('individual')">
-                    🎯 Individual<br><small style="opacity:0.5;">Every player for themselves</small>
+                    🎯 Single Player<br><small style="opacity:0.5;">Every player for themselves</small>
                 </div>
             </div>
         </div>
@@ -964,11 +980,13 @@
 ══════════════════════════════════ -->
 <div id="hostLobbyScreen" class="screen" style="display:none;">
     <div class="screen-header">
+        <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
         <div class="screen-title">⚡ <span>Waiting for Players</span></div>
         <div class="divider"></div>
     </div>
 
-    <div class="lobby-grid" style="padding: 0 1.5rem 3rem;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem;">
+    <div class="lobby-grid">
         <!-- Left: PIN + QR -->
         <div>
             <div class="card" style="text-align:center;">
@@ -978,8 +996,11 @@
                 <div class="pin-display" id="lobbyPin">—</div>
                 <div id="qrcode"></div>
             </div>
+        </div>
 
-            <div class="card mt1">
+        <!-- Right: Players Joined + Begin Game + Team Standings -->
+        <div>
+            <div class="card">
                 <div class="card-label">Players Joined</div>
                 <div id="lobbyPlayerList" class="players-list">
                     <span style="color:var(--text-muted); font-size:0.85rem;">Waiting for players...</span>
@@ -989,10 +1010,8 @@
             <button class="btn btn-primary mt1" onclick="startGame()" style="width:100%; font-size:1.05rem; padding:1.1rem;">
                 ⚡ Begin Game
             </button>
-        </div>
 
-        <!-- Right: Team Standings -->
-        <div id="teamStandingsPanel">
+        <div id="teamStandingsPanel" class="mt1">
             <div class="card">
                 <div class="card-label">Team Standings</div>
                 <div class="team-leaderboard">
@@ -1027,6 +1046,9 @@
                 </div>
             </div>
         </div>
+
+        </div>
+    </div>
     </div>
 </div>
 
@@ -1037,7 +1059,7 @@
     <div class="game-layout" style="padding: 1.5rem;">
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-            <div class="screen-title" style="font-size:1.1rem;">⚡ <span>Buzz In!</span></div>
+            <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 160px; filter: drop-shadow(0 0 8px var(--accent-glow));">
             <button class="btn btn-outline" onclick="endGame()" style="padding:0.5rem 1rem; font-size:0.8rem;">End Game</button>
         </div>
 
@@ -1100,7 +1122,7 @@
 ══════════════════════════════════ -->
 <div id="playerJoinScreen" class="screen flex-screen" style="display:none;">
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:2.5rem; margin-bottom:0.5rem;">⚡</div>
+        <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
         <div class="screen-title">Join <span>Game</span></div>
         <div class="divider"></div>
     </div>
@@ -1112,7 +1134,7 @@
         <div class="card-label mt1">Your Name</div>
         <input class="input" id="joinName" placeholder="Your name...">
 
-        <div id="teamPickerWrapper">
+        <div id="teamPickerWrapper" style="display:none;">
         <div class="card-label mt1">Pick Your Team</div>
         <div class="team-selector">
             <div class="team-option red" onclick="selectTeam('red', this)">
@@ -1130,9 +1152,10 @@
         </div>
         </div>
 
-        <button class="btn btn-primary" onclick="joinGame()" style="width:100%; font-size:1.05rem; padding:1rem;">
-            ⚡ Join Game
-        </button>
+        <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+            <button class="btn btn-outline" onclick="showScreen('landingScreen')" style="flex:0 0 auto;">← Back</button>
+            <button class="btn btn-primary" onclick="joinGame()" style="flex:1; font-size:1.05rem; padding:1rem;">⚡ Join Game</button>
+        </div>
 
         <div id="joinError" style="color:var(--wrong-red); text-align:center; margin-top:0.75rem; font-size:0.85rem; min-height:1.2rem;"></div>
     </div>
@@ -1142,6 +1165,7 @@
      PLAYER WAITING
 ══════════════════════════════════ -->
 <div id="playerWaitScreen" class="screen flex-screen" style="display:none;">
+    <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 180px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
     <div class="team-crest-big" id="playerCrestBig">⚡</div>
     <div class="player-team-name" id="playerTeamNameBig" style="color: var(--accent);"></div>
     <div class="divider"></div>
@@ -1153,6 +1177,7 @@
      PLAYER BUZZ SCREEN
 ══════════════════════════════════ -->
 <div id="playerBuzzScreen" class="screen flex-screen" style="display:none;">
+    <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 90px; margin-bottom: 0.75rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
     <div style="font-family:'Space Mono',monospace; font-size:0.75rem; color: var(--accent); letter-spacing:0.1em; margin-bottom:0.5rem; text-transform:uppercase;" id="buzzQuestionNum">QUESTION 1</div>
 
     <div class="question-for-player" id="buzzQuestionText" style="display:none;"></div>
@@ -1189,6 +1214,7 @@
      RESULTS
 ══════════════════════════════════ -->
 <div id="resultsScreen" class="screen" style="display:none;">
+    <img src="tappy_logo.png" alt="Tappy McBuzzBuzz" style="max-width: 200px; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px var(--accent-glow));">
     <div class="trophy">🏆</div>
     <div class="title-main" style="font-size:clamp(1.5rem,4vw,2.5rem);">Final <span>Results</span></div>
     <div class="divider"></div>
@@ -1260,10 +1286,13 @@
     }
 
     window.addEventListener('popstate', () => {
-        window.history.pushState(
-            { buzzinGuard: true, appScreen: document.querySelector('.screen.active')?.id || 'landingScreen' },
-            ''
-        );
+        const current = document.querySelector('.screen.active')?.id;
+        if (current === 'hostSetupScreen' || current === 'playerJoinScreen') {
+            showScreen('landingScreen');
+            window.history.pushState({ buzzinGuard: true, appScreen: 'landingScreen' }, '');
+        } else {
+            window.history.pushState({ buzzinGuard: true, appScreen: current || 'landingScreen' }, '');
+        }
     });
 
     // ── Session persistence ──
@@ -1740,6 +1769,8 @@
             if (gameData.status !== 'lobby') { errEl.textContent = 'This game has already started!'; return; }
 
             gameType = gameData.gameType || 'team';
+            const wrapper = document.getElementById('teamPickerWrapper');
+            if (wrapper) wrapper.style.display = gameType === 'team' ? '' : 'none';
 
             if (gameType === 'team' && !selectedTeam) {
                 errEl.textContent = 'Please pick a team.';
@@ -1951,6 +1982,18 @@
             }
         } catch(e) { /* ignore */ }
     }
+
+    // Auto-hide team picker when a 6-digit PIN is typed manually
+    document.getElementById('joinPin').addEventListener('input', function() {
+        const val = this.value.trim();
+        if (val.length === 6) {
+            prefetchGameType(val);
+        } else {
+            gameType = 'team';
+            const wrapper = document.getElementById('teamPickerWrapper');
+            if (wrapper) wrapper.style.display = 'none';
+        }
+    });
 
     const urlParams = new URLSearchParams(window.location.search);
     const urlPin = urlParams.get('pin');
