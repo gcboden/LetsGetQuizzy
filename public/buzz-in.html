@@ -1046,7 +1046,12 @@
 
         <div id="teamStandingsPanel" class="mt1">
             <div class="card">
-                <div class="card-label">Team Standings</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.9rem;">
+                    <div class="card-label" style="margin-bottom:0;">Team Standings</div>
+                    <button class="btn btn-outline" id="editTeamNamesBtn" onclick="toggleTeamNameEdit()" style="padding:0.3rem 0.6rem; font-size:0.75rem;">
+                        <i data-lucide="pencil" class="icon-sm"></i> Edit Names
+                    </button>
+                </div>
                 <div class="team-leaderboard">
                     <div class="team-row red" id="lb-red">
                         <div>
@@ -1135,10 +1140,10 @@
         <div class="card mt2" id="teamScoresCard">
             <div class="card-label">Live Scores</div>
             <div class="game-leaderboard">
-                <div class="team-row red"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i> Red Thunder</span><span class="team-points" id="game-pts-red">0</span></div>
-                <div class="team-row blue"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i> Blue Wave</span><span class="team-points" id="game-pts-blue">0</span></div>
-                <div class="team-row green"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i> Green Storm</span><span class="team-points" id="game-pts-green">0</span></div>
-                <div class="team-row gold"><span><i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i> Gold Flash</span><span class="team-points" id="game-pts-gold">0</span></div>
+                <div class="team-row red"><span id="game-name-red"><i data-lucide="circle" class="icon-sm" style="color:var(--team-red);fill:var(--team-red)"></i> Red Thunder</span><span class="team-points" id="game-pts-red">0</span></div>
+                <div class="team-row blue"><span id="game-name-blue"><i data-lucide="circle" class="icon-sm" style="color:var(--team-blue);fill:var(--team-blue)"></i> Blue Wave</span><span class="team-points" id="game-pts-blue">0</span></div>
+                <div class="team-row green"><span id="game-name-green"><i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i> Green Storm</span><span class="team-points" id="game-pts-green">0</span></div>
+                <div class="team-row gold"><span id="game-name-gold"><i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i> Gold Flash</span><span class="team-points" id="game-pts-gold">0</span></div>
             </div>
         </div>
 
@@ -1374,7 +1379,7 @@
             if (gameType === 'team' && selectedTeam && teamConfig[selectedTeam]) {
                 const team = teamConfig[selectedTeam];
                 document.getElementById('playerCrestBig').innerHTML = team.emoji;
-                document.getElementById('playerTeamNameBig').textContent = team.name;
+                document.getElementById('playerTeamNameBig').textContent = getTeamDisplayName(selectedTeam);
                 document.getElementById('playerTeamNameBig').style.color = team.textColor;
             } else {
                 document.getElementById('playerCrestBig').innerHTML = '<i data-lucide="zap" class="icon-xl" style="color:var(--accent)"></i>';
@@ -1415,6 +1420,51 @@
         green: { name: 'Green Storm',  emoji: '<i data-lucide="circle" class="icon-sm" style="color:var(--team-green);fill:var(--team-green)"></i>', color: 'var(--team-green)', textColor: 'var(--team-green)' },
         gold:  { name: 'Gold Flash',   emoji: '<i data-lucide="circle" class="icon-sm" style="color:var(--team-gold);fill:var(--team-gold)"></i>',   color: 'var(--team-gold)',  textColor: 'var(--team-gold)' },
     };
+
+    let isEditingTeamNames = false;
+    const customTeamNames = { red: '', blue: '', green: '', gold: '' };
+
+    function getTeamDisplayName(team) {
+        return customTeamNames[team] || teamConfig[team].name;
+    }
+    window.getTeamDisplayName = getTeamDisplayName;
+
+    function updateTeamNameDisplays() {
+        ['red','blue','green','gold'].forEach(team => {
+            const lobbyEl = document.querySelector(`#lb-${team} .team-name`);
+            if (lobbyEl) lobbyEl.innerHTML = `${teamConfig[team].emoji} ${getTeamDisplayName(team)}`;
+            const gameEl = document.getElementById(`game-name-${team}`);
+            if (gameEl) gameEl.innerHTML = `${teamConfig[team].emoji} ${getTeamDisplayName(team)}`;
+        });
+        lucide.createIcons();
+    }
+    window.updateTeamNameDisplays = updateTeamNameDisplays;
+
+    function toggleTeamNameEdit() {
+        isEditingTeamNames = !isEditingTeamNames;
+        const btn = document.getElementById('editTeamNamesBtn');
+
+        if (isEditingTeamNames) {
+            btn.innerHTML = '<i data-lucide="save" class="icon-sm"></i> Save';
+            ['red','blue','green','gold'].forEach(team => {
+                const nameEl = document.querySelector(`#lb-${team} .team-name`);
+                const currentName = customTeamNames[team] || teamConfig[team].name;
+                nameEl.innerHTML = `<input class="input" value="${currentName}" id="edit-name-${team}" style="margin:0; padding:0.4rem 0.6rem; font-size:0.85rem; width:140px;">`;
+            });
+        } else {
+            ['red','blue','green','gold'].forEach(team => {
+                const input = document.getElementById(`edit-name-${team}`);
+                if (input && input.value.trim()) {
+                    customTeamNames[team] = input.value.trim();
+                }
+            });
+            window.bset(window.bref(window.bdb, `buzzin/${gamePin}/teamNames`), { ...customTeamNames });
+            updateTeamNameDisplays();
+            btn.innerHTML = '<i data-lucide="pencil" class="icon-sm"></i> Edit Names';
+        }
+        lucide.createIcons();
+    }
+    window.toggleTeamNameEdit = toggleTeamNameEdit;
 
     const teamBgColors = {
         red:   'var(--team-red-bg)',
@@ -1633,6 +1683,7 @@
         }
 
         resetBuzzUI();
+        updateTeamNameDisplays();
         listenForBuzz();
     }
 
@@ -1659,7 +1710,7 @@
                     const c = colors[buzzer.team];
                     bg = c.bg; border = c.border; textColor = c.text;
                     emoji = teamConfig[buzzer.team].emoji;
-                    subtitle = teamConfig[buzzer.team].name;
+                    subtitle = getTeamDisplayName(buzzer.team);
                 } else {
                     bg = 'var(--accent-dim)'; border = 'var(--accent)'; textColor = 'var(--accent)';
                     emoji = '<i data-lucide="zap" class="icon-sm"></i>';
@@ -1698,7 +1749,7 @@
                 const currentSnap = await window.bget(teamRef);
                 const current = currentSnap.val() || 0;
                 await window.bset(teamRef, current + pts);
-                recipientName = teamConfig[buzzer.team]?.name || buzzer.name;
+                recipientName = getTeamDisplayName(buzzer.team) || buzzer.name;
             }
 
             const statusEl = document.getElementById('buzzerStatus');
@@ -1780,7 +1831,7 @@
             document.getElementById('finalLeaderboard').innerHTML = sorted.map(([team, points], i) => `
                 <div class="final-row ${team}" style="background:${teamBgColors[team]}; border:1px solid ${teamBorderColors[team]}; animation-delay:${i*0.15}s;">
                     <span class="rank-medal">${medals[i]}</span>
-                    <span class="final-team-name">${teamConfig[team].emoji} ${teamConfig[team].name}</span>
+                    <span class="final-team-name">${teamConfig[team].emoji} ${getTeamDisplayName(team)}</span>
                     <span class="final-points">${points} pts</span>
                 </div>
             `).join('');
@@ -1845,7 +1896,7 @@
             } else {
                 const team = teamConfig[selectedTeam];
                 document.getElementById('playerCrestBig').innerHTML = team.emoji;
-                document.getElementById('playerTeamNameBig').textContent = team.name;
+                document.getElementById('playerTeamNameBig').textContent = getTeamDisplayName(selectedTeam);
                 document.getElementById('playerTeamNameBig').style.color = team.textColor;
             }
             setTimeout(() => lucide.createIcons(), 0);
@@ -1873,6 +1924,7 @@
             }
 
             gameType = data.gameType || 'team';
+            if (data.teamNames) Object.assign(customTeamNames, data.teamNames);
 
             if (data.status === 'playing') {
                 currentQuestionIndex = data.currentQuestion || 0;
@@ -2018,7 +2070,7 @@
             document.getElementById('finalLeaderboard').innerHTML = sorted.map(([team, points], i) => `
                 <div class="final-row ${team}" style="background:${teamBgColors[team]}; border:1px solid ${teamBorderColors[team]}; animation-delay:${i*0.15}s;">
                     <span class="rank-medal">${medals[i]}</span>
-                    <span class="final-team-name">${teamConfig[team].emoji} ${teamConfig[team].name}</span>
+                    <span class="final-team-name">${teamConfig[team].emoji} ${getTeamDisplayName(team)}</span>
                     <span class="final-points">${points} pts</span>
                 </div>
             `).join('');
@@ -2034,10 +2086,24 @@
         try {
             const snap = await window.bget(window.bref(window.bdb, `buzzin/${pin}`));
             if (snap.exists()) {
-                const fetched = snap.val().gameType || 'team';
+                const data = snap.val();
+                const fetched = data.gameType || 'team';
                 gameType = fetched;
                 const wrapper = document.getElementById('teamPickerWrapper');
                 if (wrapper) wrapper.style.display = fetched === 'team' ? '' : 'none';
+                if (data.teamNames) {
+                    Object.assign(customTeamNames, data.teamNames);
+                    document.querySelectorAll('.team-option').forEach(el => {
+                        const team = el.onclick?.toString().match(/'(\w+)'/)?.[1];
+                        if (team && customTeamNames[team]) {
+                            const emojiSpan = el.querySelector('.team-emoji');
+                            el.innerHTML = '';
+                            if (emojiSpan) el.appendChild(emojiSpan);
+                            el.appendChild(document.createTextNode(customTeamNames[team]));
+                            lucide.createIcons();
+                        }
+                    });
+                }
             }
         } catch(e) { /* ignore */ }
     }
