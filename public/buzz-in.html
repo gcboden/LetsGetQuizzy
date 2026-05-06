@@ -576,9 +576,9 @@
         }
 
         .correct-btn {
-            background: linear-gradient(135deg, #00a86b, #00d68f);
-            color: white;
-            border: none;
+            background: rgba(0, 214, 143, 0.1);
+            color: var(--correct-green);
+            border: 1px solid rgba(0, 214, 143, 0.4);
             padding: 0.9rem 2rem;
             border-radius: 10px;
             font-family: 'Outfit', sans-serif;
@@ -586,15 +586,20 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(0,214,143,0.3);
+            box-shadow: 0 0 15px rgba(0, 214, 143, 0.1);
         }
 
-        .correct-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,214,143,0.4); }
+        .correct-btn:hover {
+            background: rgba(0, 214, 143, 0.18);
+            border-color: rgba(0, 214, 143, 0.6);
+            box-shadow: 0 0 25px rgba(0, 214, 143, 0.2);
+            transform: translateY(-2px);
+        }
 
         .wrong-btn {
-            background: linear-gradient(135deg, #cc0022, #ff3b5c);
-            color: white;
-            border: none;
+            background: rgba(255, 59, 92, 0.1);
+            color: var(--wrong-red);
+            border: 1px solid rgba(255, 59, 92, 0.4);
             padding: 0.9rem 2rem;
             border-radius: 10px;
             font-family: 'Outfit', sans-serif;
@@ -602,10 +607,30 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(255,59,92,0.3);
+            box-shadow: 0 0 15px rgba(255, 59, 92, 0.1);
         }
 
-        .wrong-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,59,92,0.4); }
+        .wrong-btn:hover {
+            background: rgba(255, 59, 92, 0.18);
+            border-color: rgba(255, 59, 92, 0.6);
+            box-shadow: 0 0 25px rgba(255, 59, 92, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .results-btn {
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--accent);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.08);
+            transition: all 0.2s;
+        }
+
+        .results-btn:hover {
+            background: rgba(0, 229, 255, 0.15);
+            border-color: rgba(0, 229, 255, 0.5);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.15);
+            transform: translateY(-2px);
+        }
 
         .points-selector {
             display: flex;
@@ -1103,7 +1128,7 @@
         <div class="host-controls">
             <button class="btn btn-outline" id="prevQBtn" onclick="prevQuestion()" style="padding:0.6rem 1.2rem;">← Prev</button>
             <button class="btn btn-primary" id="nextQBtn" onclick="nextQuestion()" style="padding:0.6rem 1.5rem;">Next Question →</button>
-            <button class="btn" onclick="endGame()" style="background: linear-gradient(135deg, #6b21a8, #a855f7); color:white; border:none; padding:0.6rem 1.2rem;"><i data-lucide="trophy" class="icon-sm"></i> Results</button>
+            <button class="btn results-btn" onclick="endGame()" style="padding:0.6rem 1.2rem;"><i data-lucide="trophy" class="icon-sm"></i> Results</button>
         </div>
 
         <!-- Live leaderboard — Team -->
