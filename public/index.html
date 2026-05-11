@@ -1379,6 +1379,7 @@
         #landingScreen .btn-dark-ghost{background:rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(4px)}
         #landingScreen .btn-dark-ghost:hover{background:rgba(255,255,255,.15)}
         #landingScreen .hide-mobile{display:none}
+        #landingScreen h1,#landingScreen h2,#landingScreen h3{text-align:left}
         @media(min-width:768px){
             #landingScreen .nav-links{display:flex}
             #landingScreen .hide-mobile{display:inline-flex!important}
@@ -1550,8 +1551,7 @@
     <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊</button>
 
     <div class="stars" id="stars"></div>
-    <div class="container">
-        <!-- Landing Page (Pre-Login) -->
+    <!-- Landing Page (Pre-Login) -->
         <div id="landingScreen" class="screen active">
 
 <header class="nav">
@@ -1692,6 +1692,7 @@
 
         </div>
 
+    <div class="container">
         <!-- Login Screen -->
         <div id="loginScreen" class="screen">
             <div style="display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh;">
