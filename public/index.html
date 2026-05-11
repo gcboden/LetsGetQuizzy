@@ -419,7 +419,7 @@
             border: 3px solid #E0E0E0;
             border-radius: 12px;
             font-size: 1.2rem;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'SN Pro', sans-serif;
             text-align: center;
             transition: all 0.3s ease;
         }
@@ -1137,90 +1137,6 @@
                 padding-top: 70px;
             }
             
-            /* Landing Page Mobile Nav */
-            #landingNav {
-                padding: 0 !important;
-            }
-
-            /* Show hamburger on mobile, hide desktop centered links */
-            #landingHamburger {
-                display: flex !important;
-            }
-
-            #landingNav #landingNavLinks {
-                position: fixed !important;
-                top: 0 !important;
-                right: -100% !important;
-                left: auto !important;
-                transform: none !important;
-                width: 260px !important;
-                height: 100vh !important;
-                background: white !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                padding: 4rem 1.5rem 2rem !important;
-                box-shadow: -4px 0 24px rgba(0,0,0,0.18) !important;
-                transition: right 0.3s ease !important;
-                z-index: 998 !important;
-                gap: 0 !important;
-            }
-
-            #landingNav #landingNavLinks.active {
-                right: 0 !important;
-            }
-
-            #landingNav #landingNavLinks a {
-                color: #333 !important;
-                text-shadow: none !important;
-                width: 100% !important;
-                text-align: left !important;
-                padding: 1rem !important;
-                border-radius: 8px !important;
-                margin-bottom: 0.5rem !important;
-            }
-
-            #landingNav #landingNavLinks button {
-                width: 100% !important;
-                text-align: center !important;
-                margin-top: 0.5rem !important;
-            }
-
-            /* Hide right-side spacer on mobile */
-            #landingNav > div > div:last-of-type:not(#landingNavLinks):not(#landingHamburger) {
-                display: none !important;
-            }
-
-            /* Hide scroll-reveal logo on mobile (hero logo is enough) */
-            #landingNavLogo {
-                display: none !important;
-            }
-            
-            /* Landing Page Hero - Mobile Optimized */
-            #landingScreen h1 {
-                font-size: 2rem !important;
-                line-height: 1.2 !important;
-                margin-bottom: 1rem !important;
-            }
-            
-            #landingScreen p {
-                font-size: 1rem !important;
-                margin-bottom: 1rem !important;
-            }
-            
-            /* CTA Buttons - Above the Fold on Mobile */
-            #landingScreen > div:nth-child(2) {
-                min-height: 100vh !important;
-                padding: 1rem !important;
-                justify-content: flex-start !important;
-                padding-top: 40px !important;
-            }
-            
-            #landingScreen button:not(#landingNavLinks button) {
-                padding: 1rem 2rem !important;
-                font-size: 1rem !important;
-                width: 100%;
-                max-width: 300px;
-            }
             
             /* Dashboard Mobile Nav */
             #homeScreen nav {
@@ -1428,6 +1344,162 @@
             }
         }
     </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* ═══════════════════════════════════════════
+           LANDING PAGE — scoped to #landingScreen
+           ═══════════════════════════════════════════ */
+        #landingScreen {
+            --blue: #0d70ff; --blue-hover: #0a5cd6; --blue-light: #6cc8fa;
+            --orange: #ff6700; --amber: #ff9e01; --purple: #8b5cf6;
+            --green: #10b981; --dark: #0f172a;
+            --text: #334155; --text-light: #64748b; --text-muted: #94a3b8; --border: #e2e8f0;
+        }
+        #landingScreen .container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
+        #landingScreen .text-white{color:#fff}
+        /* NAV */
+        #landingScreen .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(226,232,240,0.7)}
+        #landingScreen .nav .container{height:7rem;display:flex;align-items:center;justify-content:space-between}
+        #landingScreen .nav-logo{height:5.5rem;width:auto}
+        #landingScreen .nav-links{display:none;align-items:center;gap:2rem;font-size:.875rem;color:var(--text-light);list-style:none}
+        #landingScreen .nav-links a{text-decoration:none;color:inherit;transition:color .2s}
+        #landingScreen .nav-links a:hover{color:var(--dark)}
+        #landingScreen .nav-btns{display:flex;align-items:center;gap:.75rem}
+        #landingScreen .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-family:'SN Pro',sans-serif;font-weight:500;cursor:pointer;transition:all .2s;border:none;text-decoration:none}
+        #landingScreen .btn-pill{border-radius:9999px;height:2.75rem;padding:0 1.5rem;font-size:.875rem}
+        #landingScreen .btn-pill-lg{border-radius:9999px;height:3rem;padding:0 1.5rem;font-size:1rem}
+        #landingScreen .btn-blue{background:var(--blue);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+        #landingScreen .btn-blue:hover{background:var(--blue-hover)}
+        #landingScreen .btn-light-blue{background:var(--blue-light);color:var(--dark)}
+        #landingScreen .btn-light-blue:hover{background:#5bbceb}
+        #landingScreen .btn-outline-orange{background:transparent;color:var(--orange);border:2px solid var(--orange)}
+        #landingScreen .btn-outline-orange:hover{background:rgba(255,103,0,.1)}
+        #landingScreen .btn-ghost{background:#fff;color:var(--text);border:1px solid var(--border)}
+        #landingScreen .btn-ghost:hover{background:#f8fafc;border-color:#cbd5e1}
+        #landingScreen .btn-dark-ghost{background:rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(4px)}
+        #landingScreen .btn-dark-ghost:hover{background:rgba(255,255,255,.15)}
+        #landingScreen .hide-mobile{display:none}
+        @media(min-width:768px){
+            #landingScreen .nav-links{display:flex}
+            #landingScreen .hide-mobile{display:inline-flex!important}
+        }
+        /* HERO */
+        #landingScreen .hero{position:relative;z-index:10;overflow:hidden}
+        #landingScreen .hero-glow-1{position:absolute;top:-6rem;right:-6rem;width:480px;height:480px;border-radius:50%;background:rgba(13,112,255,.1);filter:blur(80px);pointer-events:none}
+        #landingScreen .hero-glow-2{position:absolute;top:10rem;left:-8rem;width:420px;height:420px;border-radius:50%;background:rgba(255,158,1,.15);filter:blur(80px);pointer-events:none}
+        #landingScreen .hero .container{position:relative;padding-top:5rem;padding-bottom:6rem;display:grid;gap:1rem;align-items:center}
+        #landingScreen .hero-content{position:relative;z-index:2}
+        #landingScreen .hero-badge{display:inline-flex;align-items:center;gap:.5rem;height:2rem;padding:0 .75rem;border-radius:9999px;background:rgba(13,112,255,.1);color:var(--blue);font-size:.75rem;font-weight:500}
+        #landingScreen .hero h1{margin-top:1.5rem;font-size:clamp(2.5rem,5vw,4rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--dark)}
+        #landingScreen .hero h1 .hl-blue{color:var(--blue-light)}
+        #landingScreen .hero h1 .hl-underline{position:relative;display:inline-block}
+        #landingScreen .hero h1 .hl-underline::after{content:'';position:absolute;left:0;right:0;bottom:.15em;height:.2em;background:var(--orange);border-radius:4px;z-index:-1}
+        #landingScreen .hero-sub{margin-top:1.5rem;max-width:36rem;font-size:1.125rem;line-height:1.6;color:var(--text-light)}
+        #landingScreen .hero-buttons{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem}
+        #landingScreen .hero-meta{margin-top:2.5rem;display:flex;align-items:center;gap:1.5rem;font-size:.875rem;color:var(--text-muted)}
+        #landingScreen .hero-meta-item{display:flex;align-items:center;gap:.5rem}
+        #landingScreen .hero-meta-sep{width:1px;height:1rem;background:var(--border)}
+        #landingScreen .hero-image{position:relative;z-index:1}
+        #landingScreen .hero-image img{width:100%;height:auto}
+        @media(min-width:1024px){
+            #landingScreen .hero .container{grid-template-columns:1fr 1fr}
+            #landingScreen .hero-image{transform:scale(1.25);transform-origin:bottom left;margin-bottom:-6rem}
+        }
+        /* FEATURES */
+        #landingScreen .features{position:relative;z-index:0;padding-top:8rem;padding-bottom:6rem;margin-top:-16rem}
+        #landingScreen .features-bg{position:absolute;inset:0;z-index:-1;display:flex;flex-direction:column;overflow:hidden}
+        #landingScreen .features-bg img{width:100%;height:auto;flex-shrink:0}
+        #landingScreen .features-bg-fill{flex-grow:1;background:var(--blue);margin-top:-2px}
+        #landingScreen .features-inner{position:relative;padding-top:16rem}
+        #landingScreen .section-tag{font-size:.875rem;font-weight:600}
+        #landingScreen .tag-amber{color:var(--amber)}
+        #landingScreen .section-title{margin-top:.75rem;font-size:clamp(2rem,3.5vw,2.75rem);font-weight:700;line-height:1.1;letter-spacing:-.02em}
+        #landingScreen .section-sub{margin-top:1rem;font-size:1.0625rem;line-height:1.6}
+        #landingScreen .features-grid{margin-top:3.5rem;display:grid;gap:1.25rem}
+        #landingScreen .f-card{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.5rem;transition:all .2s}
+        #landingScreen .f-card:hover{transform:translateY(-4px);border-color:#cbd5e1;box-shadow:0 10px 25px rgba(15,23,42,.05)}
+        #landingScreen .f-icon{width:2.75rem;height:2.75rem;border-radius:.75rem;display:inline-flex;align-items:center;justify-content:center;margin-bottom:1.25rem}
+        #landingScreen .f-card h3{font-size:1rem;font-weight:600;color:var(--dark)}
+        #landingScreen .f-card p{margin-top:.5rem;font-size:.875rem;line-height:1.55;color:var(--text-light)}
+        @media(min-width:640px){#landingScreen .features-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(min-width:1024px){#landingScreen .features-grid{grid-template-columns:repeat(4,1fr)}}
+        /* HOW IT WORKS */
+        #landingScreen .how{padding:6rem 0}
+        #landingScreen .how-header{display:grid;gap:3rem}
+        #landingScreen .how-steps{margin-top:3.5rem;display:grid;gap:1.25rem}
+        #landingScreen .s-card{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.75rem}
+        #landingScreen .s-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+        #landingScreen .s-num{font-size:2.5rem;font-weight:700;line-height:1;color:#cbd5e1;letter-spacing:-.02em}
+        #landingScreen .s-badge{width:2.25rem;height:2.25rem;border-radius:50%;background:rgba(13,112,255,.1);color:var(--blue);display:inline-flex;align-items:center;justify-content:center;font-size:.875rem;font-weight:600}
+        #landingScreen .s-card h3{font-size:1.125rem;font-weight:600;color:var(--dark)}
+        #landingScreen .s-card p{margin-top:.5rem;line-height:1.55;color:var(--text-light)}
+        #landingScreen .stats{margin-top:3.5rem;display:grid;gap:1.25rem}
+        #landingScreen .stat{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.75rem}
+        #landingScreen .stat-val{font-size:2.5rem;font-weight:700;line-height:1;color:var(--dark);letter-spacing:-.02em}
+        #landingScreen .stat-lbl{margin-top:.5rem;font-size:.875rem;color:var(--text-muted)}
+        @media(min-width:768px){#landingScreen .how-steps,#landingScreen .stats{grid-template-columns:repeat(3,1fr)}}
+        @media(min-width:1024px){#landingScreen .how-header{grid-template-columns:1fr 1fr;align-items:end}}
+        /* AUDIENCES */
+        #landingScreen .audiences{position:relative;padding:6rem 0;background:var(--orange);margin:3rem 0}
+        #landingScreen .aud-wave-top,#landingScreen .aud-wave-bottom{position:absolute;left:0;width:100%;overflow:hidden;line-height:0}
+        #landingScreen .aud-wave-top{top:0;transform:translateY(-100%)}
+        #landingScreen .aud-wave-bottom{bottom:0;transform:translateY(100%)}
+        #landingScreen .aud-wave-bottom svg{transform:rotate(180deg)}
+        #landingScreen .aud-wave-top svg,#landingScreen .aud-wave-bottom svg{display:block;width:100%;height:2.5rem}
+        #landingScreen .a-card{background:#fff;border:1px solid var(--border);border-radius:1rem;padding:1.75rem;transition:all .2s}
+        #landingScreen .a-card:hover{border-color:#cbd5e1;box-shadow:0 10px 25px rgba(15,23,42,.05)}
+        #landingScreen .a-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+        #landingScreen .a-tag{display:inline-flex;align-items:center;gap:.5rem;height:2rem;padding:0 .75rem;border-radius:9999px;font-size:.75rem;font-weight:600}
+        #landingScreen .a-card h3{font-size:1.25rem;font-weight:600;line-height:1.3;color:var(--dark)}
+        #landingScreen .a-card p{margin-top:.75rem;line-height:1.55;color:var(--text-light)}
+        #landingScreen .aud-grid{margin-top:3.5rem;display:grid;gap:1.25rem}
+        @media(min-width:768px){
+            #landingScreen .aud-grid{grid-template-columns:repeat(3,1fr)}
+            #landingScreen .aud-wave-top svg,#landingScreen .aud-wave-bottom svg{height:3rem}
+        }
+        /* CTA */
+        #landingScreen .cta-section{padding:6rem 0}
+        #landingScreen .cta-box{position:relative;overflow:hidden;border-radius:1.5rem;background:var(--dark);color:#fff;padding:2.5rem}
+        #landingScreen .cta-glow-1{position:absolute;top:-5rem;right:-5rem;width:18rem;height:18rem;border-radius:50%;background:rgba(13,112,255,.4);filter:blur(60px);pointer-events:none}
+        #landingScreen .cta-glow-2{position:absolute;bottom:-6rem;left:-2.5rem;width:18rem;height:18rem;border-radius:50%;background:rgba(255,158,1,.3);filter:blur(60px);pointer-events:none}
+        #landingScreen .cta-inner{position:relative;display:grid;gap:2.5rem;align-items:center}
+        #landingScreen .cta-box h2{font-size:clamp(1.875rem,3vw,2.5rem);font-weight:700;line-height:1.1;letter-spacing:-.02em}
+        #landingScreen .cta-box h2 span{color:var(--amber)}
+        #landingScreen .cta-sub{margin-top:1rem;color:#94a3b8;line-height:1.6}
+        #landingScreen .cta-btns{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:.75rem}
+        #landingScreen .cta-form{background:#fff;color:var(--text);border-radius:1rem;padding:1.5rem;box-shadow:0 20px 40px rgba(0,0,0,.2)}
+        #landingScreen .cta-form-lbl{font-size:.875rem;color:var(--text-muted);margin-bottom:.5rem}
+        #landingScreen .cta-form-row{display:flex;gap:.5rem}
+        #landingScreen .cta-form input{flex:1;height:3rem;padding:0 1rem;border-radius:.75rem;border:1px solid var(--border);font-family:'SN Pro',sans-serif;font-size:1.125rem;letter-spacing:.15em;outline:none;transition:border-color .2s,box-shadow .2s}
+        #landingScreen .cta-form input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(13,112,255,.15)}
+        #landingScreen .cta-form .btn-sub{height:3rem;padding:0 1.25rem;border-radius:.75rem;background:var(--blue);color:#fff;border:none;font-family:'SN Pro',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s}
+        #landingScreen .cta-form .btn-sub:hover{background:var(--blue-hover)}
+        #landingScreen .cta-form-hint{margin-top:.75rem;font-size:.75rem;color:var(--text-muted)}
+        @media(min-width:640px){#landingScreen .cta-box{padding:3.5rem}}
+        @media(min-width:768px){#landingScreen .cta-inner{grid-template-columns:1fr 1fr}}
+        /* FOOTER */
+        #landingScreen .footer{border-top:1px solid var(--border);background:#fff}
+        #landingScreen .footer-grid{padding:3rem 0;display:grid;gap:2rem;font-size:.875rem}
+        #landingScreen .footer-brand p{margin-top:1rem;color:var(--text-muted);line-height:1.55}
+        #landingScreen .footer-brand img{height:2.25rem;width:auto}
+        #landingScreen .footer-col h4{font-weight:600;color:var(--dark);margin-bottom:.75rem}
+        #landingScreen .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+        #landingScreen .footer-col a{text-decoration:none;color:var(--text-muted);transition:color .2s}
+        #landingScreen .footer-col a:hover{color:var(--dark)}
+        #landingScreen .footer-bot{border-top:1px solid #f1f5f9;padding:1.25rem 0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:.5rem;font-size:.75rem;color:var(--text-muted)}
+        #landingScreen .footer-bot-links{display:flex;gap:1.25rem}
+        #landingScreen .footer-bot-links a{color:inherit;text-decoration:none;transition:color .2s}
+        #landingScreen .footer-bot-links a:hover{color:var(--dark)}
+        @media(min-width:640px){
+            #landingScreen .footer-grid{grid-template-columns:repeat(2,1fr)}
+            #landingScreen .footer-bot{flex-direction:row}
+        }
+        @media(min-width:768px){#landingScreen .footer-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+        #landingScreen .mw-2xl{max-width:42rem}
+        #landingScreen .mw-md{max-width:28rem}
+        #landingScreen .icon-sm{width:1rem;height:1rem}
+        #landingScreen .icon-xs{width:.875rem;height:.875rem}
+    </style>
 </head>
 <body>
     <!-- Header with Logo and Nav -->
@@ -1481,458 +1553,144 @@
     <div class="container">
         <!-- Landing Page (Pre-Login) -->
         <div id="landingScreen" class="screen active">
-            <!-- Landing Page Nav Bar — transparent bar with centered links; logo fades in on scroll -->
-            <nav id="landingNav" style="
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 1000;
-                background: transparent;
-                backdrop-filter: none;
-                -webkit-backdrop-filter: none;
-                transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
-            ">
-                <!-- Inner wrapper: logo left (hidden until scroll), links center, signup right -->
-                <div style="
-                    max-width: 1300px;
-                    margin: 0 auto;
-                    padding: 0 2rem;
-                    height: 66px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    position: relative;
-                ">
-                    <!-- Scroll-reveal logo (left side) — hidden until user scrolls -->
-                    <img id="landingNavLogo"
-                         src="letsgetquizzy_logo.png"
-                         alt="Let's Get Quizzy!"
-                         onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-                         style="
-                             height: 52px;
-                             cursor: pointer;
-                             opacity: 0;
-                             transform: translateX(-10px);
-                             transition: opacity 0.4s ease, transform 0.4s ease;
-                             flex-shrink: 0;
-                         ">
 
-                    <!-- Centered nav links (desktop) -->
-                    <div id="landingNavLinks" style="
-                        position: absolute;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        display: flex;
-                        gap: 2rem;
-                        align-items: center;
-                    ">
-                        <a href="#" onclick="launchHostDemo(); return false;" style="
-                            color: #1a1a2e;
-                            text-decoration: none;
-                            font-weight: 700;
-                            font-size: 1rem;
-                            transition: opacity 0.2s;
-                            text-shadow: none;
-                        " onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
-                            See Demo
-                        </a>
-                        <a href="#" onclick="showScreen('joinScreen'); closeLandingMenu(); return false;" style="
-                            color: #1a1a2e;
-                            text-decoration: none;
-                            font-weight: 700;
-                            font-size: 1rem;
-                            transition: opacity 0.2s;
-                            text-shadow: none;
-                        " onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
-                            Join Game
-                        </a>
-                        <a href="#" onclick="showScreen('loginScreen'); closeLandingMenu(); return false;" style="
-                            color: #1a1a2e;
-                            text-decoration: none;
-                            font-weight: 700;
-                            font-size: 1rem;
-                            transition: opacity 0.2s;
-                            text-shadow: none;
-                        " onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
-                            Log In
-                        </a>
-                        <button onclick="showScreen('signupScreen'); closeLandingMenu();" style="
-                            background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
-                            color: white;
-                            border: none;
-                            padding: 0.6rem 1.4rem;
-                            border-radius: 8px;
-                            font-weight: 700;
-                            font-size: 1rem;
-                            cursor: pointer;
-                            transition: transform 0.2s, box-shadow 0.2s;
-                            box-shadow: 0 4px 12px rgba(13,112,255,0.4);
-                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(13,112,255,0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(13,112,255,0.4)'">
-                            Start Free
-                        </button>
-                    </div>
+<header class="nav">
+    <div class="container">
+        <a href="#"><img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" class="nav-logo"></a>
+        <nav class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#audiences">For teams</a>
+            <a href="#pricing">Pricing</a>
+        </nav>
+        <div class="nav-btns">
+            <button class="btn btn-pill btn-outline-orange hide-mobile" onclick="showScreen('loginScreen')">Log in</button>
+            <button class="btn btn-pill btn-blue" onclick="showScreen('joinScreen')">Join a game</button>
+        </div>
+    </div>
+</header>
 
-                    <!-- Right side spacer (balances logo on left) — desktop only -->
-                    <div style="width: 120px; flex-shrink: 0;"></div>
+<section class="hero">
+    <div class="hero-glow-1" aria-hidden="true"></div>
+    <div class="hero-glow-2" aria-hidden="true"></div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge"><i data-lucide="zap" style="width:14px;height:14px"></i><span>Now with buzz-in trivia mode</span></div>
+            <h1>LIVE quizzes that<br>people <span class="hl-blue">actually</span> <span class="hl-underline">love</span>.</h1>
+            <p class="hero-sub">Run classroom reviews, team meetings, and live events with team play, confidence wagers, power-ups, and a Jeopardy-style buzz-in mode. No app downloads &mdash; just a PIN.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-pill-lg btn-light-blue" onclick="window.currentUser ? showScreen('homeScreen') : showScreen('loginScreen')">Host a quiz <i data-lucide="arrow-right" class="icon-sm"></i></button>
+                <button class="btn btn-pill-lg btn-ghost" onclick="showScreen('loginScreen')"><i data-lucide="log-in" class="icon-sm" style="color:var(--blue)"></i> Log in</button>
+            </div>
+            <div class="hero-meta">
+                <div class="hero-meta-item"><i data-lucide="users" class="icon-sm"></i><span>Free for up to 50 players</span></div>
+                <div class="hero-meta-sep hide-desktop-only"></div>
+                <div class="hero-meta-item hide-desktop-only">No signup for players</div>
+            </div>
+        </div>
+        <div class="hero-image"><img src="landingPage_graphic_2.png" alt="Let's Get Quizzy live game illustration"></div>
+    </div>
+</section>
 
-                    <!-- Hamburger Menu (Mobile Only) -->
-                    <div id="landingHamburger" onclick="toggleLandingMenu()" style="
-                        display: none;
-                        flex-direction: column;
-                        gap: 5px;
-                        cursor: pointer;
-                        z-index: 1001;
-                        padding: 8px;
-                        position: absolute;
-                        right: 1rem;
-                        top: 50%;
-                        transform: translateY(-50%);
-                    ">
-                        <span style="width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
-                        <span style="width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
-                        <span style="width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
-                    </div>
-                </div>
-            </nav>
-            
-            <!-- Hero Section -->
-            <div id="landingHero" style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; padding-top: 80px; position: relative; overflow: hidden; background: transparent;">
-                
-                <!-- Subtle Background Elements -->
-                <div style="position: absolute; top: 10%; left: 5%; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); opacity: 0.06; animation: float 6s ease-in-out infinite;"></div>
-                <div style="position: absolute; bottom: 15%; right: 10%; width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); opacity: 0.06; animation: float 8s ease-in-out infinite reverse;"></div>
+<section class="features" id="features">
+    <div class="features-bg" aria-hidden="true"><img src="blueSection.png" alt=""><div class="features-bg-fill"></div></div>
+    <div class="container features-inner">
+        <div class="mw-2xl">
+            <div class="section-tag tag-amber">FEATURES</div>
+            <h2 class="section-title text-white">Everything you need to run a great game.</h2>
+            <p class="section-sub" style="color:rgba(191,219,254,.9)">Deep enough for trivia hosts. Simple enough for a Tuesday afternoon class.</p>
+        </div>
+        <div class="features-grid">
+            <div class="f-card"><div class="f-icon" style="background:rgba(13,112,255,.1);color:var(--blue)"><i data-lucide="sparkles" style="width:20px;height:20px"></i></div><h3>AI-powered quiz builder</h3><p>Generate a complete quiz from a topic in seconds. Edit, reorder, and refine without ever leaving the page.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(255,158,1,.1);color:var(--amber)"><i data-lucide="users" style="width:20px;height:20px"></i></div><h3>Team mode with CAOs</h3><p>Form teams and elect a Chief Answer Officer. Captains lock in answers while teammates strategize.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(16,185,129,.1);color:var(--green)"><i data-lucide="coins" style="width:20px;height:20px"></i></div><h3>Confidence wagers</h3><p>Players bet coins on how sure they are. High risk, high reward &mdash; perfect for review sessions.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(139,92,246,.1);color:var(--purple)"><i data-lucide="zap" style="width:20px;height:20px"></i></div><h3>Power-ups shop</h3><p>50/50, double points, time freeze, and team boost. Strategy meets trivia for unforgettable matches.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(13,112,255,.1);color:var(--blue)"><i data-lucide="radio" style="width:20px;height:20px"></i></div><h3>Buzz-in trivia mode</h3><p>Jeopardy-style. Host reads, players race to buzz in first. Mark answers with a tap.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(255,158,1,.1);color:var(--amber)"><i data-lucide="trophy" style="width:20px;height:20px"></i></div><h3>Live leaderboards</h3><p>Inter-round standings keep tension high. Celebrate the final results with a burst of confetti.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(16,185,129,.1);color:var(--green)"><i data-lucide="timer" style="width:20px;height:20px"></i></div><h3>Flexible pacing</h3><p>Per-question timers, no-timer mode, or host-controlled. Adapt to classrooms or events.</p></div>
+            <div class="f-card"><div class="f-icon" style="background:rgba(139,92,246,.1);color:var(--purple)"><i data-lucide="target" style="width:20px;height:20px"></i></div><h3>Join with a PIN</h3><p>Players hop in by scanning a QR code or entering a PIN. No accounts, no app, no friction.</p></div>
+        </div>
+    </div>
+</section>
 
-                <!-- BIG CENTERED HERO LOGO -->
-                <div style="animation: fadeInDown 0.7s ease; margin-bottom: 2.5rem;">
-                    <img src="letsgetquizzy_logo.png"
-                         alt="Let's Get Quizzy!"
-                         style="
-                             width: min(560px, 85vw);
-                             height: auto;
-                             filter: drop-shadow(0 8px 32px rgba(0,0,0,0.22));
-                         ">
-                </div>
-                
-                <!-- Main Headline -->
-                <h1 style="
-                    font-size: clamp(2.5rem, 5.5vw, 4rem);
-                    font-weight: 900;
-                    color: var(--blue-electric);
-                    margin-bottom: 1.5rem;
-                    line-height: 1.2;
-                    max-width: 1000px;
-                    animation: fadeInDown 0.8s ease 0.1s both;
-                ">
-                    Turn classroom review into a live team game
-                </h1>
-                
-                <!-- Subheadline -->
-                <p style="
-                    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-                    color: #555;
-                    max-width: 850px;
-                    margin: 0 auto 1rem;
-                    line-height: 1.7;
-                    animation: fadeInUp 0.8s ease 0.2s both;
-                ">
-                    Bring trivia-night energy to classroom review. Host live, team-based quiz games that reinforce topics, concepts, and learning outcomes.
-                </p>
-                
-                <!-- Support Line -->
-                <p style="
-                    font-size: clamp(0.95rem, 2vw, 1.1rem);
-                    color: #777;
-                    margin-bottom: 3rem;
-                    animation: fadeInUp 0.8s ease 0.4s both;
-                ">
-                    Great for K–12 classrooms, college courses, Writing 150 sessions, and trainings
-                </p>
-                
-                <!-- CTA Buttons (Equal Prominence) -->
-                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; animation: fadeInUp 0.8s ease 0.6s both;">
-                    <button onclick="showScreen('signupScreen')" style="
-                        background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
-                        color: white;
-                        border: none;
-                        padding: 1.3rem 3rem;
-                        border-radius: 12px;
-                        font-size: 1.2rem;
-                        font-weight: 700;
-                        cursor: pointer;
-                        box-shadow: 0 6px 20px rgba(13,112,255,0.3);
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(13,112,255,0.4)';" 
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(13,112,255,0.3)';">
-                        Start Free
-                    </button>
-                    
-                    <button onclick="showScreen('joinScreen')" style="
-                        background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
-                        color: white;
-                        border: none;
-                        padding: 1.3rem 3rem;
-                        border-radius: 12px;
-                        font-size: 1.2rem;
-                        font-weight: 700;
-                        cursor: pointer;
-                        box-shadow: 0 6px 20px rgba(255,193,7,0.3);
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(255,193,7,0.4)';" 
-                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(255,193,7,0.3)';">
-                        Join Game
-                    </button>
-                </div>
-                
-                <!-- Secondary CTA -->
-                <div style="margin-top: 2rem; animation: fadeInUp 0.8s ease 0.7s both;">
-                    <button onclick="launchHostDemo()" style="
-                        background: transparent;
-                        color: var(--blue-electric);
-                        border: none;
-                        padding: 0.75rem 1.5rem;
-                        font-size: 1rem;
-                        font-weight: 600;
-                        cursor: pointer;
-                        text-decoration: underline;
-                        transition: opacity 0.2s;
-                    " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
-                        or see how it works →
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Feature Cards -->
-            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.02) 0%, white 100%);">
-                <div style="max-width: 1100px; margin: 0 auto;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
-                        
-                        <!-- Feature 1 -->
-                        <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <h3 style="color: var(--blue-electric); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Team-based learning (without chaos)
-                            </h3>
-                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Students collaborate in teams, discuss each question, and choose a Team Captain to submit the final answer—so teamwork feels clear and manageable.
-                            </p>
-                        </div>
-                        
-                        <!-- Feature 2 -->
-                        <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <h3 style="color: var(--orange-gold); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Round-based play for pacing and momentum
-                            </h3>
-                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Run quizzes in rounds to create natural pauses for discussion, feedback, and leaderboards. It feels like a hosted event, not a worksheet.
-                            </p>
-                        </div>
-                        
-                        <!-- Feature 3 -->
-                        <div style="padding: 2.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <h3 style="color: var(--blue-sky); font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700;">
-                                Earn Coins & Buy Power-Ups
-                            </h3>
-                            <p style="color: #555; line-height: 1.7; font-size: 1.05rem;">
-                                Students earn coins for correct answers, then spend them on strategic advantages like Extra Time, 50/50, or Safety Net. It adds achievement, leveling-up, and tactical decisions—turning review into something that feels like a video game.
-                            </p>
-                        </div>
+<section class="how" id="how">
+    <div class="container">
+        <div class="how-header">
+            <div><div class="section-tag tag-amber">HOW IT WORKS</div><h2 class="section-title">Go from blank page to live game in under a minute.</h2></div>
+            <p class="mw-md" style="font-size:1.0625rem;line-height:1.6;color:var(--text-light)">Whether it's a quick classroom warm-up or a full evening of pub trivia, the flow stays the same &mdash; fast, clear, and engaging.</p>
+        </div>
+        <div class="how-steps">
+            <div class="s-card"><div class="s-top"><span class="s-num">01</span><span class="s-badge">1</span></div><h3>Build a quiz</h3><p>Compose questions yourself or let the AI generator draft a full set from any topic.</p></div>
+            <div class="s-card"><div class="s-top"><span class="s-num">02</span><span class="s-badge">2</span></div><h3>Share the PIN</h3><p>Launch a session and players join from any device with a PIN or QR code &mdash; no account needed.</p></div>
+            <div class="s-card"><div class="s-top"><span class="s-num">03</span><span class="s-badge">3</span></div><h3>Play live</h3><p>Control the pace, watch live answer counts, and crown a winner with confetti and bragging rights.</p></div>
+        </div>
+        <div class="stats">
+            <div class="stat"><div class="stat-val">2.4M+</div><div class="stat-lbl">Games hosted</div></div>
+            <div class="stat"><div class="stat-val">180+</div><div class="stat-lbl">Countries reached</div></div>
+            <div class="stat"><div class="stat-val">98%</div><div class="stat-lbl">Would recommend</div></div>
+        </div>
+    </div>
+</section>
+
+<section class="audiences" id="audiences">
+    <div class="aud-wave-top"><svg viewBox="0 0 1440 48" preserveAspectRatio="none"><path d="M0 48V24C240 48 480 48 720 24C960 0 1200 0 1440 24V48H0Z" fill="#ff6700"/></svg></div>
+    <div class="aud-wave-bottom"><svg viewBox="0 0 1440 48" preserveAspectRatio="none"><path d="M0 48V24C240 48 480 48 720 24C960 0 1200 0 1440 24V48H0Z" fill="#ff6700"/></svg></div>
+    <div class="container" style="position:relative;z-index:10">
+        <div class="mw-2xl">
+            <div style="color:rgba(255,255,255,.9);font-size:.875rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase">Built For</div>
+            <h2 class="section-title text-white">One platform. Endless rooms.</h2>
+        </div>
+        <div class="aud-grid">
+            <div class="a-card"><div class="a-top"><span class="a-tag" style="background:rgba(13,112,255,.1);color:var(--blue)"><i data-lucide="graduation-cap" class="icon-xs"></i> Educators</span><i data-lucide="arrow-up-right" style="width:20px;height:20px;color:#cbd5e1"></i></div><h3>Reviews students remember</h3><p>Drop test questions into LetsGetQuizzy and turn study sessions into something students will line up for.</p></div>
+            <div class="a-card"><div class="a-top"><span class="a-tag" style="background:rgba(255,158,1,.1);color:var(--amber)"><i data-lucide="briefcase" class="icon-xs"></i> Teams at work</span><i data-lucide="arrow-up-right" style="width:20px;height:20px;color:#cbd5e1"></i></div><h3>Meetings worth showing up to</h3><p>Run onboarding, all-hands trivia, or product knowledge checks with team mode and inter-round leaderboards.</p></div>
+            <div class="a-card"><div class="a-top"><span class="a-tag" style="background:rgba(139,92,246,.1);color:var(--purple)"><i data-lucide="party-popper" class="icon-xs"></i> Hosts &amp; friends</span><i data-lucide="arrow-up-right" style="width:20px;height:20px;color:#cbd5e1"></i></div><h3>Pub trivia, supercharged</h3><p>Buzz-in mode, confidence wagers, and live big-screen leaderboards make every event feel like a championship.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section" id="pricing">
+    <div class="container" style="max-width:72rem">
+        <div class="cta-box">
+            <div class="cta-glow-1" aria-hidden="true"></div>
+            <div class="cta-glow-2" aria-hidden="true"></div>
+            <div class="cta-inner">
+                <div>
+                    <h2>Ready to get <span>quizzy</span>?</h2>
+                    <p class="cta-sub">Free to start. No credit card. Host your first live game in under a minute.</p>
+                    <div class="cta-btns">
+                        <button class="btn btn-pill-lg btn-blue" onclick="window.currentUser ? showScreen('homeScreen') : showScreen('signupScreen')">Create free account <i data-lucide="arrow-right" class="icon-sm"></i></button>
+                        <button class="btn btn-pill-lg btn-dark-ghost" onclick="showScreen('joinScreen')">Browse public quizzes</button>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Why It's Different -->
-            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(255,193,7,0.03) 0%, rgba(255,158,1,0.03) 100%);">
-                <div style="max-width: 950px; margin: 0 auto;">
-                    <div style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                        <p style="color: #555; line-height: 1.8; font-size: 1.15rem; text-align: center;">
-                            Most quiz tools focus on speed and individual points. Let's Get Quizzy is designed for <strong style="color: var(--blue-electric);">collaboration, discussion, and instructor-led pacing</strong>, making it a strong fit for classrooms that value engagement and active learning.
-                        </p>
+                <div class="cta-form">
+                    <div class="cta-form-lbl">Got a game PIN?</div>
+                    <div class="cta-form-row">
+                        <input type="text" id="landingPinInput" placeholder="123 456" inputmode="numeric" maxlength="6">
+                        <button class="btn-sub" onclick="var p=document.getElementById('landingPinInput').value.trim();if(p){var el=document.getElementById('joinPin');if(el)el.value=p;}showScreen('joinScreen');">Join</button>
                     </div>
-                </div>
-            </div>
-            
-            <!-- How It Works -->
-            <div style="padding: 5rem 2rem; background: white;">
-                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 1rem; font-weight: 700;">
-                        How it works
-                    </h2>
-                    <p style="font-size: 1.1rem; color: #666; margin-bottom: 4rem;">
-                        Three simple steps to get started
-                    </p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: left;">
-                        <!-- Step 1 -->
-                        <div>
-                            <div style="
-                                width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky));
-                                color: white;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.5rem;
-                                font-weight: 700;
-                                margin-bottom: 1rem;
-                            ">1</div>
-                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">Create a quiz from your content</h4>
-                            <p style="color: #666; line-height: 1.6;">Build around your unit, readings, vocabulary, or learning outcomes (and optionally generate a first draft with AI).</p>
-                        </div>
-                        
-                        <!-- Step 2 -->
-                        <div>
-                            <div style="
-                                width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright));
-                                color: white;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.5rem;
-                                font-weight: 700;
-                                margin-bottom: 1rem;
-                            ">2</div>
-                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">Host a live game</h4>
-                            <p style="color: #666; line-height: 1.6;">Students join with a PIN. Turn on teams if you want collaborative play.</p>
-                        </div>
-                        
-                        <!-- Step 3 -->
-                        <div>
-                            <div style="
-                                width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, var(--blue-sky), #66BBFF);
-                                color: white;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.5rem;
-                                font-weight: 700;
-                                margin-bottom: 1rem;
-                            ">3</div>
-                            <h4 style="color: var(--blue-electric); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">Run it like a trivia host</h4>
-                            <p style="color: #666; line-height: 1.6;">Move through rounds, reveal answers, show leaderboards, and end with a memorable final question.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Use Cases -->
-            <div style="padding: 5rem 2rem; background: linear-gradient(180deg, rgba(13,112,255,0.02) 0%, white 100%);">
-                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--blue-electric); margin-bottom: 3rem; font-weight: 700;">
-                        Perfect for:
-                    </h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; text-align: left;">
-                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
-                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Review days & test prep</div>
-                        </div>
-                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
-                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Concept checks & formative assessment</div>
-                        </div>
-                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
-                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Vocabulary and content reinforcement</div>
-                        </div>
-                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
-                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Writing 150 / research instruction practice</div>
-                        </div>
-                        <div style="padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
-                            <div style="color: var(--blue-electric); font-weight: 600; font-size: 1.05rem;">• Staff training & team learning</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Final CTA -->
-            <div style="padding: 6rem 2rem; background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); text-align: center; color: white;">
-                <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 1.5rem; font-weight: 700; line-height: 1.4; color: white;">
-                    Make review more engaging—without making teaching harder.
-                </h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto; color: white;">
-                    Start free, run a game in minutes, and scale up when you need bigger groups or advanced features.
-                </p>
-                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
-                    <button onclick="showScreen('signupScreen')" style="
-                        background: white;
-                        color: var(--blue-electric);
-                        border: none;
-                        padding: 1.5rem 3.5rem;
-                        border-radius: 12px;
-                        font-size: 1.3rem;
-                        font-weight: 700;
-                        cursor: pointer;
-                        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        Start Free
-                    </button>
-                    <button onclick="launchHostDemo()" style="
-                        background: rgba(255,255,255,0.15);
-                        color: white;
-                        border: 2px solid white;
-                        padding: 1.5rem 3.5rem;
-                        border-radius: 12px;
-                        font-size: 1.3rem;
-                        font-weight: 700;
-                        cursor: pointer;
-                        backdrop-filter: blur(10px);
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
-                        See It in Action
-                    </button>
+                    <div class="cta-form-hint">Or scan the host's QR code from your phone camera.</div>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- Guided Host Demo Screen -->
-        <div id="demoScreen" class="screen" style="background: #f5f5f5; min-height: 100vh; position: relative;">
-            <!-- Animated Background Logo -->
-            <div id="demoBackground" style="
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                opacity: 0.1;
-                animation: pulse 3s ease-in-out infinite;
-            ">
-                <img src="letsgetquizzy_logo.png" alt="" style="max-width: 400px; width: 80vw;">
-            </div>
-            
-            <!-- Demo Host View (simulates actual host screen) -->
-            <div id="demoHostView" style="position: relative; z-index: 1;"></div>
-            
-            <!-- Floating Tooltip - Bottom Right Corner -->
-            <div id="demoTooltip" style="
-                position: fixed;
-                bottom: 2rem;
-                right: 2rem;
-                background: white;
-                padding: 2rem;
-                border-radius: 16px;
-                max-width: 420px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-                border: 3px solid var(--blue-electric);
-                z-index: 10000;
-                display: none;
-            ">
-                <div id="demoTooltipContent" style="line-height: 1.6;"></div>
-                <button id="demoNextBtn" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%; padding: 1rem; font-size: 1.1rem;">
-                    Continue →
-                </button>
-            </div>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand"><img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!"><p>Live multiplayer quizzes for classrooms, teams, and events.</p></div>
+            <div class="footer-col"><h4>Product</h4><ul><li><a href="#">Features</a></li><li><a href="#">Buzz-in mode</a></li><li><a href="#">AI generator</a></li><li><a href="#">Pricing</a></li></ul></div>
+            <div class="footer-col"><h4>Resources</h4><ul><li><a href="#">Help center</a></li><li><a href="#">Templates</a></li><li><a href="#">Educator guides</a></li><li><a href="#">Changelog</a></li></ul></div>
+            <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li><li><a href="#">Privacy</a></li></ul></div>
         </div>
+        <div class="footer-bot">
+            <div>&copy; 2026 LetsGetQuizzy &middot; letsgetquizzy.live</div>
+            <div class="footer-bot-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Status</a></div>
+        </div>
+    </div>
+</footer>
 
-        <style>
-            @keyframes pulse {
-                0%, 100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1); }
-                50% { opacity: 0.15; transform: translate(-50%, -50%) scale(1.05); }
-            }
-        </style>
+        </div>
 
         <!-- Login Screen -->
         <div id="loginScreen" class="screen">
@@ -4141,41 +3899,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             hamburger.classList.remove('active');
         }
         
-        function toggleLandingMenu() {
-            const navLinks = document.getElementById('landingNavLinks');
-            const hamburger = document.getElementById('landingHamburger');
-            navLinks.classList.toggle('active');
-            // Animate hamburger bars to X when open
-            if (hamburger) {
-                const bars = hamburger.querySelectorAll('span');
-                if (navLinks.classList.contains('active')) {
-                    bars[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
-                    bars[1].style.opacity = '0';
-                    bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
-                } else {
-                    bars[0].style.transform = '';
-                    bars[1].style.opacity = '1';
-                    bars[2].style.transform = '';
-                }
-            }
-        }
-        
-        function closeLandingMenu() {
-            const navLinks = document.getElementById('landingNavLinks');
-            const hamburger = document.getElementById('landingHamburger');
-            navLinks.classList.remove('active');
-            if (hamburger) {
-                const bars = hamburger.querySelectorAll('span');
-                bars[0].style.transform = '';
-                bars[1].style.opacity = '1';
-                bars[2].style.transform = '';
-            }
-        }
-        
         window.toggleMobileMenu = toggleMobileMenu;
         window.closeMobileMenu = closeMobileMenu;
-        window.toggleLandingMenu = toggleLandingMenu;
-        window.closeLandingMenu = closeLandingMenu;
 
         // Authentication State
         let currentUser = null;
@@ -4454,523 +4179,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         window.tryDemo = tryDemo;
         
-        // ============================================
-        // GUIDED HOST DEMO SYSTEM
-        // ============================================
-        
-        let demoStep = 0;
-        let demoQuizType = null;
-        const demoPlayers = [];
-        let demoTeamsEnabled = false;
-        
-        // Demo quiz examples
-        const demoQuizzes = {
-            classroom: {
-                title: "State Capitals Review",
-                questions: [
-                    { text: "What is the capital of California?", options: ["Los Angeles", "San Francisco", "Sacramento", "San Diego"], correct: 2 },
-                    { text: "What is the capital of Texas?", options: ["Houston", "Dallas", "Austin", "San Antonio"], correct: 2 }
-                ]
-            },
-            college: {
-                title: "Writing 150: Research Skills",
-                questions: [
-                    { text: "Which source type is considered a primary source?", options: ["Textbook summary", "Original research article", "Wikipedia entry", "Review article"], correct: 1 },
-                    { text: "What is the main purpose of a thesis statement?", options: ["To introduce the topic", "To present the main argument", "To conclude the essay", "To cite sources"], correct: 1 }
-                ]
-            }
-        };
-        
-        // Demo player names
-        const demoPlayerNames = {
-            classroom: ["Emma", "Liam", "Sophia", "Noah", "Olivia", "Mason"],
-            college: ["Alex", "Jordan", "Taylor", "Morgan", "Casey", "Riley"]
-        };
-        
-        // Launch Host Demo (entry point)
-        function launchHostDemo() {
-            console.log('launchHostDemo called!');
-            // Show demo screen first
-            showScreen('demoScreen');
-            // Then show quiz selection tooltip
-            setTimeout(() => {
-                showDemoTooltip(
-                    '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">Choose Your Example</h2>' +
-                    '<p style="color: #666; margin-bottom: 2rem; line-height: 1.6;">See how the same demo works for different teaching contexts.</p>' +
-                    '<div style="display: grid; gap: 1rem;">' +
-                        '<button onclick="startDemo(\'classroom\')" class="btn btn-primary" style="padding: 1.5rem;">📝 Classroom Review (K–12)</button>' +
-                        '<button onclick="startDemo(\'college\')" class="btn btn-secondary" style="padding: 1.5rem;">✍️ Writing 150 / College Review</button>' +
-                    '</div>',
-                    false // hide continue button
-                );
-            }, 100); // Small delay to let screen render
-        }
-        
-        function startDemo(quizType) {
-            demoQuizType = quizType;
-            demoStep = 1;
-            showScreen('demoScreen'); // Show the demo screen
-            runDemoStep();
-        }
-        
-        function runDemoStep() {
-            const overlay = document.getElementById('demoOverlay');
-            
-            switch(demoStep) {
-                case 1:
-                    // Welcome
-                    renderDemoHost('lobby');
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Welcome to the Host View! 👋</h3>' +
-                        '<p style="color: #666;">This quick demo shows how you host a live, team-based quiz game. You\'ll see exactly what you control as the instructor.</p>'
-                    );
-                    break;
-                    
-                case 2:
-                    // Quiz loaded + PIN shown
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Students Join with a PIN</h3>' +
-                        '<p style="color: #666;">Just share the PIN or QR code. Students can join from their phones, laptops, or you can use one shared device per team—whatever works for your classroom!</p>'
-                    );
-                    renderDemoHost('lobby');
-                    break;
-                    
-                case 3:
-                    // Fake players start joining
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Here They Come! 🙋</h3>' +
-                        '<p style="color: #666;">Watch as students join the game. Their names pop up in real-time so you know who\'s in.</p>'
-                    );
-                    simulatePlayersJoining();
-                    break;
-                    
-                case 4:
-                    // Enable teams
-                    showDemoTooltip(
-                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">Let\'s Get Collaborative! 🤝</h3>' +
-                        '<p style="color: #666;">Ok, let\'s get these students interacting and collaborating—click the <strong>"Enable Teams"</strong> toggle to group them into teams.</p>'
-                    );
-                    renderDemoHost('lobbyTeamToggle');
-                    break;
-                    
-                case 5:
-                    // Assign Team Captains
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Pick Your Team Captains 👑</h3>' +
-                        '<p style="color: #666;">They\'re a team, so they discuss and answer as a team. We use <strong>Team Captains</strong>—or as we like to call them, <strong>CAOs (Chief Answer Officers)</strong>—so one person submits for the whole team. Click one player on each team to designate them.</p>'
-                    );
-                    renderDemoHost('assignCaptains');
-                    break;
-                    
-                case 6:
-                    // Start game
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Ready to Play! 🎮</h3>' +
-                        '<p style="color: #666;">Perfect! Now click <strong>"Start Game"</strong> to launch the first round.</p>'
-                    );
-                    renderDemoHost('readyToStart');
-                    break;
-                    
-                case 7:
-                    // Show question
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Teams Discuss, CAO Submits ✍️</h3>' +
-                        '<p style="color: #666;">The question appears on all devices. Teams talk it through together, then the CAO locks in their answer. Only CAOs can submit—everyone else sees "View Only."</p>'
-                    );
-                    renderDemoHost('question');
-                    setTimeout(() => {
-                        simulateAnswers();
-                    }, 2000);
-                    break;
-                    
-                case 8:
-                    // Show results
-                    showDemoTooltip(
-                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">The Big Reveal! 🎉</h3>' +
-                        '<p style="color: #666;">Click <strong>"Show Results"</strong> to reveal which teams got it right. This is the fun part—everyone sees who nailed it!</p>'
-                    );
-                    renderDemoHost('results');
-                    break;
-                    
-                case 9:
-                    // Coins earned
-                    showDemoTooltip(
-                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">Coins Earned! 💰</h3>' +
-                        '<p style="color: #666;"><strong>Team Lightning earned 100 coins!</strong> <img src="coinMoney.png" style="width: 20px; vertical-align: middle;"> Teams collect coins for correct answers, then spend them strategically on power-ups between rounds.</p>'
-                    );
-                    renderDemoHost('coinsEarned');
-                    break;
-                    
-                case 10:
-                    // Round break / power-up shop
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-sky); margin-bottom: 0.5rem;">Power-Up Shop! 🛒</h3>' +
-                        '<p style="color: #666;">Between rounds, teams can spend their coins on power-ups like <strong>50/50, Extra Time, or Safety Net</strong>. They discuss as a team which advantage to buy—adding strategy and leveling-up vibes like a video game!</p>'
-                    );
-                    renderDemoHost('powerupShop');
-                    break;
-                    
-                case 11:
-                    // Leaderboard
-                    showDemoTooltip(
-                        '<h3 style="color: var(--blue-sky); margin-bottom: 0.5rem;">Round-Based Momentum 📊</h3>' +
-                        '<p style="color: #666;">Use rounds to create natural pauses. Show the leaderboard, discuss answers, and build excitement for what\'s next. It keeps the energy high!</p>'
-                    );
-                    renderDemoHost('leaderboard');
-                    break;
-                    
-                case 12:
-                    // Final wager tease
-                    showDemoTooltip(
-                        '<h3 style="color: var(--orange-gold); margin-bottom: 0.5rem;">Optional: Final Wager ⚡</h3>' +
-                        '<p style="color: #666;">Want a dramatic ending? Teams can wager <em>all their coins</em> on a final question. It\'s optional, but students absolutely love the game-show moment!</p>'
-                    );
-                    renderDemoHost('finalWager');
-                    break;
-                    
-                case 13:
-                    // End / CTA
-                    showDemoTooltip(
-                        '<h2 style="color: var(--blue-electric); margin-bottom: 1rem;">That\'s It! 🎉</h2>' +
-                        '<p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">You just saw how to host a team-based quiz game with collaboration, strategy, and energy. Ready to create your own?</p>' +
-                        '<div style="display: grid; gap: 1rem;">' +
-                            '<button onclick="showScreen(\'signupScreen\')" class="btn btn-primary" style="padding: 1.2rem;">Start Free</button>' +
-                            '<button onclick="showScreen(\'landingScreen\')" class="btn btn-secondary" style="padding: 1.2rem;">Back to Home</button>' +
-                        '</div>',
-                        false
-                    );
-                    break;
-            }
-        }
-        
-        function showDemoTooltip(content, showContinue = true) {
-            console.log('showDemoTooltip called!');
-            const tooltipContent = document.getElementById('demoTooltipContent');
-            const nextBtn = document.getElementById('demoNextBtn');
-            const tooltip = document.getElementById('demoTooltip');
-            
-            console.log('Elements found:', {
-                tooltipContent: !!tooltipContent,
-                nextBtn: !!nextBtn,
-                tooltip: !!tooltip
-            });
-            
-            if (!tooltipContent || !nextBtn || !tooltip) {
-                console.error('Missing demo elements!');
-                return;
-            }
-            
-            tooltipContent.innerHTML = content;
-            nextBtn.style.display = showContinue ? 'block' : 'none';
-            tooltip.style.display = 'block';
-            
-            console.log('Tooltip displayed');
-        }
-        
-        function renderDemoHost(scene) {
-            const hostView = document.getElementById('demoHostView');
-            const quiz = demoQuizzes[demoQuizType];
-            
-            if (scene === 'lobby') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
-                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
-                        <div style="background: linear-gradient(135deg, var(--blue-electric), var(--blue-sky)); color: white; padding: 3rem; border-radius: 16px; text-align: center; margin-bottom: 2rem;">
-                            <h2 style="font-size: 3rem; margin-bottom: 0.5rem;">PIN: 1234</h2>
-                            <p style="opacity: 0.9;">Students join at letsgetquizzy.live</p>
-                        </div>
-                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                            <h3 style="color: var(--blue-electric); margin-bottom: 1rem;">Waiting for Players...</h3>
-                            <div id="demoPlayerList"></div>
-                        </div>
-                    </div>
-                `;
-            } else if (scene === 'lobbyTeamToggle') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
-                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
-                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                            <label style="display: flex; align-items: center; gap: 1rem; font-size: 1.2rem; cursor: pointer;">
-                                <input type="checkbox" id="demoTeamsToggle" onchange="toggleDemoTeams()" style="width: 24px; height: 24px;">
-                                <span style="color: var(--blue-electric); font-weight: 600;">Enable Teams</span>
-                            </label>
-                        </div>
-                        <div id="demoPlayerList">${renderDemoPlayers(false)}</div>
-                    </div>
-                `;
-            } else if (scene === 'assignCaptains') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
-                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
-                        <div id="demoPlayerList">${renderDemoPlayers(true)}</div>
-                    </div>
-                `;
-            } else if (scene === 'readyToStart') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
-                        <h1 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">${quiz.title}</h1>
-                        <div id="demoPlayerList" style="margin-bottom: 2rem;">${renderDemoPlayers(true, true)}</div>
-                        <div style="text-align: center;">
-                            <button class="btn btn-primary" style="padding: 1.5rem 4rem; font-size: 1.3rem;" onclick="nextDemoStep()">Start Game</button>
-                        </div>
-                    </div>
-                `;
-            } else if (scene === 'question') {
-                const q = quiz.questions[0];
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
-                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">Question 1</h2>
-                        <div style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 2rem;">${q.text}</h3>
-                            <div style="display: grid; gap: 1rem;">
-                                ${q.options.map((opt, i) => `
-                                    <div style="padding: 1rem; background: #f5f5f5; border-radius: 8px; font-size: 1.1rem;">
-                                        ${String.fromCharCode(65 + i)}. ${opt}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div id="demoAnswerStatus" style="text-align: center; color: #666;"></div>
-                    </div>
-                `;
-            } else if (scene === 'results') {
-                const q = quiz.questions[0];
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
-                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">Question 1 - Results</h2>
-                        <div style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                            <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 2rem;">${q.text}</h3>
-                            <div style="display: grid; gap: 1rem;">
-                                ${q.options.map((opt, i) => `
-                                    <div style="padding: 1rem; background: ${i === q.correct ? '#d4edda' : '#f5f5f5'}; border-radius: 8px; font-size: 1.1rem; border: ${i === q.correct ? '3px solid #28a745' : 'none'};">
-                                        ${String.fromCharCode(65 + i)}. ${opt} ${i === q.correct ? '✓' : ''}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div style="text-align: center;">
-                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue</button>
-                        </div>
-                    </div>
-                `;
-            } else if (scene === 'coinsEarned') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 900px; margin: 0 auto; text-align: center;">
-                        <div style="background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); color: white; padding: 4rem 2rem; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 2rem; animation: bounce 0.6s ease;">
-                            <h2 style="font-size: 3rem; margin-bottom: 1rem;">🎉 Coins Earned! 🎉</h2>
-                            <div style="font-size: 5rem; margin: 2rem 0;">
-                                <img src="coinMoney.png" style="width: 100px; animation: spin 1s ease;">
-                            </div>
-                            <p style="font-size: 2rem; font-weight: 700;">Team Lightning: +100 coins</p>
-                        </div>
-                        <button class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.2rem;" onclick="nextDemoStep()">Continue</button>
-                    </div>
-                    <style>
-                        @keyframes spin {
-                            from { transform: rotateY(0deg); }
-                            to { transform: rotateY(360deg); }
-                        }
-                    </style>
-                `;
-            } else if (scene === 'powerupShop') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
-                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">🛒 Power-Up Shop</h2>
-                        <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Teams can spend their coins on strategic advantages!</p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(13,112,255,0.1), rgba(66,153,225,0.1)); border-radius: 12px; text-align: center;">
-                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⏰</div>
-                                    <h4 style="color: var(--blue-electric); margin-bottom: 0.5rem;">Extra Time</h4>
-                                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">+10 seconds</p>
-                                    <p style="color: var(--orange-gold); font-weight: 700;"><img src="coinMoney.png" style="width: 16px; vertical-align: middle;"> 50 coins</p>
-                                </div>
-                                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,158,1,0.1)); border-radius: 12px; text-align: center;">
-                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</div>
-                                    <h4 style="color: var(--orange-gold); margin-bottom: 0.5rem;">50/50</h4>
-                                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Remove 2 wrong answers</p>
-                                    <p style="color: var(--orange-gold); font-weight: 700;"><img src="coinMoney.png" style="width: 16px; vertical-align: middle;"> 75 coins</p>
-                                </div>
-                                <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(66,153,225,0.1), rgba(102,187,255,0.1)); border-radius: 12px; text-align: center;">
-                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🛡️</div>
-                                    <h4 style="color: var(--blue-sky); margin-bottom: 0.5rem;">Safety Net</h4>
-                                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">No penalty if wrong</p>
-                                    <p style="color: var(--orange-gold); font-weight: 700;"><img src="coinMoney.png" style="width: 16px; vertical-align: middle;"> 100 coins</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue to Leaderboard</button>
-                        </div>
-                    </div>
-                `;
-            } else if (scene === 'leaderboard') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
-                        <h2 style="color: var(--blue-electric); text-align: center; margin-bottom: 2rem;">🏆 Round 1 Complete</h2>
-                        <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                            <h3 style="color: var(--orange-gold); margin-bottom: 1.5rem; text-align: center;">Leaderboard</h3>
-                            <div style="display: grid; gap: 1rem;">
-                                <div style="padding: 1.5rem; background: linear-gradient(135deg, #FFD700, #FFA500); color: white; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 1.3rem; font-weight: 700;">🥇 Team Lightning</span>
-                                    <span style="font-size: 1.3rem; font-weight: 700;">100 pts</span>
-                                </div>
-                                <div style="padding: 1.5rem; background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: white; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 1.2rem; font-weight: 700;">🥈 Team Thunder</span>
-                                    <span style="font-size: 1.2rem; font-weight: 700;">0 pts</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Continue</button>
-                        </div>
-                    </div>
-                `;
-            } else if (scene === 'finalWager') {
-                hostView.innerHTML = `
-                    <div style="padding: 2rem; max-width: 800px; margin: 0 auto; text-align: center;">
-                        <h2 style="color: var(--orange-gold); margin-bottom: 2rem; font-size: 2.5rem;">⚡ Final Wager ⚡</h2>
-                        <div style="background: linear-gradient(135deg, var(--orange-gold), var(--orange-bright)); color: white; padding: 4rem 2rem; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-                            <p style="font-size: 1.5rem; margin-bottom: 2rem;">Teams can wager up to all their points on the final question!</p>
-                            <p style="font-size: 1.2rem; opacity: 0.9;">It's the most exciting moment of the game.</p>
-                        </div>
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <button class="btn btn-primary" style="padding: 1.2rem 3rem;" onclick="nextDemoStep()">Finish Demo</button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        function renderDemoPlayers(showTeams = false, showCaptains = false) {
-            if (!showTeams) {
-                return `
-                    <div style="display: grid; gap: 0.5rem;">
-                        ${demoPlayers.map(p => `
-                            <div style="padding: 1rem; background: #f5f5f5; border-radius: 8px;">
-                                ${p.name}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            } else {
-                const team1 = demoPlayers.slice(0, 3);
-                const team2 = demoPlayers.slice(3, 6);
-                return `
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                        <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-left: 4px solid var(--blue-electric);">
-                            <h3 style="color: var(--blue-electric); margin-bottom: 1rem;">⚡ Team Lightning</h3>
-                            ${team1.map((p, i) => `
-                                <div onclick="assignDemoCaptain(0, ${i})" style="padding: 0.8rem; background: ${p.isCaptain ? 'linear-gradient(135deg, #FFD700, #FFA500)' : '#f5f5f5'}; color: ${p.isCaptain ? 'white' : '#333'}; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;">
-                                    ${p.name} ${p.isCaptain ? '⭐ Captain' : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-left: 4px solid var(--orange-gold);">
-                            <h3 style="color: var(--orange-gold); margin-bottom: 1rem;">🔥 Team Thunder</h3>
-                            ${team2.map((p, i) => `
-                                <div onclick="assignDemoCaptain(1, ${i})" style="padding: 0.8rem; background: ${p.isCaptain ? 'linear-gradient(135deg, #FFD700, #FFA500)' : '#f5f5f5'}; color: ${p.isCaptain ? 'white' : '#333'}; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;">
-                                    ${p.name} ${p.isCaptain ? '⭐ Captain' : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        function simulatePlayersJoining() {
-            const names = demoPlayerNames[demoQuizType];
-            let count = 0;
-            const interval = setInterval(() => {
-                if (count < 6) {
-                    demoPlayers.push({ name: names[count], isCaptain: false });
-                    const playerList = document.getElementById('demoPlayerList');
-                    if (playerList) {
-                        playerList.innerHTML = `
-                            <div style="display: grid; gap: 0.5rem;">
-                                ${demoPlayers.map(p => `
-                                    <div style="padding: 1rem; background: #f5f5f5; border-radius: 8px; animation: fadeInUp 0.3s ease;">
-                                        ${p.name}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        `;
-                    }
-                    count++;
-                } else {
-                    clearInterval(interval);
-                    setTimeout(nextDemoStep, 800);
-                }
-            }, 600);
-        }
-        
-        function toggleDemoTeams() {
-            demoTeamsEnabled = document.getElementById('demoTeamsToggle').checked;
-            if (demoTeamsEnabled) {
-                setTimeout(nextDemoStep, 500);
-            }
-        }
-        
-        function assignDemoCaptain(teamIndex, playerIndex) {
-            const globalIndex = teamIndex === 0 ? playerIndex : playerIndex + 3;
-            
-            // Remove captain from all players on this team
-            if (teamIndex === 0) {
-                demoPlayers.slice(0, 3).forEach(p => p.isCaptain = false);
-            } else {
-                demoPlayers.slice(3, 6).forEach(p => p.isCaptain = false);
-            }
-            
-            // Assign new captain
-            demoPlayers[globalIndex].isCaptain = true;
-            renderDemoHost('assignCaptains');
-            
-            // Check if both teams have captains
-            const team1HasCaptain = demoPlayers.slice(0, 3).some(p => p.isCaptain);
-            const team2HasCaptain = demoPlayers.slice(3, 6).some(p => p.isCaptain);
-            
-            if (team1HasCaptain && team2HasCaptain) {
-                setTimeout(nextDemoStep, 1000);
-            }
-        }
-        
-        function simulateAnswers() {
-            const status = document.getElementById('demoAnswerStatus');
-            if (!status) return;
-            
-            let count = 0;
-            const interval = setInterval(() => {
-                count++;
-                status.innerHTML = `<p style="font-size: 1.1rem;">${count} of 2 teams have answered...</p>`;
-                
-                if (count >= 2) {
-                    clearInterval(interval);
-                    status.innerHTML = `<p style="font-size: 1.2rem; color: var(--blue-electric); font-weight: 600;">✓ All teams have answered!</p>`;
-                    setTimeout(nextDemoStep, 1500);
-                }
-            }, 1500);
-        }
-        
-        function nextDemoStep() {
-            demoStep++;
-            runDemoStep();
-        }
-        
-        // Attach to next button
-        document.addEventListener('DOMContentLoaded', function() {
-            const nextBtn = document.getElementById('demoNextBtn');
-            if (nextBtn) {
-                nextBtn.onclick = nextDemoStep;
-            }
-        });
-        
-        window.launchHostDemo = launchHostDemo;
-        window.startDemo = startDemo;
-        window.nextDemoStep = nextDemoStep;
-        window.toggleDemoTeams = toggleDemoTeams;
-        window.assignDemoCaptain = assignDemoCaptain;
-
         // Display recent quizzes on home screen
         function displayRecentQuizzes() {
             const section = document.getElementById('recentQuizzesSection');
@@ -7948,5 +7156,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
         })();
     </script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
