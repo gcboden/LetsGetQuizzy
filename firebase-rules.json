@@ -15,7 +15,7 @@
     "games": {
       "$gamePin": {
         ".read": true,
-        ".write": "auth != null || data.exists()",
+        ".write": true,
         "players": {
           "$playerId": {
             ".write": true
@@ -25,8 +25,14 @@
           ".write": true
         },
         "teams": {
-          ".write": "auth != null"
+          ".write": true
         }
+      }
+    },
+    "userQuizzes": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
       }
     }
   }
