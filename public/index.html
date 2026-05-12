@@ -3131,16 +3131,14 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     window.isGuest = false;
                     console.log('User logged in:', user.email);
                     
-                    const loginScreen = document.getElementById('loginScreen');
-                    const signupScreen = document.getElementById('signupScreen');
-                    const landingScreen = document.getElementById('landingScreen');
-                    
-                    if (loginScreen) loginScreen.classList.remove('active');
-                    if (signupScreen) signupScreen.classList.remove('active');
-                    if (landingScreen) landingScreen.classList.remove('active');
-                    
-                    // showScreen first, THEN show/hide AI buttons
-                    window.showScreen('homeScreen');
+                    // Only navigate to homeScreen when coming from a pre-login screen.
+                    // onAuthStateChanged fires on token refresh too — without this guard,
+                    // it would override whatever screen the user is currently on.
+                    const _activeScreen = document.querySelector('.screen.active');
+                    const _preLoginScreens = ['landingScreen', 'loginScreen', 'signupScreen'];
+                    if (!_activeScreen || _preLoginScreens.includes(_activeScreen.id)) {
+                        window.showScreen('homeScreen');
+                    }
 
                     // Set user's name in welcome header and profile avatar
                     const userName = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
