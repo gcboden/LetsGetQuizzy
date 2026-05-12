@@ -4145,8 +4145,15 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             // Always close AI modal when navigating
             document.getElementById('aiGeneratorModal').style.display = 'none';
 
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+            // Force-hide every screen via both class and inline style to ensure no screen
+            // bleeds through due to CSS specificity, animation quirks, or leftover inline styles.
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                s.style.display = 'none';
+            });
+            const targetScreen = document.getElementById(screenId);
+            targetScreen.style.display = '';  // clear inline override so CSS class takes over
+            targetScreen.classList.add('active');
             
             // Show/hide nav bar based on screen
             if (screenId === 'homeScreen' || screenId === 'loginScreen' || screenId === 'signupScreen' || screenId === 'landingScreen' || screenId === 'joinScreen') {
