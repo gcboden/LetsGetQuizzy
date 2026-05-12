@@ -1556,7 +1556,7 @@
 
 <header class="nav">
     <div class="container">
-        <a href="#"><img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" class="nav-logo"></a>
+        <a href="#" onclick="return false;"><img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" class="nav-logo"></a>
         <nav class="nav-links">
             <a href="#features">Features</a>
             <a href="#how">How it works</a>
@@ -1564,8 +1564,8 @@
             <a href="#pricing">Pricing</a>
         </nav>
         <div class="nav-btns">
-            <button class="btn btn-pill btn-outline-orange hide-mobile" onclick="showScreen('signupScreen')">Create a Let's Get Quizzy Account</button>
-            <a href="#" onclick="showScreen('loginScreen'); return false;" style="font-weight:600;font-size:.875rem;color:var(--text);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--dark)'" onmouseout="this.style.color='var(--text)'">Log in</a>
+            <button class="btn btn-pill btn-outline-orange hide-mobile" onclick="navigateFromLanding('signupScreen')">Create a Let's Get Quizzy Account</button>
+            <a href="#" onclick="navigateFromLanding('loginScreen'); return false;" style="font-weight:600;font-size:.875rem;color:var(--text);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--dark)'" onmouseout="this.style.color='var(--text)'">Log in</a>
         </div>
     </div>
 </header>
@@ -1579,8 +1579,8 @@
             <h1>LIVE quizzes that<br>people <span class="hl-blue">actually</span> <span class="hl-underline">love</span>.</h1>
             <p class="hero-sub">Run classroom reviews, team meetings, and live events with team play, confidence wagers, power-ups, and a Jeopardy-style buzz-in mode. No app downloads &mdash; just a PIN.</p>
             <div class="hero-buttons">
-                <button class="btn btn-pill-lg btn-light-blue" onclick="showScreen('homeScreen')">Host a quiz <i data-lucide="arrow-right" class="icon-sm"></i></button>
-                <button class="btn btn-pill-lg btn-ghost" onclick="showScreen('joinScreen')"><i data-lucide="door-open" class="icon-sm" style="color:var(--blue)"></i> Join a game</button>
+                <button class="btn btn-pill-lg btn-light-blue" onclick="navigateFromLanding('createQuizScreen')">Create a quiz <i data-lucide="arrow-right" class="icon-sm"></i></button>
+                <button class="btn btn-pill-lg btn-ghost" onclick="navigateFromLanding('joinScreen')"><i data-lucide="door-open" class="icon-sm" style="color:var(--blue)"></i> Join a game</button>
             </div>
             <div class="hero-meta">
                 <div class="hero-meta-item"><i data-lucide="users" class="icon-sm"></i><span>Free for up to 50 players</span></div>
@@ -1658,15 +1658,15 @@
                     <h2>Ready to get <span>quizzy</span>?</h2>
                     <p class="cta-sub">Free to start. No credit card. Host your first live game in under a minute.</p>
                     <div class="cta-btns">
-                        <button class="btn btn-pill-lg btn-blue" onclick="showScreen('createQuizScreen')">Create free account <i data-lucide="arrow-right" class="icon-sm"></i></button>
-                        <button class="btn btn-pill-lg btn-dark-ghost" onclick="showScreen('joinScreen')">Browse public quizzes</button>
+                        <button class="btn btn-pill-lg btn-blue" onclick="navigateFromLanding('createQuizScreen')">Create free account <i data-lucide="arrow-right" class="icon-sm"></i></button>
+                        <button class="btn btn-pill-lg btn-dark-ghost" onclick="navigateFromLanding('joinScreen')">Browse public quizzes</button>
                     </div>
                 </div>
                 <div class="cta-form">
                     <div class="cta-form-lbl">Got a game PIN?</div>
                     <div class="cta-form-row">
                         <input type="text" id="landingPinInput" placeholder="123 456" inputmode="numeric" maxlength="6">
-                        <button class="btn-sub" onclick="var p=document.getElementById('landingPinInput').value.trim();if(p){var el=document.getElementById('joinPin');if(el)el.value=p;}showScreen('joinScreen');">Join</button>
+                        <button class="btn-sub" onclick="var p=document.getElementById('landingPinInput').value.trim();if(p){var el=document.getElementById('joinPin');if(el)el.value=p;}navigateFromLanding('joinScreen');">Join</button>
                     </div>
                     <div class="cta-form-hint">Or scan the host's QR code from your phone camera.</div>
                 </div>
@@ -4143,6 +4143,20 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 document.body.classList.remove('has-nav');
             } else {
                 document.body.classList.add('has-nav');
+            }
+
+            // Guest top bar: show on specific screens when not signed in
+            const guestBarScreens = ['joinScreen', 'createQuizScreen', 'loginScreen', 'signupScreen'];
+            const bar = document.getElementById('guestTopBar');
+            if (bar) {
+                const showBar = window.isGuest && guestBarScreens.includes(screenId);
+                bar.style.display = showBar ? 'flex' : 'none';
+                document.body.style.paddingTop = showBar ? '64px' : '';
+            }
+
+            // Set base history state when returning to landing
+            if (screenId === 'landingScreen') {
+                history.replaceState({ screen: 'landingScreen' }, '', '');
             }
             
             if (screenId === 'createQuizScreen' && document.querySelectorAll('.question-item').length === 0) {
@@ -7348,6 +7362,42 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             </button>
         </div>
     </div>
+
+
+    <style>
+        #guestTopBar { display:none; position:fixed; top:0; left:0; right:0; z-index:900; background:rgba(255,255,255,0.97); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid rgba(226,232,240,0.7); padding:0 2rem; height:64px; align-items:center; justify-content:space-between; }
+    </style>
+
+    <!-- Persistent guest nav bar (shown on create/join/login/signup for guests) -->
+    <div id="guestTopBar">
+        <a href="#" onclick="navigateToLanding(); return false;">
+            <img src="letsgetquizzy_logo.png" alt="Let's Get Quizzy!" style="height:44px; display:block;">
+        </a>
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <a href="#" onclick="navigateFromLanding('loginScreen'); return false;" style="font-weight:600; font-size:0.875rem; color:#334155; text-decoration:none;">Log in</a>
+            <button onclick="navigateFromLanding('signupScreen')" style="background:var(--blue-electric); color:white; border:none; padding:0.45rem 1.1rem; border-radius:50px; font-weight:600; font-size:0.85rem; cursor:pointer; font-family:'SN Pro',sans-serif;">Sign up free</button>
+        </div>
+    </div>
+
+    <script>
+        // ── Landing page navigation with browser history ───────────────────
+        function navigateFromLanding(screenId) {
+            history.pushState({ screen: screenId }, '', '');
+            showScreen(screenId);
+        }
+        window.navigateFromLanding = navigateFromLanding;
+
+        function navigateToLanding() {
+            history.pushState({ screen: 'landingScreen' }, '', '');
+            showScreen('landingScreen');
+        }
+        window.navigateToLanding = navigateToLanding;
+
+        window.addEventListener('popstate', function(e) {
+            const screen = (e.state && e.state.screen) || (window.isGuest ? 'landingScreen' : 'homeScreen');
+            showScreen(screen);
+        });
+    </script>
 
     <script>lucide.createIcons();</script>
 </body>
