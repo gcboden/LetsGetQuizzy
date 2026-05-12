@@ -3124,20 +3124,30 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.googleProvider = googleProvider;
 
         // Set up auth state listener
+        // Track the last known user ID so we can distinguish a real new login
+        // (null → uid, or uid-A → uid-B) from a token refresh (uid stays the same).
+        // onAuthStateChanged fires multiple times per session: initial cached read,
+        // server verification, and hourly token refresh. Navigation must only happen
+        // when the user identity actually changes, not on every fire.
+        let _lastAuthUserId = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
+                    const isNewLogin = (_lastAuthUserId !== user.uid);
+                    _lastAuthUserId = user.uid;
                     window.currentUser = user;
                     window.isGuest = false;
                     console.log('User logged in:', user.email);
-                    
-                    // Only navigate to homeScreen when coming from a pre-login screen.
-                    // onAuthStateChanged fires on token refresh too — without this guard,
-                    // it would override whatever screen the user is currently on.
-                    const _activeScreen = document.querySelector('.screen.active');
-                    const _preLoginScreens = ['landingScreen', 'loginScreen', 'signupScreen'];
-                    if (!_activeScreen || _preLoginScreens.includes(_activeScreen.id)) {
-                        window.showScreen('homeScreen');
+
+                    // Only navigate when the user identity changed (real login / page load).
+                    // Token refreshes keep the same uid — skip navigation entirely.
+                    if (isNewLogin) {
+                        const _activeScreen = document.querySelector('.screen.active');
+                        const _preLoginScreens = ['landingScreen', 'loginScreen', 'signupScreen'];
+                        if (!_activeScreen || _preLoginScreens.includes(_activeScreen.id)) {
+                            window.showScreen('homeScreen');
+                        }
                     }
 
                     // Set user's name in welcome header and profile avatar
@@ -3183,12 +3193,14 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                             });
                     }
                 } else {
+                    _lastAuthUserId = null;
                     window.currentUser = null;
                     window.userHasAIAccess = false;
                     window.isGuest = true;
                     console.log('No user logged in');
                     if (window.updateNavForAuth) window.updateNavForAuth();
-                    // Show landing page for logged-out users
+                    // Navigate to landing page. logout() also calls showScreen directly,
+                    // so this is mainly a safety net for involuntary sign-outs.
                     window.showScreen('landingScreen');
                 }
             });
