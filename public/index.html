@@ -803,38 +803,163 @@
             color: var(--primary);
         }
 
+        /* ── Create Quiz Screen ── */
         .quiz-creator {
-            max-width: 800px;
+            max-width: 860px;
             margin: 2rem auto;
         }
 
-        .question-item {
-            background: var(--card);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 1.5px solid var(--border);
-            position: relative;
+        .cq-quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
+        .cq-action-card {
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.15s;
+            border: 2px solid transparent;
+            font-family: inherit;
+        }
+        .cq-action-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .cq-action-card .cqa-icon {
+            width: 44px; height: 44px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+        .cq-action-card .cqa-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+        .cq-action-card .cqa-sub { font-size: 0.82rem; }
+
+        .cqa-ai {
+            background: linear-gradient(135deg, #0d70ff, #0a55cc);
+            color: white;
+        }
+        .cqa-ai .cqa-badge {
+            display: inline-block; font-size: 0.72rem; font-weight: 600;
+            background: rgba(255,255,255,0.2); border-radius: 999px;
+            padding: 0.15rem 0.6rem; margin-bottom: 0.5rem;
+        }
+        .cqa-ai .cqa-icon { background: rgba(255,255,255,0.2); }
+        .cqa-ai .cqa-sub { color: rgba(255,255,255,0.8); }
+
+        .cqa-scratch {
+            background: var(--card);
+            border-color: #e2e8f0;
+            color: var(--text);
+        }
+        .cqa-scratch:hover { border-color: var(--blue-electric); }
+        .cqa-scratch .cqa-icon { background: #eff6ff; }
+        .cqa-scratch .cqa-sub { color: #64748b; }
+
+        .cqa-template {
+            background: var(--card);
+            border-color: #e2e8f0;
+            color: var(--text);
+            opacity: 0.6;
+            cursor: default;
+        }
+        .cqa-template:hover { transform: none; box-shadow: none; }
+        .cqa-template .cqa-icon { background: #fff7ed; }
+        .cqa-template .cqa-sub { color: #64748b; }
+
+        /* Main form panel */
+        .cq-panel {
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .cq-settings-header {
+            background: linear-gradient(135deg, #0d70ff, #0a55cc);
+            padding: 2rem 2rem 1.75rem;
+            color: white;
+        }
+        .cq-settings-header label { color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 600; display: block; margin-bottom: 0.4rem; }
+        .cq-settings-header input {
+            width: 100%; padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .cq-settings-header input::placeholder { color: rgba(255,255,255,0.5); }
+        .cq-settings-header input:focus { outline: none; background: rgba(255,255,255,0.2); }
+        .cq-meta-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; margin-top: 1.25rem; align-items: end; }
+        .cq-meta-row select {
+            width: 100%; padding: 0.55rem 0.75rem;
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.92rem;
+        }
+        .cq-meta-row select option { color: #1e293b; background: white; }
+        .cq-meta-row select:focus { outline: none; }
+        .cq-qcount-box {
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            padding: 0.55rem 1.25rem;
+            text-align: center;
+            min-width: 70px;
+        }
+        .cq-qcount-box .cq-count-num { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+        .cq-qcount-box .cq-count-label { font-size: 0.7rem; color: rgba(255,255,255,0.7); }
+
+        /* Questions body */
+        .cq-body { padding: 2rem; }
+
+        .question-item {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            padding: 1.5rem;
+            border-radius: 18px;
+            margin-bottom: 1.25rem;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+        .question-item:hover { border-color: #bfdbfe; }
+
+        .question-item-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+        .question-item-header-left { display: flex; align-items: center; gap: 0.75rem; }
+        .question-num-badge {
+            width: 34px; height: 34px;
+            background: var(--blue-electric);
+            color: white; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.95rem;
+        }
+        .question-item-header h3 { font-size: 1.05rem; font-weight: 700; margin: 0; }
+
         .delete-question-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
             background: transparent;
             color: var(--danger);
             border: 1px solid var(--danger);
-            padding: 0.4rem 0.8rem;
+            padding: 0.35rem 0.8rem;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
+            display: flex; align-items: center; gap: 0.35rem;
+            transition: background 0.15s, color 0.15s;
         }
-
-        .delete-question-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
+        .delete-question-btn:hover { background: var(--danger); color: white; }
 
         .answer-input-group {
             display: grid;
@@ -848,6 +973,56 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem;
+        }
+
+        /* Add question dashed button */
+        .cq-add-btn {
+            width: 100%;
+            border: 2.5px dashed #cbd5e1;
+            border-radius: 18px;
+            padding: 2rem;
+            background: transparent;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+            color: #64748b;
+            font-size: 1rem; font-weight: 600;
+            font-family: inherit;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .cq-add-btn:hover { border-color: var(--blue-electric); color: var(--blue-electric); background: #eff6ff; }
+        .cq-add-btn-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: #e2e8f0; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; transition: background 0.2s;
+        }
+        .cq-add-btn:hover .cq-add-btn-icon { background: #dbeafe; }
+
+        /* Action bar */
+        .cq-action-bar {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 1.25rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .cq-action-bar-right { display: flex; gap: 0.75rem; }
+
+        /* Pro tips */
+        .cq-tips {
+            background: #fff7ed;
+            border: 2px solid #fed7aa;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .cq-tips h3 { font-weight: 700; color: #9a3412; margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .cq-tips ul { margin: 0; padding-left: 1.1rem; }
+        .cq-tips li { font-size: 0.9rem; color: #c2410c; margin-bottom: 0.4rem; }
+
+        @media (max-width: 640px) {
+            .cq-quick-actions { grid-template-columns: 1fr; }
+            .cq-meta-row { grid-template-columns: 1fr 1fr; }
+            .cq-meta-row .cq-qcount-box { grid-column: span 2; }
+            .cq-settings-header, .cq-body, .cq-action-bar { padding: 1.25rem; }
         }
 
         .status-message {
@@ -2211,20 +2386,110 @@
 
         <!-- Create Quiz Screen -->
         <div id="createQuizScreen" class="screen">
-            <div class="card quiz-creator">
-                <h2><img src="createQuiz.png" style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;">Create Your Quiz</h2>
-                
-                
-                <div class="input-group">
-                    <label>Quiz Title</label>
-                    <input type="text" id="quizTitle" placeholder="Enter quiz title...">
+            <div class="quiz-creator">
+
+                <!-- Page heading -->
+                <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;">
+                    <div style="width:52px;height:52px;background:linear-gradient(135deg,#0d70ff,#0a55cc);border-radius:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <img src="createQuiz.png" style="width:28px;height:28px;filter:brightness(0) invert(1);" onerror="this.style.display='none';this.parentElement.textContent='✏️'">
+                    </div>
+                    <div>
+                        <h2 style="margin:0;font-size:1.7rem;font-weight:900;color:var(--text);">Create Your Quiz</h2>
+                        <p style="margin:0;color:#64748b;font-size:0.92rem;">Build a custom quiz or use AI to generate one instantly</p>
+                    </div>
                 </div>
-                <div id="questionsContainer"></div>
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="addQuestion()">+ Add Question</button>
-                    <button class="btn btn-primary" onclick="saveQuiz()">Save Quiz</button>
-                    <button class="btn btn-secondary" onclick="goHome()">Cancel</button>
+
+                <!-- Quick action cards -->
+                <div class="cq-quick-actions">
+                    <button class="cq-action-card cqa-ai" onclick="showAIGenerator()">
+                        <div class="cqa-badge">AI Powered</div>
+                        <div class="cqa-icon">✨</div>
+                        <div class="cqa-title">Generate with AI</div>
+                        <div class="cqa-sub">Create a quiz in seconds using AI</div>
+                    </button>
+                    <button class="cq-action-card cqa-scratch" onclick="addQuestion(); this.closest('.quiz-creator').querySelector('.cq-panel').scrollIntoView({behavior:'smooth'})">
+                        <div class="cqa-icon" style="color:#0d70ff;font-size:1.5rem;">+</div>
+                        <div class="cqa-title">Start from Scratch</div>
+                        <div class="cqa-sub">Build your quiz manually</div>
+                    </button>
+                    <div class="cq-action-card cqa-template">
+                        <div class="cqa-icon" style="color:#ea580c;">📄</div>
+                        <div class="cqa-title">Import Template</div>
+                        <div class="cqa-sub">Coming soon</div>
+                    </div>
                 </div>
+
+                <!-- Main panel -->
+                <div class="cq-panel">
+
+                    <!-- Blue settings header -->
+                    <div class="cq-settings-header">
+                        <label>Quiz Title</label>
+                        <input type="text" id="quizTitle" placeholder="Enter an awesome quiz title...">
+                        <div class="cq-meta-row">
+                            <div>
+                                <label>Category</label>
+                                <select id="quizCategory">
+                                    <option value="">Select category</option>
+                                    <option value="science">Science</option>
+                                    <option value="history">History</option>
+                                    <option value="math">Math</option>
+                                    <option value="geography">Geography</option>
+                                    <option value="pop-culture">Pop Culture</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Difficulty</label>
+                                <select id="quizDifficulty">
+                                    <option value="easy">Easy</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="hard">Hard</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Questions</label>
+                                <div class="cq-qcount-box">
+                                    <div class="cq-count-num" id="questionCountDisplay">0</div>
+                                    <div class="cq-count-label">total</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Questions list -->
+                    <div class="cq-body">
+                        <div id="questionsContainer"></div>
+
+                        <!-- Add question button -->
+                        <button class="cq-add-btn" onclick="addQuestion()">
+                            <div class="cq-add-btn-icon">+</div>
+                            <span>Add Another Question</span>
+                        </button>
+                    </div>
+
+                    <!-- Action bar -->
+                    <div class="cq-action-bar">
+                        <button class="btn btn-secondary" onclick="goHome()">✕ Cancel</button>
+                        <div class="cq-action-bar-right">
+                            <button class="btn btn-primary" onclick="saveQuiz()">💾 Save Quiz</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pro tips -->
+                <div class="cq-tips">
+                    <h3>💡 Pro Tips for Great Quizzes</h3>
+                    <ul>
+                        <li>Keep questions clear and concise</li>
+                        <li>Use 15–30 seconds per question for best engagement</li>
+                        <li>Mix difficulty levels to keep everyone interested</li>
+                        <li>Add variety with different question types</li>
+                    </ul>
+                </div>
+
             </div>
         </div>
 
@@ -4381,8 +4646,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'question-item';
                 questionDiv.innerHTML = `
-                    <button class="delete-question-btn" onclick="deleteQuestion(this)">Delete</button>
-                    <h3>Question ${questionCount}</h3>
+                    <div class="question-item-header">
+                        <div class="question-item-header-left">
+                            <div class="question-num-badge">${questionCount}</div>
+                            <h3>Question ${questionCount}</h3>
+                        </div>
+                        <button class="delete-question-btn" onclick="deleteQuestion(this)">✕ Delete</button>
+                    </div>
                     <div class="input-group">
                         <label>Question Type</label>
                         <select class="question-type-select" onchange="updateQuestionFields(this)">
@@ -4406,7 +4676,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 `;
                 container.appendChild(questionDiv);
             });
-            
+
+            updateQuestionCountDisplay();
             showScreen('createQuizScreen');
         }
         window.editQuiz = editQuiz;
@@ -4563,6 +4834,12 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // Quiz Creation
         let questionCount = 0;
+        function updateQuestionCountDisplay() {
+            const count = document.querySelectorAll('#questionsContainer .question-item').length;
+            const el = document.getElementById('questionCountDisplay');
+            if (el) el.textContent = count;
+        }
+
         function addQuestion() {
             playSound('tickSound');
             questionCount++;
@@ -4570,8 +4847,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             const questionDiv = document.createElement('div');
             questionDiv.className = 'question-item';
             questionDiv.innerHTML = `
-                <button class="delete-question-btn" onclick="deleteQuestion(this)">Delete</button>
-                <h3>Question ${questionCount}</h3>
+                <div class="question-item-header">
+                    <div class="question-item-header-left">
+                        <div class="question-num-badge">${questionCount}</div>
+                        <h3>Question ${questionCount}</h3>
+                    </div>
+                    <button class="delete-question-btn" onclick="deleteQuestion(this)">✕ Delete</button>
+                </div>
                 <div class="input-group">
                     <label>Question Type</label>
                     <select class="question-type-select" onchange="updateQuestionFields(this)">
@@ -4594,12 +4876,14 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 </div>
             `;
             container.appendChild(questionDiv);
+            updateQuestionCountDisplay();
         }
         window.addQuestion = addQuestion;
 
         function deleteQuestion(btn) {
             playSound('tickSound');
             btn.closest('.question-item').remove();
+            updateQuestionCountDisplay();
         }
         window.deleteQuestion = deleteQuestion;
 
@@ -4759,6 +5043,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 document.getElementById('quizTitle').value = '';
                 document.getElementById('questionsContainer').innerHTML = '';
                 questionCount = 0;
+                updateQuestionCountDisplay();
                 editingQuizId = null;
                 showScreen('homeScreen');
                 displayRecentQuizzes();
@@ -4804,6 +5089,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             document.getElementById('quizTitle').value = '';
             document.getElementById('questionsContainer').innerHTML = '';
             questionCount = 0;
+            updateQuestionCountDisplay();
         }
         window.saveQuiz = saveQuiz;
         window.showNotification = showNotification;
