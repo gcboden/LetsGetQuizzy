@@ -938,6 +938,18 @@
             margin-bottom: 1.25rem;
         }
         .question-item-header-left { display: flex; align-items: center; gap: 0.75rem; }
+
+        .drag-handle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            cursor: grab;
+            padding: 0 0.25rem;
+            line-height: 1;
+            user-select: none;
+        }
+        .drag-handle:active { cursor: grabbing; }
+        .question-item.sortable-chosen { opacity: 0.85; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+        .question-item.sortable-ghost { opacity: 0.3; }
         .question-num-badge {
             width: 34px; height: 34px;
             background: var(--blue-electric);
@@ -1520,6 +1532,7 @@
         }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <style>
         /* ═══════════════════════════════════════════
            LANDING PAGE — scoped to #landingScreen
@@ -4838,6 +4851,30 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             if (el) el.textContent = count;
         }
 
+        function renumberQuestions() {
+            document.querySelectorAll('#questionsContainer .question-item').forEach((item, i) => {
+                const badge = item.querySelector('.question-num-badge');
+                const heading = item.querySelector('h3');
+                if (badge) badge.textContent = i + 1;
+                if (heading) heading.textContent = `Question ${i + 1}`;
+            });
+            updateQuestionCountDisplay();
+        }
+
+        // Init drag-to-reorder once the DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('questionsContainer');
+            if (container && window.Sortable) {
+                Sortable.create(container, {
+                    handle: '.drag-handle',
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    chosenClass: 'sortable-chosen',
+                    onEnd: renumberQuestions
+                });
+            }
+        });
+
         function addQuestion() {
             playSound('tickSound');
             questionCount++;
@@ -4847,6 +4884,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             questionDiv.innerHTML = `
                 <div class="question-item-header">
                     <div class="question-item-header-left">
+                        <div class="drag-handle" title="Drag to reorder">⠿</div>
                         <div class="question-num-badge">${questionCount}</div>
                         <h3>Question ${questionCount}</h3>
                     </div>
