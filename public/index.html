@@ -1666,6 +1666,33 @@
         #landingScreen .cta-form-hint{margin-top:.75rem;font-size:.75rem;color:var(--text-muted)}
         @media(min-width:640px){#landingScreen .cta-box{padding:3.5rem}}
         @media(min-width:768px){#landingScreen .cta-inner{grid-template-columns:1fr 1fr}}
+
+        /* ── Pricing Section ── */
+        #landingScreen .pricing-section{padding:6rem 0;background:#f8fafc}
+        #landingScreen .pricing-grid{display:grid;gap:1.5rem;margin-top:3rem}
+        @media(min-width:768px){#landingScreen .pricing-grid{grid-template-columns:repeat(3,1fr);align-items:start}}
+        #landingScreen .pr-card{background:#fff;border:1.5px solid var(--border);border-radius:1.25rem;padding:2rem;position:relative;transition:box-shadow .2s}
+        #landingScreen .pr-card:hover{box-shadow:0 8px 24px rgba(15,23,42,.07)}
+        #landingScreen .pr-card--popular{border:2px solid var(--blue);box-shadow:0 8px 32px rgba(13,112,255,.13)}
+        #landingScreen .pr-card--popular:hover{box-shadow:0 12px 40px rgba(13,112,255,.18)}
+        #landingScreen .pr-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:.75rem;font-weight:700;letter-spacing:.03em;padding:.3rem .9rem;border-radius:999px;white-space:nowrap;font-family:'SN Pro',sans-serif}
+        #landingScreen .pr-tier{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.6rem}
+        #landingScreen .pr-price{font-size:2.75rem;font-weight:800;line-height:1;color:var(--dark);letter-spacing:-.03em}
+        #landingScreen .pr-price-sub{font-size:.95rem;font-weight:500;color:var(--text-light)}
+        #landingScreen .pr-desc{margin-top:.6rem;font-size:.9rem;color:var(--text-light);line-height:1.55}
+        #landingScreen .pr-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+        #landingScreen .pr-features{list-style:none;padding:0;margin:0 0 1.75rem;display:flex;flex-direction:column;gap:.65rem}
+        #landingScreen .pr-feature{display:flex;align-items:flex-start;gap:.55rem;font-size:.9rem;line-height:1.45;color:var(--text)}
+        #landingScreen .pr-check{flex-shrink:0;margin-top:1px;width:1rem;height:1rem}
+        #landingScreen .pr-btn{display:flex;align-items:center;justify-content:center;width:100%;height:2.75rem;border-radius:9999px;font-family:'SN Pro',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+        #landingScreen .pr-btn-ghost{background:#fff;color:var(--dark);border:1.5px solid var(--border)}
+        #landingScreen .pr-btn-ghost:hover{background:#f1f5f9;border-color:#94a3b8}
+        #landingScreen .pr-btn-blue{background:var(--blue);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+        #landingScreen .pr-btn-blue:hover{background:var(--blue-hover)}
+        #landingScreen .pr-btn-dark{background:var(--dark);color:#fff}
+        #landingScreen .pr-btn-dark:hover{background:#1e293b}
+        #landingScreen .pr-note{text-align:center;margin-top:2.5rem;font-size:.875rem;color:var(--text-muted)}
+        #landingScreen .pr-inherit-label{font-size:.8rem;font-weight:600;color:var(--text-muted);margin-bottom:.5rem;display:block}
         /* FOOTER */
         #landingScreen .footer{border-top:1px solid var(--border);background:#fff}
         #landingScreen .footer-grid{padding:3rem 0;display:grid;gap:2rem;font-size:.875rem}
@@ -1836,7 +1863,81 @@
     </div>
 </section>
 
-<section class="cta-section" id="pricing">
+<section class="pricing-section" id="pricing">
+    <div class="container">
+        <div class="mw-2xl">
+            <div class="section-tag" style="color:var(--blue)">PRICING</div>
+            <h2 class="section-title">Simple, honest pricing.</h2>
+            <p class="section-sub" style="color:var(--text-light)">Start free — no credit card, no time limit. Upgrade when you need more power.</p>
+        </div>
+
+        <div class="pricing-grid">
+
+            <!-- Explorer -->
+            <div class="pr-card">
+                <div class="pr-tier" style="color:var(--blue)">Explorer</div>
+                <div class="pr-price">Free</div>
+                <div class="pr-desc">No account needed. Jump in and play right now.</div>
+                <hr class="pr-divider">
+                <ul class="pr-features">
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--blue)"></i><span>Create and host quizzes — <strong>no account required</strong></span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--blue)"></i><span>Up to <strong>10 players</strong> per game</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--blue)"></i><span>Up to <strong>10 questions</strong> per quiz</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--blue)"></i><span>Full gameplay — teams, wagers, power-ups</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--blue)"></i><span>Buzz-in trivia mode</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--blue)"></i><span>QR code + PIN join</span></li>
+                </ul>
+                <button class="pr-btn pr-btn-ghost" onclick="navigateFromLanding('createQuizScreen')">Start quizzing</button>
+            </div>
+
+            <!-- Classroom (Most Popular) -->
+            <div class="pr-card pr-card--popular">
+                <div class="pr-badge">Most Popular</div>
+                <div class="pr-tier" style="color:var(--amber)">Classroom</div>
+                <div>
+                    <span class="pr-price">$0</span>
+                    <span class="pr-price-sub"> / month</span>
+                </div>
+                <div class="pr-desc">Free account. Everything you need for regular use.</div>
+                <hr class="pr-divider">
+                <span class="pr-inherit-label">Everything in Explorer, plus:</span>
+                <ul class="pr-features">
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--amber)"></i><span>Save up to <strong>5 quizzes</strong></span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--amber)"></i><span>Up to <strong>25 players</strong> per game</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--amber)"></i><span>Up to <strong>25 questions</strong> per quiz</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--amber)"></i><span><strong>2 AI quiz generations</strong> per month</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:var(--amber)"></i><span>Game history and stats</span></li>
+                </ul>
+                <button class="pr-btn pr-btn-blue" onclick="navigateFromLanding('signupScreen')">Create free account <i data-lucide="arrow-right" style="width:.9rem;height:.9rem;margin-left:.35rem"></i></button>
+            </div>
+
+            <!-- Pro -->
+            <div class="pr-card">
+                <div class="pr-tier" style="color:#16a34a">Pro</div>
+                <div>
+                    <span class="pr-price">$4</span>
+                    <span class="pr-price-sub"> / month</span>
+                </div>
+                <div class="pr-desc">For power users, educators, and serious trivia hosts.</div>
+                <hr class="pr-divider">
+                <span class="pr-inherit-label">Everything in Classroom, plus:</span>
+                <ul class="pr-features">
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:#16a34a"></i><span><strong>Unlimited</strong> saved quizzes</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:#16a34a"></i><span>Up to <strong>100+ players</strong> per game</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:#16a34a"></i><span><strong>Unlimited</strong> questions per quiz</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:#16a34a"></i><span><strong>Unlimited AI</strong> quiz generations</span></li>
+                    <li class="pr-feature"><i data-lucide="check" class="pr-check" style="color:#16a34a"></i><span>Priority access to new features</span></li>
+                </ul>
+                <button class="pr-btn pr-btn-dark" onclick="navigateFromLanding('signupScreen')">Go Pro</button>
+            </div>
+
+        </div>
+
+        <p class="pr-note">All plans include full gameplay with no ads, ever.</p>
+    </div>
+</section>
+
+<section class="cta-section">
     <div class="container" style="max-width:72rem">
         <div class="cta-box">
             <div class="cta-glow-1" aria-hidden="true"></div>
