@@ -4927,7 +4927,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 document.getElementById('lobbyJoinUrl').textContent = joinUrl;
                 
                 showScreen('lobbyScreen');
-                
+
+                if (window.isGuest) localStorage.setItem('lgq_lastQuizGame', new Date().toDateString());
+
                 // Auto-enable teams if flag is set
                 if (window.autoEnableTeams) {
                     setTimeout(() => {
@@ -5417,6 +5419,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         // Host game
         async function startHosting() {
             playSound('joinSound');
+            if (!canGuestHostQuiz()) {
+                showAuthPromptModal(
+                    "You've used your free game for today! Create a free account to host unlimited games — it takes 10 seconds.",
+                    "Or come back tomorrow for another free game."
+                );
+                return;
+            }
             const quizId = document.getElementById('quizSelect').value;
             if (!quizId) {
                 alert('Please select a quiz!');
@@ -7235,6 +7244,14 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 }
             }
 
+            if (!canGuestBuzzIn()) {
+                showAuthPromptModal(
+                    "You've used your free buzz-in game for today! Create a free account to host unlimited games — it takes 10 seconds.",
+                    "Or come back tomorrow for another free game."
+                );
+                return;
+            }
+
             try {
                 await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
                     status: 'lobby',
@@ -7257,6 +7274,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 document.getElementById('buzzLobbyJoinUrl').textContent = joinUrl;
 
                 showScreen('buzzInLobbyScreen');
+                if (window.isGuest) localStorage.setItem('lgq_lastBuzzGame', new Date().toDateString());
                 listenToBuzzPlayers();
             } catch (error) {
                 alert('Error creating buzz-in game.');
@@ -7685,14 +7703,31 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.updateNavForAuth = updateNavForAuth;
 
         // ── Auth Prompt Modal ─────────────────────────────────────────────
-        function showAuthPromptModal(message) {
+        function showAuthPromptModal(message, note) {
             const el = document.getElementById('authPromptMessage');
             if (el) el.textContent = message || 'Create a free account to unlock this feature.';
+            const noteEl = document.getElementById('authPromptNote');
+            if (noteEl) {
+                if (note) { noteEl.textContent = note; noteEl.style.display = 'block'; }
+                else { noteEl.style.display = 'none'; }
+            }
             const modal = document.getElementById('authPromptModal');
             if (modal) modal.style.display = 'flex';
             switchAuthTab('signup');
         }
         window.showAuthPromptModal = showAuthPromptModal;
+
+        function canGuestHostQuiz() {
+            if (!window.isGuest) return true;
+            return localStorage.getItem('lgq_lastQuizGame') !== new Date().toDateString();
+        }
+        window.canGuestHostQuiz = canGuestHostQuiz;
+
+        function canGuestBuzzIn() {
+            if (!window.isGuest) return true;
+            return localStorage.getItem('lgq_lastBuzzGame') !== new Date().toDateString();
+        }
+        window.canGuestBuzzIn = canGuestBuzzIn;
 
         function closeAuthPromptModal() {
             const modal = document.getElementById('authPromptModal');
@@ -7773,6 +7808,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             <div style="text-align:center;margin-bottom:1.5rem;">
                 <div style="font-size:2.5rem;margin-bottom:0.5rem;">🎉</div>
                 <div id="authPromptMessage" style="font-size:1.05rem;color:#333;line-height:1.5;font-weight:500;"></div>
+                <div id="authPromptNote" style="margin-top:0.5rem;font-size:0.85rem;color:#999;display:none;"></div>
             </div>
             <!-- Tabs -->
             <div style="display:flex;border-bottom:2px solid #eee;margin-bottom:1.5rem;">
