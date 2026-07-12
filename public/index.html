@@ -3172,31 +3172,35 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     <div id="buzzModeBuzzer" onclick="setBuzzMode('buzzer')" style="
                         background: linear-gradient(135deg, #ff5a00, #ff9e00);
                         color: white;
-                        padding: 1.5rem;
+                        padding: 1.1rem;
                         border-radius: 16px;
                         cursor: pointer;
                         text-align: center;
                         transition: all 0.2s;
-                        border: 3px solid transparent;
+                        border: 3px solid #ff5a00;
                         box-shadow: 0 4px 15px rgba(255,90,0,0.3);
                     ">
-                        <img src="aloud.png" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 0.5rem;">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Pure Buzzer</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Read questions aloud</p>
+                        <div style="width: 64px; height: 64px; border-radius: 50%; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem;">
+                            <img src="aloud.png" style="width: 42px; height: 42px; object-fit: contain;">
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 0.2rem;">Pure Buzzer</h3>
+                        <p id="buzzModeBuzzerSub" style="font-size: 0.8rem; color: rgba(255,255,255,0.9);">Read questions aloud</p>
                     </div>
                     <div id="buzzmodeDisplay" onclick="setBuzzMode('display')" style="
-                        background: linear-gradient(135deg, #0c70ff, #42cbff);
-                        color: white;
-                        padding: 1.5rem;
+                        background: white;
+                        color: var(--dark);
+                        padding: 1.1rem;
                         border-radius: 16px;
                         cursor: pointer;
                         text-align: center;
                         transition: all 0.2s;
-                        border: 3px solid transparent;
+                        border: 3px solid #0c70ff;
                     ">
-                        <img src="Display.png" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 0.5rem;">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Display Questions</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.9;">Show questions on screen</p>
+                        <div style="width: 64px; height: 64px; border-radius: 50%; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem;">
+                            <img src="Display.png" style="width: 42px; height: 42px; object-fit: contain;">
+                        </div>
+                        <h3 style="font-size: 1rem; margin-bottom: 0.2rem;">Display Questions</h3>
+                        <p id="buzzModeDisplaySub" style="font-size: 0.8rem; color: #64748b;">Show questions on screen</p>
                     </div>
                 </div>
 
@@ -3229,7 +3233,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-success" onclick="createBuzzInGame()" style="font-size: 1.2rem; padding: 1rem 3rem;"><img src="buzzIn.png" style="width: 22px; height: 22px; object-fit: contain; vertical-align: middle; margin-right: 6px;">Create Buzz-In Game</button>
+                    <button class="btn" onclick="createBuzzInGame()" style="font-size: 1.2rem; padding: 1rem 3rem; background: transparent; color: #ff5a00; border: 3px solid #ff5a00;"><img src="buzzIn.png" style="width: 22px; height: 22px; object-fit: contain; vertical-align: middle; margin-right: 6px;">Create Buzz-In Game</button>
                     <button class="btn btn-secondary" onclick="goHome()">Cancel</button>
                 </div>
             </div>
@@ -7181,13 +7185,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         function goToBuzzInSetup() {
             playSound('joinSound');
-            buzzMode = 'buzzer';
             buzzQuestionCount = 0;
             document.getElementById('buzzQuestionsContainer').innerHTML = '';
             document.getElementById('buzzQuestionsInput').style.display = 'none';
-            // Highlight default mode
-            document.getElementById('buzzModeBuzzer').style.border = '3px solid white';
-            document.getElementById('buzzmodeDisplay').style.border = '3px solid transparent';
+            setBuzzMode('buzzer');
             showScreen('buzzInSetupScreen');
         }
         window.goToBuzzInSetup = goToBuzzInSetup;
@@ -7197,15 +7198,33 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             playSound('tickSound');
             const buzzerCard = document.getElementById('buzzModeBuzzer');
             const displayCard = document.getElementById('buzzmodeDisplay');
+            const buzzerSub = document.getElementById('buzzModeBuzzerSub');
+            const displaySub = document.getElementById('buzzModeDisplaySub');
             const questionsInput = document.getElementById('buzzQuestionsInput');
 
             if (mode === 'buzzer') {
-                buzzerCard.style.border = '3px solid white';
-                displayCard.style.border = '3px solid transparent';
+                buzzerCard.style.background = 'linear-gradient(135deg, #ff5a00, #ff9e00)';
+                buzzerCard.style.color = 'white';
+                buzzerCard.style.boxShadow = '0 4px 15px rgba(255,90,0,0.3)';
+                buzzerSub.style.color = 'rgba(255,255,255,0.9)';
+
+                displayCard.style.background = 'white';
+                displayCard.style.color = 'var(--dark)';
+                displayCard.style.boxShadow = 'none';
+                displaySub.style.color = '#64748b';
+
                 questionsInput.style.display = 'none';
             } else {
-                buzzerCard.style.border = '3px solid transparent';
-                displayCard.style.border = '3px solid white';
+                displayCard.style.background = 'linear-gradient(135deg, #0c70ff, #42cbff)';
+                displayCard.style.color = 'white';
+                displayCard.style.boxShadow = '0 4px 15px rgba(12,112,255,0.3)';
+                displaySub.style.color = 'rgba(255,255,255,0.9)';
+
+                buzzerCard.style.background = 'white';
+                buzzerCard.style.color = 'var(--dark)';
+                buzzerCard.style.boxShadow = 'none';
+                buzzerSub.style.color = '#64748b';
+
                 questionsInput.style.display = 'block';
                 if (buzzQuestionCount === 0) addBuzzQuestion();
             }
@@ -7274,7 +7293,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 const joinUrl = `${window.location.origin}${window.location.pathname}?buzzpin=${buzzGamePin}`;
                 const qrContainer = document.getElementById('buzzLobbyQrCode');
                 qrContainer.innerHTML = '';
-                new QRCode(qrContainer, { text: joinUrl, width: 160, height: 160, colorDark: '#e63946', colorLight: '#ffffff' });
+                new QRCode(qrContainer, { text: joinUrl, width: 160, height: 160, colorDark: '#0d1d38', colorLight: '#ffffff' });
                 document.getElementById('buzzLobbyJoinUrl').textContent = joinUrl;
 
                 showScreen('buzzInLobbyScreen');
@@ -7351,7 +7370,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 if (buzzer && buzzer.name) {
                     document.getElementById('buzzHostStatus').innerHTML = `
                         <div style="
-                            background: linear-gradient(135deg, #e63946, #ff6b6b);
+                            background: linear-gradient(135deg, #ff5a00, #ff9e00);
                             color: white;
                             padding: 1.5rem;
                             border-radius: 16px;
@@ -7583,7 +7602,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             const btn = document.getElementById('buzzPlayerBtn');
             btn.disabled = false;
             btn.style.opacity = '1';
-            btn.style.background = 'linear-gradient(135deg, #e63946, #cc0000)';
+            btn.style.background = 'linear-gradient(135deg, #ff5a00, #ff9e00)';
             document.getElementById('buzzPlayerStatus').textContent = '';
 
             // Listen for buzz state
@@ -7610,7 +7629,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     // Buzzers reopened
                     btn.disabled = false;
                     btn.style.opacity = '1';
-                    btn.style.background = 'linear-gradient(135deg, #e63946, #cc0000)';
+                    btn.style.background = 'linear-gradient(135deg, #ff5a00, #ff9e00)';
                     status.textContent = '';
                 }
             });
