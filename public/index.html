@@ -233,6 +233,13 @@
             50% { transform: translateX(-50%) translateY(-10px); }
         }
 
+        .icon-inline {
+            width: 1.1em;
+            height: 1.1em;
+            vertical-align: -0.15em;
+            margin-right: 0.35em;
+        }
+
         .card {
             background: var(--card);
             border-radius: 16px;
@@ -3282,7 +3289,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
                 <!-- Buzz Status -->
                 <div id="buzzHostStatus" style="text-align: center; padding: 2rem; background: rgba(0,0,0,0.03); border-radius: 16px; margin-bottom: 1.5rem;">
-                    <p style="font-size: 1.3rem; color: #999;">⚡ Waiting for someone to buzz in...</p>
+                    <p style="font-size: 1.3rem; color: #999; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><i data-lucide="zap" class="icon-inline"></i> Waiting for someone to buzz in...</p>
                 </div>
 
                 <!-- Points Selector -->
@@ -3297,29 +3304,21 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 </div>
 
                 <!-- Host Controls (shown when someone buzzes) -->
-                <div id="buzzHostControls" style="display: none; text-align: center; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
-                    <button onclick="buzzMarkAnswer(true)" style="
-                        background: #06D6A0; color: white; border: none; padding: 1rem 2rem;
-                        border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer;
-                        font-family: 'SN Pro', sans-serif; margin: 0.5rem;
-                    ">✅ Correct!</button>
-                    <button onclick="buzzMarkAnswer(false)" style="
-                        background: #EF476F; color: white; border: none; padding: 1rem 2rem;
-                        border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer;
-                        font-family: 'SN Pro', sans-serif; margin: 0.5rem;
-                    ">❌ Wrong — Reopen</button>
+                <div id="buzzHostControls" style="display: none; gap: 1rem; justify-content: center; margin-bottom: 1.75rem;">
+                    <button class="btn" onclick="buzzMarkAnswer(true)" style="background: #0c70ff; color: white; font-size: 1.05rem;"><i data-lucide="check-circle" class="icon-inline"></i>Correct!</button>
+                    <button class="btn" onclick="buzzMarkAnswer(false)" style="background: #ff5a00; color: white; font-size: 1.05rem;"><i data-lucide="x-circle" class="icon-inline"></i>Wrong — Reopen</button>
                 </div>
 
                 <!-- Navigation -->
                 <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
-                    <button class="btn btn-secondary" onclick="buzzPrevQuestion()">← Prev</button>
-                    <button class="btn btn-primary" onclick="buzzNextQuestion()">Next Question →</button>
-                    <button class="btn" onclick="endBuzzInGame()" style="background: linear-gradient(135deg, #ff5a00, #ff9e00); color: white;">🏆 Show Results</button>
+                    <button class="btn btn-secondary" onclick="buzzPrevQuestion()"><i data-lucide="arrow-left" class="icon-inline"></i>Prev</button>
+                    <button class="btn" onclick="buzzNextQuestion()" style="background: #0d1d38; color: white;">Next Question<i data-lucide="arrow-right" class="icon-inline" style="margin-right:0; margin-left:0.35em;"></i></button>
+                    <button class="btn" onclick="endBuzzInGame()" style="background: transparent; color: #ff5a00; border: 3px solid #ff5a00;"><i data-lucide="trophy" class="icon-inline"></i>Show Results</button>
                 </div>
 
                 <!-- Live Leaderboard -->
                 <div style="background: rgba(0,0,0,0.03); padding: 1.5rem; border-radius: 16px;">
-                    <h3 style="text-align: center; color: var(--blue-electric); margin-bottom: 1rem;">🏆 Leaderboard</h3>
+                    <h3 style="text-align: center; color: var(--blue-electric); margin-bottom: 1rem;"><i data-lucide="trophy" class="icon-inline"></i>Leaderboard</h3>
                     <div id="buzzHostLeaderboard" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
                 </div>
             </div>
@@ -3363,7 +3362,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         <!-- Buzz-In Results Screen -->
         <div id="buzzInResultsScreen" class="screen">
             <div class="card" style="max-width: 700px; margin: 0 auto; text-align: center;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                <div style="margin-bottom: 1rem; color: #ff9e00;"><i data-lucide="trophy" style="width:64px;height:64px;"></i></div>
                 <h1 style="font-size: 2.5rem; color: var(--blue-electric); margin-bottom: 2rem;">Final Results</h1>
                 <div id="buzzFinalLeaderboard" style="display: flex; flex-direction: column; gap: 1rem;"></div>
                 <div class="btn-group" style="margin-top: 2rem;">
@@ -7282,7 +7281,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     questions: buzzQuestions.length > 0 ? buzzQuestions : null,
                     defaultPoints: buzzDefaultPoints,
                     currentQuestion: 0,
-                    buzzedBy: null,
+                    buzzOrder: null,
                     createdAt: Date.now(),
                     gameType: 'buzzin'
                 });
@@ -7334,7 +7333,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             await window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
                 status: 'playing',
                 currentQuestion: 0,
-                buzzedBy: null
+                buzzOrder: null
             });
 
             showBuzzHostGame(0);
@@ -7354,7 +7353,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
 
             // Reset buzz UI
-            document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #999;">⚡ Waiting for someone to buzz in...</p>';
+            document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #999; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><i data-lucide="zap" class="icon-inline"></i> Waiting for someone to buzz in...</p>';
+            if (window.lucide) lucide.createIcons();
             document.getElementById('buzzHostControls').style.display = 'none';
 
             showScreen('buzzInHostScreen');
@@ -7363,24 +7363,33 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
 
         function listenForBuzzIn() {
-            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`);
+            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzOrder`);
             if (buzzBuzzerListener) buzzBuzzerListener();
             buzzBuzzerListener = window.dbOnValue(buzzRef, (snap) => {
-                const buzzer = snap.val();
-                if (buzzer && buzzer.name) {
+                const order = snap.val();
+                if (order && order.length > 0) {
+                    const [first, ...rest] = order;
+                    const rankLabels = ['2nd', '3rd'];
+                    const restHtml = rest.map((p, i) => `
+                        <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; background: rgba(0,0,0,0.04); color: var(--dark); padding: 0.6rem 1rem; border-radius: 10px; margin-top: 0.5rem; font-weight: 600;">
+                            <span style="opacity:0.55; font-size:0.85rem;">${rankLabels[i] || `${i + 2}th`}</span>${p.name}
+                        </div>
+                    `).join('');
                     document.getElementById('buzzHostStatus').innerHTML = `
                         <div style="
-                            background: linear-gradient(135deg, #ff5a00, #ff9e00);
+                            background: linear-gradient(135deg, #42cbff, #0c70ff);
                             color: white;
                             padding: 1.5rem;
                             border-radius: 16px;
                             text-align: center;
                             animation: fadeInUp 0.3s ease;
                         ">
-                            <p style="font-size: 2rem; font-weight: 700;">⚡ ${buzzer.name}</p>
+                            <p style="font-size: 2rem; font-weight: 700;"><i data-lucide="zap" class="icon-inline"></i> ${first.name}</p>
                             <p style="font-size: 1rem; opacity: 0.9;">buzzed in!</p>
                         </div>
+                        ${restHtml}
                     `;
+                    if (window.lucide) lucide.createIcons();
                     document.getElementById('buzzHostControls').style.display = 'flex';
                 }
             });
@@ -7424,8 +7433,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
 
         async function buzzMarkAnswer(correct) {
-            const buzzSnap = await window.dbGet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`));
-            const buzzer = buzzSnap.val();
+            const orderSnap = await window.dbGet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzOrder`));
+            const order = orderSnap.val();
+            const buzzer = order && order[0];
             if (!buzzer) return;
 
             if (correct) {
@@ -7440,20 +7450,23 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
                 playSound('correctSound');
                 document.getElementById('buzzHostStatus').innerHTML += `
-                    <p style="color: #06D6A0; font-size: 1.2rem; font-weight: 700; margin-top: 0.5rem; animation: fadeInUp 0.3s ease;">
-                        ✅ +${pts} points to ${buzzer.name}!
+                    <p style="color: #0c70ff; font-size: 1.2rem; font-weight: 700; margin-top: 0.5rem; animation: fadeInUp 0.3s ease;">
+                        <i data-lucide="check-circle" class="icon-inline"></i> +${pts} points to ${buzzer.name}!
                     </p>
                 `;
+                if (window.lucide) lucide.createIcons();
 
                 setTimeout(async () => {
-                    await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
-                    document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #999;">⚡ Waiting for someone to buzz in...</p>';
+                    await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzOrder`), null);
+                    document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #999; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><i data-lucide="zap" class="icon-inline"></i> Waiting for someone to buzz in...</p>';
+                    if (window.lucide) lucide.createIcons();
                     document.getElementById('buzzHostControls').style.display = 'none';
                 }, 1500);
             } else {
                 playSound('wrongSound');
-                await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
-                document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #EF476F;">❌ Wrong! Buzzers reopened...</p>';
+                await window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzOrder`), null);
+                document.getElementById('buzzHostStatus').innerHTML = '<p style="font-size: 1.3rem; color: #ff5a00; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><i data-lucide="x-circle" class="icon-inline"></i> Wrong! Buzzers reopened...</p>';
+                if (window.lucide) lucide.createIcons();
                 document.getElementById('buzzHostControls').style.display = 'none';
             }
         }
@@ -7463,10 +7476,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             playSound('tickSound');
             const maxIndex = buzzMode === 'display' && buzzQuestions.length ? buzzQuestions.length - 1 : buzzCurrentQuestionIndex + 1;
             const next = Math.min(buzzCurrentQuestionIndex + 1, maxIndex);
-            window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
             window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
                 currentQuestion: next,
-                buzzedBy: null
+                buzzOrder: null
             });
             showBuzzHostGame(next);
         }
@@ -7476,10 +7488,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             if (buzzCurrentQuestionIndex <= 0) return;
             playSound('tickSound');
             const prev = buzzCurrentQuestionIndex - 1;
-            window.dbSet(window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`), null);
             window.dbUpdate(window.dbRef(window.db, `buzzin/${buzzGamePin}`), {
                 currentQuestion: prev,
-                buzzedBy: null
+                buzzOrder: null
             });
             showBuzzHostGame(prev);
         }
@@ -7606,35 +7617,47 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             document.getElementById('buzzPlayerStatus').textContent = '';
 
             // Listen for buzz state
-            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`);
+            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzOrder`);
             // Clean up old listener
             if (window._buzzPlayerBuzzListener) window._buzzPlayerBuzzListener();
             window._buzzPlayerBuzzListener = window.dbOnValue(buzzRef, (snap) => {
-                const buzzer = snap.val();
-                const btn = document.getElementById('buzzPlayerBtn');
-                const status = document.getElementById('buzzPlayerStatus');
-                if (buzzer && buzzer.name) {
-                    if (buzzer.id === currentPlayer.id) {
-                        status.textContent = '⚡ You buzzed in!';
-                        status.style.color = '#06D6A0';
-                        btn.disabled = true;
-                    } else {
-                        status.textContent = `🔒 ${buzzer.name} buzzed in first!`;
-                        status.style.color = '#EF476F';
-                        btn.disabled = true;
-                        btn.style.opacity = '0.5';
-                        btn.style.background = '#999';
-                    }
-                } else {
-                    // Buzzers reopened
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                    btn.style.background = 'linear-gradient(135deg, #ff5a00, #ff9e00)';
-                    status.textContent = '';
-                }
+                applyPlayerBuzzState(snap.val());
             });
 
             listenToBuzzScores('player');
+        }
+
+        // Updates the buzz button + status message based on the current buzzOrder array
+        function applyPlayerBuzzState(order) {
+            const btn = document.getElementById('buzzPlayerBtn');
+            const status = document.getElementById('buzzPlayerStatus');
+            if (order && order.length > 0) {
+                const rank = order.findIndex(p => p.id === currentPlayer.id);
+                if (rank === 0) {
+                    status.innerHTML = '<i data-lucide="zap" class="icon-inline"></i>You buzzed in!';
+                    status.style.color = '#0c70ff';
+                    btn.disabled = true;
+                } else if (rank === 1 || rank === 2) {
+                    status.innerHTML = `<i data-lucide="zap" class="icon-inline"></i>You buzzed in ${rank === 1 ? '2nd' : '3rd'}!`;
+                    status.style.color = '#42cbff';
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.background = '#999';
+                } else {
+                    status.innerHTML = `<i data-lucide="lock" class="icon-inline"></i>${order[0].name} got there first!`;
+                    status.style.color = '#ff5a00';
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.background = '#999';
+                }
+                if (window.lucide) lucide.createIcons();
+            } else {
+                // Buzzers reopened
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.background = 'linear-gradient(135deg, #ff5a00, #ff9e00)';
+                status.textContent = '';
+            }
         }
 
         async function playerBuzzIn() {
@@ -7643,38 +7666,29 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             if (btn.disabled) return;
 
             btn.disabled = true;
-            status.textContent = '⚡ Buzzing...';
+            status.innerHTML = '<i data-lucide="zap" class="icon-inline"></i>Buzzing...';
             status.style.color = 'var(--orange-gold)';
+            if (window.lucide) lucide.createIcons();
 
-            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzedBy`);
+            const buzzRef = window.dbRef(window.db, `buzzin/${buzzGamePin}/buzzOrder`);
 
             try {
-                const result = await window.dbRunTransaction(buzzRef, (currentValue) => {
-                    if (currentValue) return currentValue; // Someone already buzzed
-                    return {
-                        id: currentPlayer.id,
-                        name: currentPlayer.name,
-                        timestamp: Date.now()
-                    };
+                const result = await window.dbRunTransaction(buzzRef, (current) => {
+                    const order = current || [];
+                    if (order.some(p => p.id === currentPlayer.id)) return order; // Already buzzed this round
+                    if (order.length >= 3) return order; // Top 3 locked in
+                    return [...order, { id: currentPlayer.id, name: currentPlayer.name, timestamp: Date.now() }];
                 });
 
-                const winner = result.snapshot?.val();
-                if (!result.committed || !winner) {
+                if (!result.committed) {
                     btn.disabled = false;
                     status.textContent = 'Try again!';
                     return;
                 }
 
-                if (winner.id === currentPlayer.id) {
-                    status.textContent = '⚡ You buzzed in!';
-                    status.style.color = '#06D6A0';
-                    playSound('correctSound');
-                } else {
-                    status.textContent = `🔒 ${winner.name} got there first!`;
-                    status.style.color = '#EF476F';
-                    btn.style.opacity = '0.5';
-                    btn.style.background = '#999';
-                }
+                const order = result.snapshot?.val() || [];
+                if (order.findIndex(p => p.id === currentPlayer.id) === 0) playSound('correctSound');
+                applyPlayerBuzzState(order);
             } catch (e) {
                 btn.disabled = false;
                 status.textContent = 'Connection hiccup. Try again!';
