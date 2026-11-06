@@ -1754,7 +1754,7 @@
                 <a class="nav-link" onclick="goToHostScreen();">Host Game</a>
                 <a class="nav-link" onclick="showScreen('joinScreen'); closeMobileMenu();">Join Game</a>
                 <a id="aiNavBtnHeader" class="nav-link ai-maker-btn" onclick="showAIGenerator(); closeMobileMenu();" style="display:none;">✨ AI Quiz Maker</a>
-                <a class="nav-link" onclick="logout(); closeMobileMenu();" style="color: var(--orange-bright);">Logout</a>
+                <a id="logoutNavLink" class="nav-link" onclick="logout(); closeMobileMenu();" style="color: var(--orange-bright);">Logout</a>
             </nav>
         </div>
     </div>
@@ -2238,7 +2238,7 @@
                     
                     <!-- Nav Links -->
                     <div style="display: flex; gap: 1.5rem;">
-                        <a href="#" onclick="showHomeTab('quizzes'); return false;" style="
+                        <a id="yourQuizzesNav" href="#" onclick="showHomeTab('quizzes'); return false;" style="
                             color: #333;
                             text-decoration: none;
                             font-weight: 600;
@@ -2485,9 +2485,9 @@
                 <!-- Guest Sign-In Prompt -->
                 <div id="guestSignInState" style="display: none; text-align: center; padding: 3rem 2rem; background: linear-gradient(135deg, rgba(13,112,255,0.05), rgba(66,153,225,0.05)); border-radius: 16px; border: 2px dashed #ddd;">
                     <img src="lockout.png" style="width: 56px; height: 56px; object-fit: contain; margin-bottom: 1rem;">
-                    <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 0.75rem; text-align: center;">Sign in to see your saved quizzes</h3>
+                    <h3 style="color: var(--blue-electric); font-size: 1.5rem; margin-bottom: 0.75rem; text-align: center;">Your quizzes are saved for this guest session</h3>
                     <p style="color: #666; font-size: 1rem; margin-bottom: 1.5rem; max-width: 420px; margin-left: auto; margin-right: auto; text-align: center;">
-                        Create a free account to save quizzes, build a library, and access them anytime.
+                        Create a free account to keep them if you switch devices or clear browser data.
                     </p>
                     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                         <button onclick="showScreen('signupScreen')" style="background: var(--blue-electric); color: white; border: none; padding: 0.8rem 1.75rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">Create free account</button>
@@ -3425,17 +3425,16 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
     <!-- Audio elements for sound effects -->
     <audio id="correctSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGe88OScTgwPUKXl8bllHAU2jtryzHgrBSF1xe/glEILElyx6OyrWBUIQ5zd8sFuJAUsgc7y2Ik2CBdmvO/mnE4MD0+l5fG5ZRwFN43a8sx5KwUgdMTv4JNCCxFbsejrq1kVB0Kb3fK/bSQFKn/O8diJNwgXZbzv5pxODA9PpOTxuWUcBTaO2fPLeSsFIHLF7+CTQgsQWrHo66xZFQdBmtvxwW0kBSp/zvHYiDcIF2W87+acTgwPT6Tk8bplHAU2jtrzynosBS" +
-        "Byw+/glEILEFux6Oqtm1kVB0Ga2/HAbSQFKX/O8diINwgXZbvv5JxODA9OpOTxu2YcBTWN2vLLeSsFIHLE7+GUQgsRW7Ho6qybWRUHQJrb8MBtJAUpfs7x2Ig3CBdlu+/knE4MD06k5PG7ZhwFNY3a8st5KwUfcsXv4JRCCxFbsejqrJtZFQdAmtvwwG0kBSl+zvHYiDcIF2W77+ScTgwPTqTk8btmHAU1jdrzy3ksBR9yxe/glEMLEVux6OqsmVkVB0Ca2+/AbSQFKX7O8dqINwgXZbvv5JxODA9OpOTxu2YcBTSN2vLMeSsFIHLE7+GUQgsQWrHo6qybWRUHQJrb8MBtIwUpfs7x2og3CBdku+/knE4MD06j5PG7ZhwFNI3a8sx5LAUQ";
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGe88OScTgwPUKXl8bllHAU2jtryzHgrBSF1xe/glEILElyx6OyrWBUIQ5zd8sFuJAUsgc7y2Ik2CBdmvO/mnE4MD0+l5fG5ZRwFN43a8sx5KwUgdMTv4JNCCxFbsejrq1kVB0Kb3fK/bSQFKn/O8diJNwgXZbzv5pxODA9PpOTxuWUcBTaO2fPLeSsFIHLF7+CTQgsQWrHo66xZFQdBmtvxwW0kBSp/zvHYiDcIF2W87+acTgwPT6Tk8bplHAU2jtrzynosBSByw+/glEILEFux6Oqtm1kVB0Ga2/HAbSQFKX/O8diINwgXZbvv5JxODA9OpOTxu2YcBTWN2vLLeSsFIHLE7+GUQgsRW7Ho6qybWRUHQJrb8MBtJAUpfs7x2Ig3CBdlu+/knE4MD06k5PG7ZhwFNY3a8st5KwUfcsXv4JRCCxFbsejqrJtZFQdAmtvwwG0kBSl+zvHYiDcIF2W77+ScTgwPTqTk8btmHAU1jdrzy3ksBR9yxe/glEMLEVux6OqsmVkVB0Ca2+/AbSQFKX7O8dqINwgXZbvv5JxODA9OpOTxu2YcBTSN2vLMeSsFIHLE7+GUQgsQWrHo6qybWRUHQJrb8MBtIwUpfs7x2og3CBdku+/knE4MD06j5PG7ZhwFNI3a8sx5LAUQ">
     </audio>
     <audio id="wrongSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRhYAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0Ya0JAACAf4CAgICAgH+AgH6Af39+fn59fX18fHx7e3p6eXl4eHd3d3Z2dnV1dHRzc3JycXFwcHBvb29ubW1tbGxramppamloaGdnZ2ZlZWVkZGNjY2JiYWFhYGBfX19eXl1dXF1cXFtbWltaWllZWFlYV1dXVlZVVVRUVFNTU1JUVFNTU1JRUVBQUFBPTk5OTU1NTExLTExMS0tKSkpJSUlIR0dHRkZGRUVERERDQ0NDQkFBQUA/QD8/Pj4+PT09PDw8Ozs7Ozk6OTk5ODg3Njc2NjU1NDQzMzMzMjIyMTEwMTAvLy8uLi0tLS0sLCwrKysqKikpKCgoJygnJiYmJSUkJCQjIyIiIiEhICAf";
+        <source src="data:audio/wav;base64,UklGRhYAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0Ya0JAACAf4CAgICAgH+AgH6Af39+fn59fX18fHx7e3p6eXl4eHd3d3Z2dnV1dHRzc3JycXFwcHBvb29ubW1tbGxramppamloaGdnZ2ZlZWVkZGNjY2JiYWFhYGBfX19eXl1dXF1cXFtbWltaWllZWFlYV1dXVlZVVVRUVFNTU1JUVFNTU1JRUVBQUFBPTk5OTU1NTExLTExMS0tKSkpJSUlIR0dHRkZGRUVERERDQ0NDQkFBQUA/QD8/Pj4+PT09PDw8Ozs7Ozk6OTk5ODg3Njc2NjU1NDQzMzMzMjIyMTEwMTAvLy8uLi0tLS0sLCwrKysqKikpKCgoJygnJiYmJSUkJCQjIyIiIiEhICAf">
     </audio>
     <audio id="tickSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRhQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZQAAAAAgIqKiYmIiYiJiIeIiIiHh4eGh4aGhYWFhYSEhIODgoKCgYGAgH9/fn59fHx7e3p6eXl4d3d2dnV1dHRzc3Jycnh5h4d9ent5dnVycW9ta2poZmRiYV9dW1lXVVNSUE5MS0lHRkREQkE/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSkoJyYlJCMiISEfHx0dHBsaGRgYFxYVFBMSERAPDw4NDAsKCQgHBwYFBAMCAQEA";
+        <source src="data:audio/wav;base64,UklGRhQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZQAAAAAgIqKiYmIiYiJiIeIiIiHh4eGh4aGhYWFhYSEhIODgoKCgYGAgH9/fn59fHx7e3p6eXl4d3d2dnV1dHRzc3Jycnh5h4d9ent5dnVycW9ta2poZmRiYV9dW1lXVVNSUE5MS0lHRkREQkE/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSkoJyYlJCMiISEfHx0dHBsaGRgYFxYVFBMSERAPDw4NDAsKCQgHBwYFBAMCAQEA">
     </audio>
     <audio id="joinSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0YQ4AAAAAgICFhomLjI2Oj5CQkZKSlJWWlpeXl5iYmJmZmZmamZmZmZmYmJiYl5eXlpaVlJSTkpGQj46NjIuKiYiFhIKBgH5+fHt6eXd2dXRyc3Bvbmxram5ubG1saWhnZmRjYmFfXl1bWllXVlRTUU9OTEtJR0ZERE";
+        <source src="data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0YQ4AAAAAgICFhomLjI2Oj5CQkZKSlJWWlpeXl5iYmJmZmZmamZmZmZmYmJiYl5eXlpaVlJSTkpGQj46NjIuKiYiFhIKBgH5+fHt6eXd2dXRyc3Bvbmxram5ubG1saWhnZmRjYmFfXl1bWllXVlRTUU9OTEtJR0ZERE">
     </audio>
     <audio id="leaderboardMusic" preload="auto" loop>
         <source src="data:audio/wav;base64,UklGRvYBAABXQVZFZm10IBAAAAABAAAB">
@@ -3448,7 +3447,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, set, get, onValue, update, remove, push, child, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithCredential, signInWithPopup, signInAnonymously, EmailAuthProvider, linkWithCredential, linkWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         // TODO: Replace with your Firebase config
         const firebaseConfig = {
@@ -3484,10 +3483,116 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
         window.signInWithPopup = signInWithPopup;
+        window.signInAnonymously = signInAnonymously;
+        window.linkWithCredential = linkWithCredential;
+        window.linkWithPopup = linkWithPopup;
         window.GoogleAuthProvider = GoogleAuthProvider;
         window.onAuthStateChanged = onAuthStateChanged;
         window.signOut = signOut;
         window.googleProvider = googleProvider;
+
+        async function readUserQuizzes(uid) {
+            const snapshot = await get(ref(database, `userQuizzes/${uid}`));
+            return snapshot.exists() ? (snapshot.val() || {}) : {};
+        }
+
+        async function copyAnonymousQuizzes(sourceUid, destinationUid, sourceQuizzes) {
+            if (!sourceUid || sourceUid === destinationUid) return;
+            const source = sourceQuizzes || await readUserQuizzes(sourceUid);
+            const destination = await readUserQuizzes(destinationUid);
+            let collisionIndex = 0;
+
+            for (const [quizId, quiz] of Object.entries(source)) {
+                let destinationId = quizId;
+                while (Object.prototype.hasOwnProperty.call(destination, destinationId)) {
+                    destinationId = `${quizId}_guest_${Date.now()}_${collisionIndex++}`;
+                }
+                const copiedQuiz = { ...quiz, id: destinationId, createdBy: destinationUid };
+                await set(ref(database, `userQuizzes/${destinationUid}/${destinationId}`), copiedQuiz);
+                destination[destinationId] = copiedQuiz;
+            }
+
+            if (auth.currentUser?.uid === destinationUid && !auth.currentUser.isAnonymous) {
+                window.currentUser = auth.currentUser;
+                window.isGuest = false;
+                if (window.updateNavForAuth) window.updateNavForAuth();
+                if (window.loadUserQuizzes) await window.loadUserQuizzes();
+            }
+        }
+
+        async function createOrLinkEmailAccount(email, password) {
+            const current = auth.currentUser;
+            if (current?.isAnonymous) {
+                return linkWithCredential(current, EmailAuthProvider.credential(email, password));
+            }
+            return createUserWithEmailAndPassword(auth, email, password);
+        }
+
+        async function signInOrLinkEmailAccount(email, password) {
+            const anonymousUser = auth.currentUser;
+            if (!anonymousUser?.isAnonymous) {
+                return signInWithEmailAndPassword(auth, email, password);
+            }
+
+            const credential = EmailAuthProvider.credential(email, password);
+            try {
+                return await linkWithCredential(anonymousUser, credential);
+            } catch (error) {
+                const isExistingCredential = ['auth/email-already-in-use', 'auth/credential-already-in-use'].includes(error.code);
+                if (!isExistingCredential) throw error;
+
+                const anonymousQuizzes = await readUserQuizzes(anonymousUser.uid);
+                const result = await signInWithCredential(auth, credential);
+                await copyAnonymousQuizzes(anonymousUser.uid, result.user.uid, anonymousQuizzes);
+                return result;
+            }
+        }
+
+        async function signInOrLinkGoogleAccount() {
+            const anonymousUser = auth.currentUser;
+            if (!anonymousUser?.isAnonymous) return signInWithPopup(auth, googleProvider);
+
+            try {
+                return await linkWithPopup(anonymousUser, googleProvider);
+            } catch (error) {
+                const isExistingCredential = ['auth/email-already-in-use', 'auth/credential-already-in-use', 'auth/account-exists-with-different-credential'].includes(error.code);
+                if (!isExistingCredential) throw error;
+
+                const anonymousQuizzes = await readUserQuizzes(anonymousUser.uid);
+                const credential = error.credential || GoogleAuthProvider.credentialFromError(error);
+                if (!credential) throw error;
+                const result = await signInWithCredential(auth, credential);
+                await copyAnonymousQuizzes(anonymousUser.uid, result.user.uid, anonymousQuizzes);
+                return result;
+            }
+        }
+
+        window.createOrLinkEmailAccount = createOrLinkEmailAccount;
+        window.signInOrLinkEmailAccount = signInOrLinkEmailAccount;
+        window.signInOrLinkGoogleAccount = signInOrLinkGoogleAccount;
+
+        async function ensureHostingAuth() {
+            let user;
+            const existingUser = auth.currentUser;
+            try {
+                user = existingUser || (await signInAnonymously(auth)).user;
+            } catch (error) {
+                console.error('Anonymous sign-in failed:', error);
+                const guestModeDisabled = error.code === 'auth/admin-restricted-operation' || error.code === 'auth/operation-not-allowed';
+                const message = guestModeDisabled
+                    ? 'Guest mode is currently unavailable. Please sign in or try again later.'
+                    : 'Could not start a guest session. Please try again.';
+                if (window.showNotification) window.showNotification(message, 'error');
+                else alert(message);
+                return null;
+            }
+            window.currentUser = user;
+            window.isGuest = user.isAnonymous === true;
+            if (window.updateNavForAuth) window.updateNavForAuth();
+            if (!existingUser && user.isAnonymous && window.loadUserQuizzes) await window.loadUserQuizzes();
+            return user;
+        }
+        window.ensureHostingAuth = ensureHostingAuth;
 
         // Set up auth state listener
         // Track the last known user ID so we can distinguish a real new login
@@ -3496,19 +3601,23 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         // server verification, and hourly token refresh. Navigation must only happen
         // when the user identity actually changes, not on every fire.
         let _lastAuthUserId = null;
+        let _lastAuthWasAnonymous = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
-                    const isNewLogin = (_lastAuthUserId !== user.uid);
+                    const isAnonymous = user.isAnonymous === true;
+                    const isNewLogin = (_lastAuthUserId !== user.uid || _lastAuthWasAnonymous !== isAnonymous);
                     _lastAuthUserId = user.uid;
+                    _lastAuthWasAnonymous = isAnonymous;
                     window.currentUser = user;
-                    window.isGuest = false;
-                    console.log('User logged in:', user.email);
+                    window.isGuest = isAnonymous;
+                    if (window.updateNavForAuth) window.updateNavForAuth();
+                    console.log(isAnonymous ? 'Anonymous guest session active' : 'User logged in:', user.email || '');
 
                     // Only navigate when the user identity changed (real login / page load).
                     // Token refreshes keep the same uid — skip navigation entirely.
-                    if (isNewLogin) {
+                    if (isNewLogin && !isAnonymous) {
                         const _activeScreen = document.querySelector('.screen.active');
                         const _preLoginScreens = ['landingScreen', 'loginScreen', 'signupScreen'];
                         if (!_activeScreen || _preLoginScreens.includes(_activeScreen.id)) {
@@ -3517,37 +3626,46 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     }
 
                     // Set user's name in welcome header and profile avatar
-                    const userName = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
                     const welcomeEl = document.getElementById('dashboardWelcome');
-                    if (welcomeEl) welcomeEl.textContent = `Hello, ${userName}!`;
-                    const profileName = document.getElementById('profileName');
-                    if (profileName) profileName.textContent = userName;
-                    const profileAvatar = document.getElementById('profileAvatar');
-                    if (profileAvatar) profileAvatar.textContent = userName.charAt(0).toUpperCase();
-
-                    // Check if this user is on the AI access whitelist
-                    try {
-                        const emailKey = user.email.replace(/\./g, '_').replace(/@/g, '_at_');
-                        const accessSnap = await get(ref(getDatabase(app), `aiAccess/${emailKey}`));
-                        const hasAIAccess = accessSnap.exists() && accessSnap.val().allowed === true;
-                        window.userHasAIAccess = hasAIAccess;
-
-                        // Show or hide all AI Quiz Maker buttons based on access
-                        const aiButtons = ['aiNavBtnHeader', 'aiNavBtnDashboard', 'aiNavBtnEmpty'];
-                        aiButtons.forEach(id => {
-                            const el = document.getElementById(id);
-                            if (el) el.style.display = hasAIAccess ? (id === 'aiNavBtnHeader' ? 'inline-flex' : 'inline-block') : 'none';
-                        });
-
-                        // Load this user's quizzes from Firebase
-                    if (window.loadUserQuizzes) window.loadUserQuizzes();
-                    } catch (e) {
-                        console.log('AI access check failed, defaulting to no access', e);
+                    if (isAnonymous) {
+                        if (welcomeEl) welcomeEl.textContent = 'Welcome, guest!';
+                        const profileName = document.getElementById('profileName');
+                        if (profileName) profileName.textContent = '';
+                        const profileAvatar = document.getElementById('profileAvatar');
+                        if (profileAvatar) profileAvatar.textContent = '?';
                         window.userHasAIAccess = false;
+                        ['aiNavBtnHeader', 'aiNavBtnDashboard', 'aiNavBtnEmpty'].forEach(id => {
+                            const el = document.getElementById(id);
+                            if (el) el.style.display = 'none';
+                        });
+                        if (window.loadUserQuizzes) await window.loadUserQuizzes();
+                    } else {
+                        const userName = user.displayName?.split(' ')[0] || user.email?.split('@')[0] || 'there';
+                        if (welcomeEl) welcomeEl.textContent = `Hello, ${userName}!`;
+                        const profileName = document.getElementById('profileName');
+                        if (profileName) profileName.textContent = userName;
+                        const profileAvatar = document.getElementById('profileAvatar');
+                        if (profileAvatar) profileAvatar.textContent = userName.charAt(0).toUpperCase();
+
+                        // Check this real user's AI access and load their saved quizzes.
+                        try {
+                            const emailKey = (user.email || '').replace(/\./g, '_').replace(/@/g, '_at_');
+                            const accessSnap = user.email ? await get(ref(database, `aiAccess/${emailKey}`)) : null;
+                            const hasAIAccess = !!accessSnap?.exists() && accessSnap.val().allowed === true;
+                            window.userHasAIAccess = hasAIAccess;
+                            ['aiNavBtnHeader', 'aiNavBtnDashboard', 'aiNavBtnEmpty'].forEach(id => {
+                                const el = document.getElementById(id);
+                                if (el) el.style.display = hasAIAccess ? (id === 'aiNavBtnHeader' ? 'inline-flex' : 'inline-block') : 'none';
+                            });
+                        } catch (e) {
+                            console.log('AI access check failed, defaulting to no access', e);
+                            window.userHasAIAccess = false;
+                        }
+                        if (window.loadUserQuizzes) await window.loadUserQuizzes();
                     }
                     if (window.updateNavForAuth) window.updateNavForAuth();
                     // If upgrading from guest mode, auto-save any in-memory quiz
-                    if (window.guestQuiz) {
+                    if (!isAnonymous && window.guestQuiz) {
                         const gq = window.guestQuiz;
                         window.guestQuiz = null;
                         const quizId = Date.now();
@@ -3560,6 +3678,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     }
                 } else {
                     _lastAuthUserId = null;
+                    _lastAuthWasAnonymous = null;
                     window.currentUser = null;
                     window.userHasAIAccess = false;
                     window.isGuest = true;
@@ -4326,28 +4445,33 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.closeMobileMenu = closeMobileMenu;
 
         // Authentication State
-        let currentUser = null;
-        window.isGuest = true;   // true until signed in
+        window.isGuest = true;   // true for signed-out and anonymous users
         window.guestQuiz = null; // in-memory quiz for guests
 
         // Check if user is authenticated
         function requireAuth() {
-            if (!window.currentUser) {
-                alert('⚠️ Please log in to access this feature!');
-                showScreen('loginScreen');
+            if (!window.currentUser || window.currentUser.isAnonymous) {
+                if (window.showAuthPromptModal) window.showAuthPromptModal('Create a free account to access this feature.');
                 return false;
             }
             return true;
         }
 
-        // Navigation functions (no auth required — guests can create and host)
-        function goToCreateQuiz() {
+        async function requireAccountForHosting() {
+            return !!(await window.ensureHostingAuth());
+        }
+        window.requireAccountForHosting = requireAccountForHosting;
+
+        // Navigation functions
+        async function goToCreateQuiz() {
+            if (!(await requireAccountForHosting())) return;
             showScreen('createQuizScreen');
             closeMobileMenu();
         }
         window.goToCreateQuiz = goToCreateQuiz;
 
-        function goToHostScreen() {
+        async function goToHostScreen() {
+            if (!(await requireAccountForHosting())) return;
             showScreen('hostScreen');
             closeMobileMenu();
         }
@@ -4364,13 +4488,14 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
             
             try {
-                await window.signInWithEmailAndPassword(window.auth, email, password);
+                await window.signInOrLinkEmailAccount(email, password);
                 playSound('correctSound');
             } catch (error) {
                 playSound('wrongSound');
                 let message = 'Login failed';
                 if (error.code === 'auth/user-not-found') message = 'No account found with this email';
                 if (error.code === 'auth/wrong-password') message = 'Incorrect password';
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') message = 'Incorrect email or password';
                 if (error.code === 'auth/invalid-email') message = 'Invalid email address';
                 alert(message);
             }
@@ -4394,7 +4519,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             }
             
             try {
-                const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
+                const userCredential = await window.createOrLinkEmailAccount(email, password);
                 const user = userCredential.user;
                 
                 // Save user profile
@@ -4419,7 +4544,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         // Login with Google
         async function loginWithGoogle() {
             try {
-                const result = await window.signInWithPopup(window.auth, window.googleProvider);
+                const result = await window.signInOrLinkGoogleAccount();
                 const user = result.user;
                 
                 // Save/update user profile
@@ -4891,6 +5016,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.deleteQuiz = deleteQuiz;
 
         async function startHostingQuiz() {
+            if (!(await requireAccountForHosting())) return;
             gamePin = Math.floor(100000 + Math.random() * 900000).toString();
             isHost = true;
             currentQuestionIndex = 0;
@@ -4930,8 +5056,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 
                 showScreen('lobbyScreen');
 
-                if (window.isGuest) localStorage.setItem('lgq_lastQuizGame', new Date().toDateString());
-
                 // Auto-enable teams if flag is set
                 if (window.autoEnableTeams) {
                     setTimeout(() => {
@@ -4943,7 +5067,10 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 
                 listenToPlayers();
             } catch (error) {
-                alert('Error creating game. Please check your Firebase configuration.');
+                const errorCode = String(error.code || '').toLowerCase();
+                alert(errorCode.includes('permission_denied')
+                    ? 'You need to sign in to host a game. Please sign in and try again.'
+                    : 'We couldn’t create your game. Please try again.');
                 console.error(error);
             }
         }
@@ -5094,7 +5221,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         }
         window.updateQuestionFields = updateQuestionFields;
 
-        function saveQuiz() {
+        async function saveQuiz() {
             playSound('correctSound');
             const title = document.getElementById('quizTitle').value;
             if (!title) {
@@ -5172,27 +5299,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 return;
             }
 
-            // Guest: store in memory and show auth prompt
             if (!window.currentUser) {
-                const quizId = 'guest_' + Date.now();
-                const quiz = { id: quizId, title, questions, isGuest: true, createdAt: Date.now() };
-                window.guestQuiz = quiz;
-                // Add to quizzes array so they can host it now
-                quizzes = quizzes.filter(q => !q.isGuest);
-                quizzes.push(quiz);
-                loadQuizzes();
-                document.getElementById('quizTitle').value = '';
-                document.getElementById('questionsContainer').innerHTML = '';
-                questionCount = 0;
-                updateQuestionCountDisplay();
-                editingQuizId = null;
-                showScreen('homeScreen');
-                displayRecentQuizzes();
-                // Show auth prompt as a non-blocking invite
-                if (window.showAuthPromptModal) window.showAuthPromptModal(
-                    '💾 Create a free account to save your quiz — or host it now without signing up!'
-                );
-                return;
+                const guestUser = await window.ensureHostingAuth();
+                if (!guestUser) return;
             }
             const uid = window.currentUser.uid;
 
@@ -5237,9 +5346,9 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         // AI Quiz Generator Functions
         function showAIGenerator() {
-            if (!window.currentUser) {
+            if (!window.currentUser || window.currentUser.isAnonymous) {
                 if (window.showAuthPromptModal) window.showAuthPromptModal(
-                    '✨ AI Quiz Maker is a member feature — sign up free to unlock it!'
+                    'Create a free account to unlock the AI Quiz Maker.'
                 );
                 return;
             }
@@ -5408,6 +5517,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         function loadQuizzes() {
             const select = document.getElementById('quizSelect');
+            const selectedId = select.value;
             select.innerHTML = '<option value="">Select a quiz...</option>';
             quizzes.forEach(quiz => {
                 const option = document.createElement('option');
@@ -5415,26 +5525,26 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 option.textContent = quiz.title;
                 select.appendChild(option);
             });
+            if (selectedId && quizzes.some(quiz => String(quiz.id) === selectedId)) {
+                select.value = selectedId;
+            }
         }
         window.loadQuizzes = loadQuizzes;
 
         // Host game
         async function startHosting() {
-            playSound('joinSound');
-            if (!canGuestHostQuiz()) {
-                showAuthPromptModal(
-                    "You've used your free game for today! Create a free account to host unlimited games — it takes 10 seconds.",
-                    "Or come back tomorrow for another free game."
-                );
-                return;
-            }
             const quizId = document.getElementById('quizSelect').value;
             if (!quizId) {
                 alert('Please select a quiz!');
                 return;
             }
-
-            currentQuiz = quizzes.find(q => q.id == quizId);
+            if (!(await requireAccountForHosting())) return;
+            playSound('joinSound');
+            currentQuiz = quizzes.find(q => String(q.id) === quizId);
+            if (!currentQuiz) {
+                alert('This quiz is no longer available. Please choose another quiz.');
+                return;
+            }
             
             // Get settings from UI
             roundsEnabled = document.getElementById('enableRounds').checked;
@@ -5461,6 +5571,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.startHosting = startHosting;
 
         async function startTeamHosting() {
+            if (!(await requireAccountForHosting())) return;
             playSound('joinSound');
             window.autoEnableTeams = true; // Flag to auto-enable teams
             showScreen('hostScreen');
@@ -7177,7 +7288,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         let buzzBuzzerListener = null;
         let buzzScoresListener = null;
 
-        function goToBuzzInSetup() {
+        async function goToBuzzInSetup() {
+            if (!(await requireAccountForHosting())) return;
             playSound('joinSound');
             buzzQuestionCount = 0;
             document.getElementById('buzzQuestionsContainer').innerHTML = '';
@@ -7242,6 +7354,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         window.addBuzzQuestion = addBuzzQuestion;
 
         async function createBuzzInGame() {
+            if (!(await requireAccountForHosting())) return;
             playSound('joinSound');
             buzzGamePin = Math.floor(100000 + Math.random() * 900000).toString();
             buzzIsHost = true;
@@ -7259,14 +7372,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                     alert('Please enter at least one question!');
                     return;
                 }
-            }
-
-            if (!canGuestBuzzIn()) {
-                showAuthPromptModal(
-                    "You've used your free buzz-in game for today! Create a free account to host unlimited games — it takes 10 seconds.",
-                    "Or come back tomorrow for another free game."
-                );
-                return;
             }
 
             try {
@@ -7291,10 +7396,12 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
                 document.getElementById('buzzLobbyJoinUrl').textContent = joinUrl;
 
                 showScreen('buzzInLobbyScreen');
-                if (window.isGuest) localStorage.setItem('lgq_lastBuzzGame', new Date().toDateString());
                 listenToBuzzPlayers();
             } catch (error) {
-                alert('Error creating buzz-in game.');
+                const errorCode = String(error.code || '').toLowerCase();
+                alert(errorCode.includes('permission_denied')
+                    ? 'You need to sign in to host a game. Please sign in and try again.'
+                    : 'We couldn’t create your buzz-in game. Please try again.');
                 console.error(error);
             }
         }
@@ -7729,8 +7836,20 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
         function updateNavForAuth() {
             const guestNav = document.getElementById('guestNavButtons');
             const userNav  = document.getElementById('userNavButtons');
+            const logoutNav = document.getElementById('logoutNavLink');
+            const yourQuizzesNav = document.getElementById('yourQuizzesNav');
+            const guestBar = document.getElementById('guestTopBar');
             if (guestNav) guestNav.style.display = window.isGuest ? 'flex' : 'none';
             if (userNav)  userNav.style.display  = window.isGuest ? 'none' : 'block';
+            if (logoutNav) logoutNav.style.display = window.isGuest ? 'none' : '';
+            if (yourQuizzesNav) yourQuizzesNav.style.display = window.isGuest ? 'none' : '';
+            if (guestBar) {
+                const activeScreenId = document.querySelector('.screen.active')?.id;
+                const guestBarScreens = ['joinScreen', 'createQuizScreen', 'loginScreen', 'signupScreen'];
+                const showBar = window.isGuest && guestBarScreens.includes(activeScreenId);
+                guestBar.style.display = showBar ? 'flex' : 'none';
+                document.body.style.paddingTop = showBar ? '64px' : '';
+            }
         }
         window.updateNavForAuth = updateNavForAuth;
 
@@ -7748,18 +7867,6 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             switchAuthTab('signup');
         }
         window.showAuthPromptModal = showAuthPromptModal;
-
-        function canGuestHostQuiz() {
-            if (!window.isGuest) return true;
-            return localStorage.getItem('lgq_lastQuizGame') !== new Date().toDateString();
-        }
-        window.canGuestHostQuiz = canGuestHostQuiz;
-
-        function canGuestBuzzIn() {
-            if (!window.isGuest) return true;
-            return localStorage.getItem('lgq_lastBuzzGame') !== new Date().toDateString();
-        }
-        window.canGuestBuzzIn = canGuestBuzzIn;
 
         function closeAuthPromptModal() {
             const modal = document.getElementById('authPromptModal');
@@ -7787,7 +7894,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             if (!name || !email || !password) { alert('Please fill in all fields'); return; }
             if (password.length < 6) { alert('Password must be at least 6 characters'); return; }
             try {
-                const cred = await window.createUserWithEmailAndPassword(window.auth, email, password);
+                const cred = await window.createOrLinkEmailAccount(email, password);
                 await window.dbSet(window.dbRef(window.db, `users/${cred.user.uid}`), { name, email, createdAt: Date.now() });
                 closeAuthPromptModal();
             } catch (err) {
@@ -7805,12 +7912,13 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
             const password = document.getElementById('authLoginPassword').value;
             if (!email || !password) { alert('Please enter email and password'); return; }
             try {
-                await window.signInWithEmailAndPassword(window.auth, email, password);
+                await window.signInOrLinkEmailAccount(email, password);
                 closeAuthPromptModal();
             } catch (err) {
                 let msg = 'Login failed';
                 if (err.code === 'auth/user-not-found') msg = 'No account with that email';
                 if (err.code === 'auth/wrong-password') msg = 'Incorrect password';
+                if (err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials') msg = 'Incorrect email or password';
                 if (err.code === 'auth/invalid-email') msg = 'Invalid email address';
                 alert(msg);
             }
@@ -7819,7 +7927,7 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
         async function authModalGoogle() {
             try {
-                const result = await window.signInWithPopup(window.auth, window.googleProvider);
+                const result = await window.signInOrLinkGoogleAccount();
                 await window.dbSet(window.dbRef(window.db, `users/${result.user.uid}`), {
                     name: result.user.displayName, email: result.user.email,
                     photoURL: result.user.photoURL, createdAt: Date.now()
@@ -7888,7 +7996,8 @@ Example: Human anatomy - cardiovascular system" style="min-height: 100px; resize
 
     <script>
         // ── Landing page navigation with browser history ───────────────────
-        function navigateFromLanding(screenId) {
+        async function navigateFromLanding(screenId) {
+            if (screenId === 'createQuizScreen' && !(await window.ensureHostingAuth())) return;
             history.pushState({ screen: screenId }, '', '');
             showScreen(screenId);
         }
